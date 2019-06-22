@@ -28,6 +28,7 @@ import java.util.GregorianCalendar;
 import auto.ausiot.schedule.Schedule;
 import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.ui.TimePickerFragment;
+import auto.ausiot.util.Constants;
 import auto.ausiot.util.DateHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -261,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 15, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * Constants.ALARM_FREQUENCY, pendingIntent);
 
     }
 }

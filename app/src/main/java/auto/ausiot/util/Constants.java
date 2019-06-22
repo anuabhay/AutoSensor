@@ -12,5 +12,7 @@ public class Constants {
     public static String MQTT_USER = "sbpmtfqc";
     public static String MQTT_PASSWD = "GGGMHoXnNMz-";
 
+    public static int ALARM_FREQUENCY = 15;
+
 
 }
