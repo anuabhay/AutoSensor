@@ -12,6 +12,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ import java.time.LocalTime;
 import auto.ausiot.schedule.Schedule;
 import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.util.Constants;
+import auto.ausiot.util.Logger;
 import mqtt.Subscriber;
 
 public class MonitorActivity extends AppCompatActivity {
@@ -38,24 +40,28 @@ public class MonitorActivity extends AppCompatActivity {
     private TextView mTextMessage;
 
     Context context ;
+    Logger logger = null;
+    private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent i;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     //mTextMessage.setText(R.string.title_home);
                     //myBtn.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.navigation_dashboard:
-                    Intent i = new Intent(MonitorActivity.this,MainActivity.class);
+                    i = new Intent(MonitorActivity.this,MainActivity.class);
                     startActivity(i);
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
-                    //mTextMessage.setText(R.string.title_notifications);
+                    i = new Intent(MonitorActivity.this,EventViewer.class);
+                    startActivity(i);
                     return true;
             }
             return false;
@@ -67,18 +73,24 @@ public class MonitorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
 
+        Resources res = getResources();
+        context = MonitorActivity.this.getApplicationContext();
+
+
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
+        logger = new Logger(context);
         Button btnOpen = (Button) findViewById(R.id.button_open);
         btnOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.startAnimation(buttonClick);
                 try {
                     Subscriber.connect();
                     Subscriber.sendMsg(Constants.ACTION_TOPIC,"open");
+                    logger.log("Open Meessage sent");
                 } catch (MqttException e) {
                     e.printStackTrace();
                 } catch (URISyntaxException e) {
@@ -93,9 +105,11 @@ public class MonitorActivity extends AppCompatActivity {
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.startAnimation(buttonClick);
                 try {
                     Subscriber.connect();
                     Subscriber.sendMsg(Constants.ACTION_TOPIC,"close");
+                    logger.log("Close Meessage sent");
                 } catch (MqttException e) {
                     e.printStackTrace();
                 } catch (URISyntaxException e) {
@@ -125,6 +139,8 @@ public class MonitorActivity extends AppCompatActivity {
 
 
     public void onButtonStatus(Button view) throws MqttException, URISyntaxException {
+        view.startAnimation(buttonClick);
+
 
     }
 

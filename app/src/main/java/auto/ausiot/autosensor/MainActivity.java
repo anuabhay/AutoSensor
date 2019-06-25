@@ -11,6 +11,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -30,24 +31,31 @@ import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.ui.TimePickerFragment;
 import auto.ausiot.util.Constants;
 import auto.ausiot.util.DateHelper;
+import auto.ausiot.util.Logger;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
     Context context ;
+    private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
+    private Logger logger = null;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent i;
              switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    Intent i = new Intent(MainActivity.this,MonitorActivity.class);
+                    i = new Intent(MainActivity.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
                 case R.id.navigation_dashboard:
                     return true;
                 case R.id.navigation_notifications:
+                    i = new Intent(MainActivity.this,EventViewer.class);
+                    startActivity(i);
+
                     return true;
             }
             return false;
@@ -93,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         setAlarm();
 
         initListners();
+
+        logger = new Logger(context);
     }
 
     private void initListners(){
@@ -160,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onButtonClick(Button view) throws MqttException, URISyntaxException {
+        view.startAnimation(buttonClick);
         saveScheduleData();
     }
 
@@ -246,23 +257,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void cancelAlarm(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(getApplicationContext(),
+                AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(), Constants.ALARM_REQUEST_CODE, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+
 
     }
 
     void setAlarm(){
 
-        int REQUEST_CODE=101;
-
-        Toast.makeText(context, "Alarm Triggered", Toast.LENGTH_LONG).show();
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
         Intent intent = new Intent(this, AlarmReceiver.class);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, Constants.ALARM_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * Constants.ALARM_FREQUENCY, pendingIntent);
 
     }
+
+
 }

@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -72,6 +73,19 @@ public class sheduleTest {
         ScheduleItem si = c.hasScheduleItem(LocalDate.now().getDayOfWeek().ordinal(), new Date());
         String msg = si.getTime().toString() + si.getDuration();
         x = 1000;
+
+    }
+
+    @Test
+    public void testLogs(){
+        ArrayList<String> s = new ArrayList<String>();
+        s.add("a");
+        s.add("b");
+
+        String[] array = s.toArray(new String[s.size()]);
+
+        int x = 1;
+
 
     }
 }

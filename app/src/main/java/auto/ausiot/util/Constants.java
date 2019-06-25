@@ -13,6 +13,8 @@ public class Constants {
     public static String MQTT_PASSWD = "GGGMHoXnNMz-";
 
     public static int ALARM_FREQUENCY = 15;
+    public static int ALARM_REQUEST_CODE=101;
+
 
 
 }
