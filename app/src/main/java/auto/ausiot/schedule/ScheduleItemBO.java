@@ -8,19 +8,12 @@ import java.util.Date;
  * Created by anu on 19/06/19.
  */
 
-public class ScheduleItem {
+public class ScheduleItemBO {
     Date time;
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
     //Duration duration;
     int duration ;
+
+    boolean enabled = true;
 
     public Date getTime() {
         return time;
@@ -30,6 +23,15 @@ public class ScheduleItem {
         this.time = time;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -38,9 +40,8 @@ public class ScheduleItem {
         this.enabled = enabled;
     }
 
-    boolean enabled = true;
 
-    public ScheduleItem(Date time , int duration, boolean enabled){
+    public ScheduleItemBO(Date time , int duration, boolean enabled){
         this.time = time;
         this.duration = duration;
         this.enabled = enabled;

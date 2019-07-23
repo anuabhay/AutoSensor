@@ -18,49 +18,90 @@
         app:menu="@menu/navigation" />
 
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal|bottom"
-        android:orientation="horizontal"
-        android:divider="@drawable/divider8p"
-        android:showDividers="middle">
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_margin="50dp"
+        android:showDividers="middle"
+        >
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="40sp"
+            android:gravity="center_horizontal"
+            android:text="Last live at"
+            android:singleLine="false"
+            />
 
-        <Button
+        <TextView
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="40sp"
+            android:gravity="center_horizontal"
+            android:singleLine="false"
+            android:text="UNKNOWN"
+            />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:showDividers="middle"
+        >
+
+        <!--<Button
             android:id="@+id/button_status"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:background="@drawable/circle"
-            android:drawableTop="@android:drawable/ic_dialog_info"
-            android:paddingTop="20dp"
-            android:text="Status"
+            android:text="Refresh Status"
+            android:textSize="22sp"
             android:textColor="#fff"
-            android:layout_marginBottom="30dp"/>
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"/> -->
 
-        <Button
-            android:id="@+id/button_open"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+        <Switch
+            android:id="@+id/sensor_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_centerHorizontal="true"
+            android:showText="true"
+            android:text="Sensor 1      "
+            android:textOn="On   "
+            android:textOff="Off    "
+            android:gravity="center"
+            android:padding="20dp"
             android:background="@drawable/circle"
-            android:drawableTop="@android:drawable/checkbox_on_background"
-            android:paddingTop="20dp"
-            android:text="Open"
             android:textColor="#fff"
-            android:layout_marginBottom="33dp"/>
+            android:textSize="22sp"
+            android:layout_marginBottom="15dp"
+            />
 
-        <Button
-            android:id="@+id/button_close"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-
+        <Switch
+            android:id="@+id/sensor_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:showText="true"
+            android:text="Sensor 2      "
+            android:textOn="On   "
+            android:textOff="Off    "
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:padding="20dp"
             android:background="@drawable/circle"
-            android:drawableTop="@android:drawable/ic_lock_lock"
-            android:paddingTop="20dp"
-            android:text="Close"
             android:textColor="#fff"
-            android:layout_marginBottom="30dp"/>
+            android:textSize="22sp" />
 
+    </LinearLayout>
 
     </LinearLayout>
 

@@ -4,14 +4,12 @@ import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
-import auto.ausiot.schedule.Schedule;
-import auto.ausiot.schedule.ScheduleItem;
+import auto.ausiot.schedule.ScheduleBO;
+import auto.ausiot.schedule.ScheduleItemBO;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class sheduleTest {
     @Test
     public void create_shedule_from_string() throws Exception {
-        Schedule c = new Schedule();
+        ScheduleBO c = new ScheduleBO();
         String schedule = "WEEKLY::1,13:00,9,TRUE;2,13:00,9,TRUE;3,13:00,9,TRUE;4,13:00,9,TRUE;5,13:00,9,TRUE;6,13:00,9,TRUE;0,13:00,9,TRUE";
         c.createSheduleFromString(schedule);
     }
@@ -37,13 +35,13 @@ public class sheduleTest {
        // time.getHours() + time.getMinutes()
 
 
-        Schedule c = new Schedule();
+        ScheduleBO c = new ScheduleBO();
         String schedule = "WEEKLY::1,13:00,9,TRUE;2,13:00,9,TRUE;3,13:00,9,TRUE;4,01:00,9,TRUE;5,13:00,9,TRUE;6,13:00,9,TRUE;0,13:00,9,TRUE";
         c.createSheduleFromString(schedule);
         String dumpstring = c.dumpSheduleString();
         System.out.println(dumpstring);
 
-        Schedule c1 = new Schedule();
+        ScheduleBO c1 = new ScheduleBO();
         c1.createSheduleFromString(dumpstring);
         int x = 1;
     }
@@ -64,13 +62,13 @@ public class sheduleTest {
         calendar.get(Calendar.HOUR);
 
 
-        Schedule c = new Schedule();
+        ScheduleBO c = new ScheduleBO();
         String schedule = "WEEKLY::1,13:00,9,TRUE;2,13:00,9,TRUE;3,13:00,9,TRUE;4,23:15,9,TRUE;5,00:30,9,TRUE;6,13:00,9,TRUE;0,13:00,9,TRUE";
         c.createSheduleFromString(schedule);
 
         Date date = new Date(); // this object contains the current date value
         int x = LocalDate.now().getDayOfWeek().ordinal();
-        ScheduleItem si = c.hasScheduleItem(LocalDate.now().getDayOfWeek().ordinal(), new Date());
+        ScheduleItemBO si = c.hasScheduleItem(LocalDate.now().getDayOfWeek().ordinal(), new Date());
         String msg = si.getTime().toString() + si.getDuration();
         x = 1000;
 
@@ -87,5 +85,22 @@ public class sheduleTest {
         int x = 1;
 
 
+    }
+
+    @Test
+    public void xxx(){
+        String s = "Jul 17, 2019 4:11:49 PM";
+        s = "Jul 17, 2019 16:30:38 PM";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "MMM dd, yyyy H:mm:ss a");
+         try {
+                Date x = dateFormat.parse(s);
+//                Date x = new Date();
+//                String z = dateFormat.format(x);
+                int c = 1;
+            } catch (Exception e) {
+             int c = 1;
+                // Handle exception here
+            }
     }
 }

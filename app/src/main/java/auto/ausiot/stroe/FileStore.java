@@ -1,15 +1,13 @@
 package auto.ausiot.stroe;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 
-import auto.ausiot.schedule.Schedule;
+import auto.ausiot.schedule.ScheduleBO;
 
 /**
  * Created by anu on 20/06/19.
@@ -28,8 +26,8 @@ public class FileStore implements ScheduleStore {
     }
 
     //@RequiresApi(api = Build.VERSION_CODES.O)
-    public Schedule load(){
-        Schedule sc = new Schedule();
+    public ScheduleBO load(){
+        ScheduleBO sc = new ScheduleBO();
         FileInputStream fis = null;
         try {
             fis = context.openFileInput(fileName);
@@ -66,7 +64,7 @@ public class FileStore implements ScheduleStore {
 
 
 
-    public void save(Schedule sc){
+    public void save(ScheduleBO sc){
         //Context context = MainActivity.this.getApplicationContext();
         FileOutputStream fos = null;
         try {

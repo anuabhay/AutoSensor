@@ -1,6 +1,6 @@
 package auto.ausiot.stroe;
 
-import auto.ausiot.schedule.Schedule;
+import auto.ausiot.schedule.ScheduleBO;
 
 /**
  * Created by anu on 20/06/19.
@@ -8,7 +8,7 @@ import auto.ausiot.schedule.Schedule;
 
 public interface ScheduleStore {
 
-    public Schedule load();
+    public ScheduleBO load();
 
-    public void save(Schedule sc);
+    public void save(ScheduleBO sc);
 }

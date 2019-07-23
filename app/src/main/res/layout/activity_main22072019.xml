@@ -308,15 +308,15 @@
         <LinearLayout
             android:id="@+id/checkBox_enable_layout"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="10"
-            android:layout_below="@+id/timePicker"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            tools:context="com.example.pager.MainActivity" >
+            android:layout_below="@+id/timePicker"
+            android:layout_marginTop="10dp" >
 
                 <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Enabled"
@@ -326,7 +326,7 @@
 
                 <CheckBox
                     android:id="@+id/checkBox_enable"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                 />
         </LinearLayout>
@@ -473,43 +473,6 @@
                 />
         </RadioGroup>
 
-        <RadioGroup
-            android:id="@+id/radioSensorID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="25dp">
-
-            <RadioButton
-                android:id="@+id/radioButton_sensor1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="14dp"
-                android:layout_marginRight="14dp"
-                android:layout_toLeftOf="@+id/textView_3"
-                android:layout_toStartOf="@+id/textView_3"
-                android:text="Sensor 1"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <RadioButton
-                android:id="@+id/radioButton_sensor2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="14dp"
-                android:layout_marginRight="14dp"
-                android:layout_toLeftOf="@+id/textView_3"
-                android:layout_toStartOf="@+id/textView_3"
-                android:checked="true"
-                android:text="Sensor 2"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
-        </RadioGroup>
 
         <RadioGroup
             android:id="@+id/radioConfigType"

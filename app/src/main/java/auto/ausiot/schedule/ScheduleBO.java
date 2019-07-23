@@ -1,39 +1,33 @@
 package auto.ausiot.schedule;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-
-import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TimeZone;
+
+import auto.ausiot.util.Constants;
+import auto.ausiot.vo.Days;
+import auto.ausiot.vo.Schedule;
+import auto.ausiot.vo.ScheduleItem;
+import auto.ausiot.vo.ScheduleType;
 
 /**
  * Created by anu on 19/06/19.
  */
 
-public class Schedule {
-    public enum Days {
-        Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday;
+public class ScheduleBO {
 
-        public static Days get(int index){
-            return Days.values()[index];
-        }
-    }
+    String id;
 
-    public enum ScheduleType {
-        Daily, Weekly
-    }
-
-
-    Map<Days, ScheduleItem> mapSchedule = new HashMap<>();
+    Map<Days, ScheduleItemBO> mapSchedule = new HashMap<>();
     ScheduleType type = ScheduleType.Daily;
 
-    public Schedule(){
+    public ScheduleBO(){
 
     }
 
@@ -43,12 +37,20 @@ public class Schedule {
             ret = false;
         return ret;
     }
-    public Schedule(Date time , int duration , boolean enabled){
-        ScheduleItem si = new ScheduleItem(time,duration,enabled);
-        createSchedule(si);
 
+//    public ScheduleBO(Date time , int duration , boolean enabled){
+//        ScheduleItemBO si = new ScheduleItemBO(time,duration,enabled);
+//        createSchedule(si);
+//
+//    }
+
+    public ScheduleBO(String id, Map<Days, ScheduleItemBO> mapSchedule , ScheduleType type){
+        this.id = id;
+        this.type = type;
+        this.mapSchedule = mapSchedule;
     }
-    public void createSchedule(ScheduleItem si){
+
+    public void createSchedule(ScheduleItemBO si){
         for (Days day : Days.values()) {
             mapSchedule.put(day,si);
         }
@@ -57,19 +59,68 @@ public class Schedule {
 
     public void setSheduleItem(int iday, Date time , int duration, boolean enabled ){
         Days day = Days.get(iday);
-        ScheduleItem si = new ScheduleItem(time,duration, enabled);
+        ScheduleItemBO si = new ScheduleItemBO(time,duration, enabled);
         mapSchedule.put(day,si);
     }
 
     public void setSheduleItem(Days day, Date time , int duration, boolean enabled ){
-        ScheduleItem si = new ScheduleItem(time,duration, enabled);
+        ScheduleItemBO si = new ScheduleItemBO(time,duration, enabled);
         mapSchedule.put(day,si);
     }
 
+    public Schedule getScheduleVO(){
+        Iterator it = mapSchedule.entrySet().iterator();
+        Map<Days, ScheduleItem> mapSchedulevo = new HashMap<>();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            ScheduleItemBO bo = ((ScheduleItemBO)pair.getValue());
+//            String id, Date time, int duration,
+//            boolean enabled, Date lastTriggered
+            //Time Zone
+
+            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+            calendar.setTime(bo.getTime());
+            calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date newdate = new Date();
+            newdate.setTime(0);
+            //newdate.setYear(calendar.get(Calendar.YEAR));
+            //newdate.setMonth(calendar.get(Calendar.MONTH));
+            //newdate.setDate(calendar.get(Calendar.DATE));
+            newdate.setHours(calendar.get(Calendar.HOUR));
+            newdate.setMinutes(calendar.get(Calendar.MINUTE));
+
+            ScheduleItem itemvo = new ScheduleItem("id",bo.getTime(),bo.getDuration(),bo.isEnabled(),null);
+            mapSchedulevo.put((Days)pair.getKey(),itemvo);
+        }
+        Schedule svo = new Schedule(id, mapSchedulevo,true);
+        return svo;
+    }
+
+    public static ScheduleBO getScheduleBO(Schedule schedulevo){
+        Map<Days, ScheduleItem> mapSchedule = schedulevo.getMapSchedule();
+        Iterator it = mapSchedule.entrySet().iterator();
+        Map<Days, ScheduleItemBO> mapSchedulebo = new HashMap<>();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            ScheduleItem bo = ((ScheduleItem)pair.getValue());
+//            String id, Date time, int duration,
+//            boolean enabled, Date lastTriggered
+            //Time Zone
+            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+            calendar.setTimeZone(TimeZone.getDefault());
+            calendar.setTime(bo.getTime());
+
+            ScheduleItemBO itembo = new ScheduleItemBO(calendar.getTime(),bo.getDuration(),bo.isEnabled());
+            mapSchedulebo.put((Days)pair.getKey(),itembo);
+        }
+        ScheduleBO svo = new ScheduleBO(schedulevo.getId(),mapSchedulebo,ScheduleType.Weekly);
+        return svo;
+    }
+
     //@RequiresApi(api = Build.VERSION_CODES.O)
-    public ScheduleItem hasScheduleItem(int iday, Date time) throws ParseException {
+    public ScheduleItemBO hasScheduleItem(int iday, Date time) throws ParseException {
         Days day = Days.get(iday);
-        ScheduleItem si = mapSchedule.get(day);
+        ScheduleItemBO si = mapSchedule.get(day);
         //long diffmints = Duration.between(si.time , time).toMinutes();
         SimpleDateFormat df = new SimpleDateFormat("HH:mm");
         String stime = df.format(si.getTime());
@@ -95,8 +146,13 @@ public class Schedule {
         return mapSchedule.get(day).enabled;
     }
 
-    public  int getDUrationForDay(Days day){
+    public  int getDurationForDay(Days day){
         return mapSchedule.get(day).duration;
+    }
+
+
+    public  ScheduleItemBO getScheduleItem(Days day){
+        return mapSchedule.get(day);
     }
 
     //@RequiresApi(api = Build.VERSION_CODES.O)
@@ -123,6 +179,7 @@ public class Schedule {
 
                 //String sDate1="31/12/1998:" + stime;
                 Date time = new SimpleDateFormat("HH:mm").parse(stime);
+                //Date time = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(stime);
 
                 //String sDate1="31/12/1998:" + stime;
                 //Date time = new SimpleDateFormat("dd/MM/yyyy:HH:MM").parse(sDate1);
@@ -145,10 +202,10 @@ public class Schedule {
         Iterator it = mapSchedule.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            //String sTime = ((ScheduleItem)pair.getValue()).time.toString();
-            String sTime = new SimpleDateFormat("HH:mm").format(((ScheduleItem)pair.getValue()).time);
-            String sDuration = String.valueOf (   ((ScheduleItem)pair.getValue()).duration);
-            String sEnabled =  String.valueOf (((ScheduleItem)pair.getValue()).enabled);
+            //String sTime = ((ScheduleItemBO)pair.getValue()).time.toString();
+            String sTime = new SimpleDateFormat("HH:mm").format(((ScheduleItemBO)pair.getValue()).time);
+            String sDuration = String.valueOf (   ((ScheduleItemBO)pair.getValue()).duration);
+            String sEnabled =  String.valueOf (((ScheduleItemBO)pair.getValue()).enabled);
             String sDay =  Integer.toString(((Days)pair.getKey()).ordinal());
             if (count == 6) {
                 dumpString = dumpString + sDay + "," + sTime + "," + sDuration + "," + sEnabled;
