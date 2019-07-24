@@ -134,6 +134,7 @@ public class MonitorActivity extends AppCompatActivity {
                     }else{
                         Subscriber.sendMsg(topic, Constants.ACTION_R2_CLOSE);
                     }
+                    Subscriber.disconnect();
 
                     logger.log("Open Meessage sent");
                 } catch (MqttException e) {

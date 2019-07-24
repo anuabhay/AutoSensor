@@ -2,6 +2,8 @@ package auto.ausiot.stroe;
 
 import android.content.Context;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import auto.ausiot.util.Constants;
@@ -27,6 +29,11 @@ public class RestStore /*implements ScheduleStore*/ {
     }
 
     public Schedule loadfromservice(String sensorID, final RestCallBack restcallback){
+//        try {
+//            sensorID = URLEncoder.encode(sensorID,"utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         //@TODO Need hooking this up with QR code
         Call<Schedule> call = service.getSchedules(sensorID);
@@ -53,12 +60,14 @@ public class RestStore /*implements ScheduleStore*/ {
             @Override
             public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
                 //@TODO Do We need to do anything here , save success
+                restcallback.onResponse(null);
 
             }
 
             @Override
             public void onFailure(Call<List<Schedule>> call, Throwable t) {
                 //@TODO Do error check
+                restcallback.onFailure();
             }
         });
     }

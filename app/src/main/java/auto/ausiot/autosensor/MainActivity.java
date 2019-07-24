@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     //@TODO THis need to change for user ID to support multiple sensors
     private String unitID;
     private String sensorID = "1";
+    Button saveBtn;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -150,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         tvduration.setText("00:00");
         TextView tvtime = (TextView) findViewById(R.id.timePicker);
         tvtime.setText("00:00");
-        //loadScheduleData();
+        loadScheduleData();
 
         //No Alarms From the app any more
         //setAlarm();
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initListners(){
         // Save button
-        Button saveBtn = (Button) findViewById(R.id.button);
+        saveBtn = (Button) findViewById(R.id.button);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -297,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                 Days day = getDayFromCheckID(radioGroupDays.getCheckedRadioButtonId());
                 Date dt = DateHelper.getDateFromString(s.toString());
                 schedulebo.getScheduleItem(day).setTime(dt);
-                int x = 1;
+                saveBtn.setText("Save");
 
             }
 
@@ -321,7 +322,8 @@ public class MainActivity extends AppCompatActivity {
                 Days day = getDayFromCheckID(radioGroupDays.getCheckedRadioButtonId());
                 int minutes = DateHelper.getMinutesFromDateString(s.toString());
                 schedulebo.getScheduleItem(day).setDuration(minutes);
-             }
+                saveBtn.setText("Save");
+            }
 
         };
         tvDuration.addTextChangedListener(twDuration);
@@ -463,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
         RestCallBack rcallback =  new RestCallBack() {
             @Override
             public void onResponse(Schedule scvo) {
-
+                saveBtn.setText("Saved");
             }
 
             @Override

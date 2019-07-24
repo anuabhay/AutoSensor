@@ -9,16 +9,26 @@ public class Constants {
     public static String STATUS_TOPIC = "status_topic";
 
 
-    public static String ACTION_R1_OPEN = "R10N";
+    public static String ACTION_R1_OPEN = "R1ON";
     public static String ACTION_R1_CLOSE = "R1OFF";
 
-    public static String ACTION_R2_OPEN = "R20N";
+    public static String ACTION_R2_OPEN = "R2ON";
     public static String ACTION_R2_CLOSE = "R2OFF";
 
     //MQTT Login
-    public static String MQTT_HOST = "tcp://m12.cloudmqtt.com:13727";
-    public static String MQTT_USER = "sbpmtfqc";
-    public static String MQTT_PASSWD = "GGGMHoXnNMz-";
+//    public static String MQTT_HOST = "tcp://m12.cloudmqtt.com:13727";
+//    public static String MQTT_USER = "sbpmtfqc";
+//    public static String MQTT_PASSWD = "GGGMHoXnNMz-";
+
+    public static String MQTT_HOST = "tcp://postman.cloudmqtt.com:10976";
+    public static String MQTT_USER = "ttfygwil";
+    public static String MQTT_PASSWD = "Zuvz27NYz943";
+
+
+//    public static String MQTT_HOST = "tcp://postman.cloudmqtt.com:16469";
+//    public static String MQTT_USER = "aiaarkdj";
+//    public static String MQTT_PASSWD = "yXQw1rW71vp4";
+
 
     public static int ALARM_FREQUENCY = 15;
     public static int ALARM_REQUEST_CODE=101;

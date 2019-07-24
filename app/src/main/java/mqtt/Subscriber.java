@@ -18,7 +18,7 @@ public class Subscriber implements MqttCallback {
 
     private static final int qos = 1;
     //private String topic = "test";
-    private MqttClient client;
+    private static MqttClient client = null;
     private static Subscriber mqttsub = null;
     MQTTCallBack act;
 
@@ -27,6 +27,27 @@ public class Subscriber implements MqttCallback {
 //    }
 
     public Subscriber() throws MqttException {
+
+        if (client == null) {
+            String host = Constants.MQTT_HOST;
+            String username = Constants.MQTT_USER;
+            String password = Constants.MQTT_PASSWD;
+            String clientId = MqttAsyncClient.generateClientId();
+
+
+            MqttConnectOptions conOpt = new MqttConnectOptions();
+            conOpt.setCleanSession(true);
+            conOpt.setUserName(username);
+            conOpt.setPassword(password.toCharArray());
+
+            this.client = new MqttClient(host, clientId, new MemoryPersistence());
+            this.client.setCallback(this);
+            this.client.connect(conOpt);
+        }
+        //this.client.subscribe(this.topic, qos);
+    }
+
+    public void createConnection() throws MqttException {
         String host = Constants.MQTT_HOST;
         String username = Constants.MQTT_USER;
         String password = Constants.MQTT_PASSWD;
@@ -41,8 +62,6 @@ public class Subscriber implements MqttCallback {
         this.client = new MqttClient(host, clientId, new MemoryPersistence());
         this.client.setCallback(this);
         this.client.connect(conOpt);
-
-        //this.client.subscribe(this.topic, qos);
     }
 
     private String[] getAuth(URI uri) {
@@ -83,6 +102,10 @@ public class Subscriber implements MqttCallback {
 
     public static void connect() throws MqttException, URISyntaxException{
         mqttsub = new Subscriber();
+    }
+
+    public static void disconnect() throws MqttException {
+        //mqttsub.client.disconnect();;
     }
 
     public static void sendMsg(String topic, String msg) throws MqttException, URISyntaxException{
