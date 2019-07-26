@@ -15,6 +15,8 @@ public class Constants {
     public static String ACTION_R2_OPEN = "R2ON";
     public static String ACTION_R2_CLOSE = "R2OFF";
 
+    public static String ACTION_GET_STATUS = "STATUS";
+
     //MQTT Login
 //    public static String MQTT_HOST = "tcp://m12.cloudmqtt.com:13727";
 //    public static String MQTT_USER = "sbpmtfqc";
@@ -30,6 +32,7 @@ public class Constants {
 //    public static String MQTT_PASSWD = "yXQw1rW71vp4";
 
 
+    //No longer needed
     public static int ALARM_FREQUENCY = 15;
     public static int ALARM_REQUEST_CODE=101;
 
@@ -40,6 +43,7 @@ public class Constants {
     //public static final String BASE_URL = "http://10.0.2.2:8080";
     public static final String BASE_URL = "http://35.224.124.185:8080";
 
-
+    // Frequency of checking the status in mili seconds
+    public static int STATUC_CHECK_FREQUENCY = 10000;
 
 }

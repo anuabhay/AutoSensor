@@ -23,6 +23,7 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".EventViewer"></activity>
         <activity android:name=".InitViewer"></activity>
+        <activity android:name=".AddUser"></activity>
         <receiver android:process=":remote" android:name=".AlarmReceiver"></receiver>
 
 

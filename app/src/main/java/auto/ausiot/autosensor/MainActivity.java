@@ -5,11 +5,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -124,9 +127,13 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // find which radio button is selected
                 if (checkedId == R.id.radioButton_sensor1) {
-                        sensorID = "1";
+                    sensorID = "1";
+                    //RelativeLayout l =  (RelativeLayout) findViewById(R.id.XXXXX);
+                    //l.setBackgroundColor(Color.CYAN);
                 } else {
                         sensorID = "2";
+                    //RelativeLayout l =  (RelativeLayout) findViewById(R.id.XXXXX);
+                    //l.setBackgroundColor(Color.GRAY              );
                 }
                 loadScheduleData();
             }

@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">AutoSensor</string>
+    <string name="app_name">OziBark</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Schedule</string>
     <string name="title_notifications">Config</string>
+
+
+    <string name="title_line1">Line - 1</string>
+    <string name="title_line2">Line - 2</string>
 </resources>

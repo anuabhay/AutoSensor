@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="QRCodeWhiteColor">#ffffff</color>
     <color name="QRCodeBlackColor">#000000</color>
+    <color name="LineLableColor">#0527e1</color>
+    <color name="buttonOn">#0b8e1a</color>
+    <color name="main_layuot_bg_color">#dee2ea</color>
 </resources>

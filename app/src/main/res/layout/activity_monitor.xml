@@ -31,9 +31,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textSize="40sp"
+            android:textSize="35sp"
             android:gravity="center_horizontal"
             android:text="Last live at"
+            android:textColor="@color/LineLableColor"
             android:singleLine="false"
             />
 
@@ -41,9 +42,10 @@
             android:id="@+id/banner"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textSize="40sp"
+            android:textSize="28sp"
             android:gravity="center_horizontal"
             android:singleLine="false"
+            android:textColor="@color/LineLableColor"
             android:text="UNKNOWN"
             />
 
@@ -56,50 +58,69 @@
         android:showDividers="middle"
         >
 
-        <!--<Button
-            android:id="@+id/button_status"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/circle"
-            android:text="Refresh Status"
-            android:textSize="22sp"
-            android:textColor="#fff"
-            android:layout_marginBottom="10dp"
-            android:textAllCaps="false"/> -->
-
-        <Switch
-            android:id="@+id/sensor_1"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="false"
-            android:layout_centerHorizontal="true"
-            android:showText="true"
-            android:text="Sensor 1      "
-            android:textOn="On   "
-            android:textOff="Off    "
-            android:gravity="center"
-            android:padding="20dp"
-            android:background="@drawable/circle"
-            android:textColor="#fff"
-            android:textSize="22sp"
-            android:layout_marginBottom="15dp"
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:background="@color/main_layuot_bg_color"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="@string/title_line1"
+                android:layout_marginRight="30dp"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/LineLableColor"
+                android:layout_margin="5dp"
+            />
+            <Button
+                android:id="@+id/button_sensor1"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Open"
+                android:textSize="22sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textAllCaps="false"
+                android:background="@drawable/circle_1"
+                android:layout_margin="5dp"
             />
 
-        <Switch
-            android:id="@+id/sensor_2"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="false"
-            android:showText="true"
-            android:text="Sensor 2      "
-            android:textOn="On   "
-            android:textOff="Off    "
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:padding="20dp"
-            android:background="@drawable/circle"
-            android:textColor="#fff"
-            android:textSize="22sp" />
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:background="@color/main_layuot_bg_color">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="@string/title_line2"
+                android:layout_marginRight="30dp"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/LineLableColor"
+                android:layout_margin="5dp"
+                />
+            <Button
+                android:id="@+id/button_sensor2"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Open"
+                android:textSize="22sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textAllCaps="false"
+                android:background="@drawable/circle_1"
+                android:layout_margin="5dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

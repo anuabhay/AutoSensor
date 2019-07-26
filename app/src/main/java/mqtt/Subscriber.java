@@ -20,7 +20,7 @@ public class Subscriber implements MqttCallback {
     //private String topic = "test";
     private static MqttClient client = null;
     private static Subscriber mqttsub = null;
-    MQTTCallBack act;
+    private static MQTTCallBack callback;
 
 //    public Subscriber(String uri) throws MqttException, URISyntaxException {
 //        this();
@@ -46,6 +46,8 @@ public class Subscriber implements MqttCallback {
         }
         //this.client.subscribe(this.topic, qos);
     }
+
+
 
     public void createConnection() throws MqttException {
         String host = Constants.MQTT_HOST;
@@ -97,7 +99,7 @@ public class Subscriber implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws MqttException {
         System.out.println(String.format("[%s] %s", topic, new String(message.getPayload())));
         //mqttsub.act.testcallback(new String(message.getPayload()));
-        mqttsub.act.onCallBack(new String(message.getPayload()));
+        mqttsub.callback.onCallBack(new String(message.getPayload()));
     }
 
     public static void connect() throws MqttException, URISyntaxException{
@@ -114,7 +116,7 @@ public class Subscriber implements MqttCallback {
 
     public static void subscribe(String topic,MQTTCallBack act) throws MqttException {
         mqttsub.client.subscribe(topic, qos);
-        mqttsub.act = act;
+        mqttsub.callback = act;
     }
 
 
