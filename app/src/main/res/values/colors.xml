@@ -8,4 +8,7 @@
     <color name="LineLableColor">#0527e1</color>
     <color name="buttonOn">#0b8e1a</color>
     <color name="main_layuot_bg_color">#dee2ea</color>
+    <color name="schedule_1_background">#dee2ea</color>
+    <color name="schedule_2_background">#cddcf9</color>
+
 </resources>

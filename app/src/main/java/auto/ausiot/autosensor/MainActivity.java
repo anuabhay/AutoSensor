@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
     private String unitID;
     private String sensorID = "1";
     Button saveBtn;
+    LinearLayout mainLayout;
+    RadioButton line_1;
+    RadioButton  line_2;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        hideWeekly();
+        //hideWeekly();
         //@TODO If Weekly schedules are needed make this visible
 //        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioConfigType);
 
@@ -120,6 +125,10 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        mainLayout = findViewById(R.id.lo_all_content);
+        line_1 = findViewById(R.id.radioButton_sensor1);
+        line_2 = findViewById(R.id.radioButton_sensor2);
+
         RadioGroup radioGroupSensor = (RadioGroup) findViewById(R.id.radioSensorID);
         radioGroupSensor.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -130,9 +139,16 @@ public class MainActivity extends AppCompatActivity {
                     sensorID = "1";
                     //RelativeLayout l =  (RelativeLayout) findViewById(R.id.XXXXX);
                     //l.setBackgroundColor(Color.CYAN);
+                    line_2.setTextColor(Color.GRAY);
+                    line_1.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                    //mainLayout.setBackgroundColor(getResources().getColor(R.color.schedule_1_background));
                 } else {
                         sensorID = "2";
                     //RelativeLayout l =  (RelativeLayout) findViewById(R.id.XXXXX);
+                    line_1.setTextColor(Color.GRAY);
+                    line_2.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    //mainLayout.setBackgroundColor(getResources().getColor(R.color.schedule_2_background));
                     //l.setBackgroundColor(Color.GRAY              );
                 }
                 loadScheduleData();
@@ -140,8 +156,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        RadioGroup radioGroupconfig = (RadioGroup) findViewById(R.id.radioConfigType);
-        radioGroupconfig.setVisibility(View.INVISIBLE);
+        //RadioGroup radioGroupconfig = (RadioGroup) findViewById(R.id.radioConfigType);
+        //radioGroupconfig.setVisibility(View.INVISIBLE);
 
         radioGroupDays = (RadioGroup) findViewById(R.id.radioDays);
         radioGroupDays.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -158,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
         tvduration.setText("00:00");
         TextView tvtime = (TextView) findViewById(R.id.timePicker);
         tvtime.setText("00:00");
-        loadScheduleData();
+        //loadScheduleData();
+        RadioButton radiobutton_sensor_1 = (RadioButton) findViewById(R.id.radioButton_sensor1);
+        radiobutton_sensor_1.setChecked(true);
 
         //No Alarms From the app any more
         //setAlarm();
@@ -339,21 +357,21 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Hide weekly Schedule Controls
      */
-    private void hideWeekly(){
-        RadioGroup rdays = (RadioGroup) findViewById(R.id.radioDays);
-        rdays.setVisibility(View.VISIBLE);
-
-        LinearLayout lout = (LinearLayout) findViewById(R.id.lo_weeks);
-        lout.setVisibility(View.INVISIBLE);
-    }
-
-    private void hideDaily(){
-        RadioGroup rdays = (RadioGroup) findViewById(R.id.radioDays);
-        rdays.setVisibility(View.INVISIBLE);
-
-        LinearLayout lout = (LinearLayout) findViewById(R.id.lo_weeks);
-        lout.setVisibility(View.VISIBLE);
-    }
+//    private void hideWeekly(){
+//        RadioGroup rdays = (RadioGroup) findViewById(R.id.radioDays);
+//        rdays.setVisibility(View.VISIBLE);
+//
+//        LinearLayout lout = (LinearLayout) findViewById(R.id.lo_weeks);
+//        lout.setVisibility(View.INVISIBLE);
+//    }
+//
+//    private void hideDaily(){
+//        RadioGroup rdays = (RadioGroup) findViewById(R.id.radioDays);
+//        rdays.setVisibility(View.INVISIBLE);
+//
+//        LinearLayout lout = (LinearLayout) findViewById(R.id.lo_weeks);
+//        lout.setVisibility(View.VISIBLE);
+//    }
 
     public void onButtonClick(Button view) throws MqttException, URISyntaxException {
         view.startAnimation(buttonClick);
@@ -452,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
                      CheckBox ch = (CheckBox) findViewById(id);
 
                      if (schedulebo.getEnabledForDay(day)) {
-                         ch.setChecked(true);
+//                         ch.setChecked(true);
                      }
                  }
              }

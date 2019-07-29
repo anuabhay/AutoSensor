@@ -69,7 +69,7 @@
                     android:layout_toLeftOf="@+id/textView_3"
                     android:layout_toStartOf="@+id/textView_3"
                     android:text="@string/title_line1"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -84,7 +84,7 @@
                     android:layout_toStartOf="@+id/textView_3"
                     android:checked="true"
                     android:text="@string/title_line2"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="24sp"
                     android:textStyle="bold"/>
             </RadioGroup>
@@ -100,10 +100,118 @@
             >
 
         <LinearLayout
+            android:id="@+id/lo_weeks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/layout_sensor_radio"
+            android:gravity="center"
+            >
+
+        <TextView
+            android:id="@+id/textView_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+
+            />
+
+        <TextView
+            android:id="@+id/textView_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="T"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_weight="1"
+
+            />
+
+        <TextView
+            android:id="@+id/textView_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView_2"
+            android:layout_alignBottom="@+id/textView_2"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="30dp"
+            android:text="W"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+
+            />
+
+        <TextView
+            android:id="@+id/textView_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="30dp"
+            android:text="T"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/textView_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="30dp"
+            android:text="F"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/textView_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="30dp"
+            android:text="S"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/textView_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="34dp"
+            android:text="S"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            />
+
+
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lo_weeks"
-            android:layout_marginLeft="8dp"
+
             >
 
             <RadioGroup
@@ -119,8 +227,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    style="@style/RadioWithTextOnTop"
-                    android:text="M"
+
                     />
 
                 <RadioButton
@@ -129,8 +236,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="11dp"
                     android:layout_marginStart="14dp"
-                    style="@style/RadioWithTextOnTop"
-                    android:text="T"
+
                     />
                 <RadioButton
                     android:id="@+id/radio_3"
@@ -138,8 +244,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="11dp"
                     android:layout_marginStart="14dp"
-                    style="@style/RadioWithTextOnTop"
-                    android:text="W"
                     />
                 <RadioButton
                     android:id="@+id/radio_4"
@@ -147,8 +251,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="11dp"
                     android:layout_marginStart="14dp"
-                    style="@style/RadioWithTextOnTop"
-                    android:text="T"
                     />
                 <RadioButton
                     android:id="@+id/radio_5"
@@ -156,8 +258,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="11dp"
                     android:layout_marginStart="14dp"
-                    style="@style/RadioWithTextOnTop"
-                    android:text="F"
                     />
                 <RadioButton
                     android:id="@+id/radio_6"
@@ -165,9 +265,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="11dp"
                     android:layout_marginStart="14dp"
-                    style="@style/RadioWithTextOnTop"
-                    android:text="S"
-
                     />
                 <RadioButton
                     android:id="@+id/radio_7"
@@ -175,8 +272,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="11dp"
                     android:layout_marginStart="14dp"
-                    style="@style/RadioWithTextOnTop"
-                    android:text="S"
                     />
             </RadioGroup>
 

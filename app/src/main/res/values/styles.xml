@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RadioWithTextOnTop">
+        <item name="android:button">@null</item>
+        <item name="android:drawableBottom">?android:attr/listChoiceIndicatorSingle</item>
+        <item name="android:gravity">center_horizontal|bottom</item>
+
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+
+
+        <!-- <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:gravity">center_horizontal|bottom</item>
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" -->
+
+    </style>
+
 </resources>
