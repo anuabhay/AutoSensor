@@ -1,5 +1,7 @@
 package auto.ausiot.autosensor;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -9,9 +11,11 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +27,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -30,6 +35,7 @@ import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,13 +44,14 @@ import java.util.concurrent.TimeUnit;
 import auto.ausiot.util.AppConfig;
 import auto.ausiot.util.Constants;
 import auto.ausiot.util.Logger;
+import mqtt.HeartBeatCallBack;
 import mqtt.MQTTCallBack;
 import mqtt.Subscriber;
 
 public class MonitorActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
-    private TextView textBanner;
+    private static TextView textBanner;
 
     Context context ;
     Logger logger = null;
@@ -58,11 +65,12 @@ public class MonitorActivity extends AppCompatActivity {
     private boolean isSensorOpen_1 = false;
     private boolean isSensorOpen_2 = false;
     MediaPlayer mp;
-    private Timer myTimer;
     private Handler handler;
+    private static AlarmManager alarmManager = null;
+    static HeartBeatCallBack hbcallback = null;
 
-    private boolean network_status = true;
-    private Date last_heart_beat;
+    //private boolean network_status = true;
+    //private Date last_heart_beat = new Date();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -134,6 +142,7 @@ public class MonitorActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         textBanner = (TextView) findViewById(R.id.banner);
 
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -186,41 +195,33 @@ public class MonitorActivity extends AppCompatActivity {
         // Subscribe to the same topic
         // Send Message STATUS
         // And look for Message format NETWORKON
+        //HeartBeatCallBack.textBanner = textBanner;
+
+
+        //setNetworkStatusBanner();
         subscribeToStatus(unitID);
         sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
 
-        handler = new Handler();
-        handler.postDelayed(runnable, Constants.STATUS_CHECK_FREQUENCY);
-
-
-
-//        myTimer = new Timer();
-//        myTimer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                TimerMethod();
-//            }
-//
-//        }, 0, Constants.STATUC_CHECK_FREQUENCY);
-
+        setAlarm(unitID);
+        //handler = new Handler(Looper.getMainLooper());
+        //handler.postDelayed(runnable, Constants.STATUS_CHECK_FREQUENCY);
     }
 
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-      /* do what you need to do */
-            if ( compareDates(last_heart_beat,new Date(),Constants.MAX_HEART_BEAT_MISS_DURATION)){
-                textBanner.setText("Network Down");
-                textBanner.setTextColor(Color.RED);
-            }else{
-                textBanner.setText("Network On");
-                textBanner.setTextColor(getResources().getColor(R.color.LineLableColor));
-            }
-            network_status = false;
-            sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);      /* and here comes the "trick" */
-            handler.postDelayed(this, Constants.STATUS_CHECK_FREQUENCY);
-        }
-    };
+    @Override
+    public void onResume() {
+        super.onResume();
+        //setNetworkStatusBanner();
+
+    }
+//    private Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//      /* do what you need to do */
+//            setNetworkStatusBanner();
+//            sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);      /* and here comes the "trick" */
+//            handler.postDelayed(this, Constants.STATUS_CHECK_FREQUENCY);
+//        }
+//    };
     public void sendMQTTMsg(String topic, String action) {
         try {
             Subscriber.sendMsg(topic, action);
@@ -233,43 +234,46 @@ public class MonitorActivity extends AppCompatActivity {
 
     }
 
-    /*private void TimerMethod()
-    {
-        //This method is called directly by the timer
-        //and runs in the same thread as the timer.
-
-        //We call the method that will work with the UI
-        //through the runOnUiThread method.
-        this.runOnUiThread(Timer_Tick);
-    }
-
-    private Runnable Timer_Tick = new Runnable() {
-        public void run() {
-            if ( network_status == false){
-                textBanner.setText("Network Down");
-                textBanner.setTextColor(Color.RED);
-            }else{
-                textBanner.setText(sdf.format(new Date()));
-                textBanner.setTextColor(getResources().getColor(R.color.LineLableColor));
-
-            }
-            network_status = false;
-            sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
-        }
-    };*/
-
     public void subscribeToStatus(String topic)  {
+
+        // Set calender to One hour behind from the current time
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(new Date());
+//        cal.add(Calendar.HOUR, -1);
+//        Date oneHourBack = cal.getTime();
+//        HeartBeatCallBack.setLast_heart_beat(oneHourBack);
+        textBanner.setText("Network Down");
+        textBanner.setTextColor(Color.RED);
+
         try {
-            Subscriber.connect();
-            Subscriber.subscribe(topic, new MQTTCallBack() {
+            hbcallback = new HeartBeatCallBack()
+            {
                 @Override
                 public void onCallBack(String msg) {
                     if (msg.compareTo("NETWORKON") == 0) {
-                       network_status = true;
-                       last_heart_beat = new Date();
+                        HeartBeatCallBack.last_heart_beat = new Date();
+                        //setNetworkStatusBanner();
                     }
                 }
-            });
+            };
+            HeartBeatCallBack.textBanner = textBanner;
+            Subscriber.connect();
+            Subscriber.subscribe_to_heartbeat(topic);
+            Subscriber.setHbcallback(hbcallback);
+
+//            Subscriber.setHbcallback(new HeartBeatCallBack(){
+//                @Override
+//                public void onCallBack(String msg) {
+//                    if (msg.compareTo("NETWORKON") == 0) {
+//                        HeartBeatCallBack.last_heart_beat = new Date();
+//                        setNetworkStatusBanner();
+//                    }else if(msg.compareTo("STATUS") == 0){
+//                        setNetworkStatusBanner();
+//                    }
+//
+//                }
+//            });
+
         }  catch (MqttException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
@@ -277,7 +281,16 @@ public class MonitorActivity extends AppCompatActivity {
         }
     }
 
+    public void setNetworkStatusBanner(){
 
+        if ( compareDates(HeartBeatCallBack.getLast_heart_beat(),new Date(),Constants.MAX_HEART_BEAT_MISS_DURATION)){
+            textBanner.setText("Network Down");
+            textBanner.setTextColor(Color.RED);
+        }else{
+            textBanner.setText("Network On");
+            textBanner.setTextColor(getResources().getColor(R.color.LineLableColor));
+        }
+    }
     public boolean compareDates(Date startTime , Date nowTime, int gapInMinutes) {
         boolean ret = false;
         long diff = nowTime.getTime() - startTime.getTime();
@@ -287,6 +300,34 @@ public class MonitorActivity extends AppCompatActivity {
             ret = true;
         }
         return ret;
+    }
+
+    void cancelAlarm(){
+        //AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(getApplicationContext(),
+                AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(), Constants.ALARM_REQUEST_CODE, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+
+
+    }
+
+    void setAlarm(String unitID){
+        if (alarmManager == null) {
+            alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            AlarmReceiver.monitorActivity =this;
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 120, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constants.STATUS_CHECK_FREQUENCY, pendingIntent);
+        }
+
+    }
+
+    public void processAlarmCallBack(){
+        //Toast.makeText(context, "Alarm Triggered", Toast.LENGTH_LONG).show();
+        setNetworkStatusBanner();
+        sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
     }
 
 }

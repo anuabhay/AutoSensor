@@ -21,6 +21,7 @@ public class Subscriber implements MqttCallback {
     private static MqttClient client = null;
     private static Subscriber mqttsub = null;
     private static MQTTCallBack callback;
+    private static HeartBeatCallBack hbcallback;
 
 //    public Subscriber(String uri) throws MqttException, URISyntaxException {
 //        this();
@@ -43,10 +44,15 @@ public class Subscriber implements MqttCallback {
             this.client = new MqttClient(host, clientId, new MemoryPersistence());
             this.client.setCallback(this);
             this.client.connect(conOpt);
+            //hbcallback = new HeartBeatCallBack();
         }
         //this.client.subscribe(this.topic, qos);
     }
 
+    public static void setHbcallback(HeartBeatCallBack callback){
+        if (hbcallback == null)
+            hbcallback = callback;
+    }
 
 
     public void createConnection() throws MqttException {
@@ -98,12 +104,14 @@ public class Subscriber implements MqttCallback {
      */
     public void messageArrived(String topic, MqttMessage message) throws MqttException {
         System.out.println(String.format("[%s] %s", topic, new String(message.getPayload())));
-        //mqttsub.act.testcallback(new String(message.getPayload()));
-        mqttsub.callback.onCallBack(new String(message.getPayload()));
+
+        //mqttsub.callback.onCallBack(new String(message.getPayload()));
+        hbcallback.onCallBack(new String(message.getPayload()));
     }
 
     public static void connect() throws MqttException, URISyntaxException{
-        mqttsub = new Subscriber();
+        if(mqttsub == null)
+            mqttsub = new Subscriber();
     }
 
     public static void disconnect() throws MqttException {
@@ -114,11 +122,14 @@ public class Subscriber implements MqttCallback {
         mqttsub.sendMessage(topic, msg);
     }
 
-    public static void subscribe(String topic,MQTTCallBack act) throws MqttException {
-        mqttsub.client.subscribe(topic, qos);
-        mqttsub.callback = act;
+//    public static void subscribe(String topic,MQTTCallBack act) throws MqttException {
+//        mqttsub.client.subscribe(topic, qos);
+//        mqttsub.callback = act;
+//    }
+
+    public static void subscribe_to_heartbeat(String topic) throws MqttException {
+        mqttsub.client.subscribe(topic);
+        //mqttsub.callback = act;
     }
-
-
 }
 

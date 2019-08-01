@@ -24,7 +24,7 @@
         <activity android:name=".EventViewer"></activity>
         <activity android:name=".MonitorActivity"></activity>
         <activity android:name=".AddUser"></activity>
-        <receiver android:process=":remote" android:name=".AlarmReceiver"></receiver>
+        <receiver android:name=".AlarmReceiver" android:enabled="true"></receiver>
 
 
 
