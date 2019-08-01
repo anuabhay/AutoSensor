@@ -6,49 +6,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SoundEffectConstants;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 //import android.widget.Button;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.URISyntaxException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import auto.ausiot.util.AppConfig;
 import auto.ausiot.util.Constants;
 import auto.ausiot.util.Logger;
 import mqtt.HeartBeatCallBack;
-import mqtt.MQTTCallBack;
 import mqtt.Subscriber;
 
-public class MonitorActivity extends AppCompatActivity {
+public class MonitorActivity extends AppCompatActivity implements WaterLineFragment.OnFragmentInteractionListener {
 
     private TextView mTextMessage;
     private static TextView textBanner;
@@ -131,65 +119,85 @@ public class MonitorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
+        try {
+            Subscriber.connect();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        mp = MediaPlayer.create(this, R.raw.click);
 
-        final Resources res = getResources();
+
         context = MonitorActivity.this.getApplicationContext();
         config = new AppConfig(MonitorActivity.this.getApplicationContext());
         this.unitID = config.readFirstConfig();
-
         checkInitialized();
+//
+//        checkInitialized();
+//
+//        mTextMessage = (TextView) findViewById(R.id.message);
+//        textBanner = (TextView) findViewById(R.id.banner);
+//
+//
+//        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//
+//        logger = new Logger(context);
+//        mp = MediaPlayer.create(this, R.raw.click);
+//
+//        btnSensor1 = (Button) findViewById(R.id.button_sensor2);
+//        btnSensor1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                GradientDrawable drawable = (GradientDrawable) btnSensor1.getBackground();
+//                if (isSensorOpen_1) {
+//                    btnSensor1.setText("Open");
+//                    drawable.setColor(getResources().getColor(R.color.buttonOn));
+//                    mp.start();
+//                    sendMQTTMsg(unitID,Constants.ACTION_R1_CLOSE);
+//                }else{
+//                    btnSensor1.setText("Close");
+//                    drawable.setColor(Color.RED);
+//                    view.playSoundEffect(SoundEffectConstants.CLICK);
+//                    mp.start();
+//                    sendMQTTMsg(unitID,Constants.ACTION_R1_OPEN);
+//                }
+//                isSensorOpen_1 = !isSensorOpen_1;
+//
+//       }});
+//
+//        btnSensor2 = (Button) findViewById(R.id.button_sensor2);
+//        btnSensor2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                GradientDrawable drawable = (GradientDrawable) btnSensor2.getBackground();
+//                if (isSensorOpen_2) {
+//                    btnSensor2.setText("Open");
+//                    drawable.setColor(getResources().getColor(R.color.buttonOn));
+//                    mp.start();
+//                    sendMQTTMsg(unitID,Constants.ACTION_R2_CLOSE);
+//                }else{
+//                    btnSensor2.setText("Close");
+//                    drawable.setColor(Color.RED);
+//                    view.playSoundEffect(SoundEffectConstants.CLICK);
+//                    mp.start();
+//                    sendMQTTMsg(unitID,Constants.ACTION_R2_OPEN);
+//                }
+//                isSensorOpen_2 = !isSensorOpen_2;
+//
+//            }});
+//
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        textBanner = (TextView) findViewById(R.id.banner);
 
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+// Replace the contents of the container with the new fragment
+        ft.replace(R.id.water_line, WaterLineFragment.newInstance("1","1","2",unitID,mp));
+// or ft.add(R.id.your_placeholder, new FooFragment());
+// Complete the changes added above
+        ft.commit();
+        // Now later we can lookup the fragment by tag
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        logger = new Logger(context);
-        mp = MediaPlayer.create(this, R.raw.click);
-
-        btnSensor1 = (Button) findViewById(R.id.button_sensor1);
-        btnSensor1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GradientDrawable drawable = (GradientDrawable) btnSensor1.getBackground();
-                if (isSensorOpen_1) {
-                    btnSensor1.setText("Open");
-                    drawable.setColor(getResources().getColor(R.color.buttonOn));
-                    mp.start();
-                    sendMQTTMsg(unitID,Constants.ACTION_R1_CLOSE);
-                }else{
-                    btnSensor1.setText("Close");
-                    drawable.setColor(Color.RED);
-                    view.playSoundEffect(SoundEffectConstants.CLICK);
-                    mp.start();
-                    sendMQTTMsg(unitID,Constants.ACTION_R1_OPEN);
-                }
-                isSensorOpen_1 = !isSensorOpen_1;
-
-       }});
-
-        btnSensor2 = (Button) findViewById(R.id.button_sensor2);
-        btnSensor2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GradientDrawable drawable = (GradientDrawable) btnSensor2.getBackground();
-                if (isSensorOpen_2) {
-                    btnSensor2.setText("Open");
-                    drawable.setColor(getResources().getColor(R.color.buttonOn));
-                    mp.start();
-                    sendMQTTMsg(unitID,Constants.ACTION_R2_CLOSE);
-                }else{
-                    btnSensor2.setText("Close");
-                    drawable.setColor(Color.RED);
-                    view.playSoundEffect(SoundEffectConstants.CLICK);
-                    mp.start();
-                    sendMQTTMsg(unitID,Constants.ACTION_R2_OPEN);
-                }
-                isSensorOpen_2 = !isSensorOpen_2;
-
-            }});
 
         // Get Status
         // Subscribe to the same topic
@@ -199,10 +207,10 @@ public class MonitorActivity extends AppCompatActivity {
 
 
         //setNetworkStatusBanner();
-        subscribeToStatus(unitID);
-        sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
-
-        setAlarm(unitID);
+//        subscribeToStatus(unitID);
+//        sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
+//
+//        setAlarm(unitID);
         //handler = new Handler(Looper.getMainLooper());
         //handler.postDelayed(runnable, Constants.STATUS_CHECK_FREQUENCY);
     }
@@ -330,6 +338,10 @@ public class MonitorActivity extends AppCompatActivity {
         sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
 
 
