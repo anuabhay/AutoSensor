@@ -9,6 +9,9 @@
     <color name="buttonOn">#0b8e1a</color>
     <color name="main_layuot_bg_color">#dee2ea</color>
     <color name="schedule_1_background">#dee2ea</color>
-    <color name="schedule_2_background">#cddcf9</color>
-
+    <color name="on">#077e18</color>
+    <color name="off">#d60404</color>
+    <color name="black_border">#000000</color>
+    <color name="transparent">#cddcf9</color>
+    <color name="white">#f5f5f5</color>
 </resources>

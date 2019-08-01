@@ -18,17 +18,17 @@
         app:menu="@menu/navigation" />
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:gravity="top"
         android:orientation="vertical"
-        android:layout_margin="50dp"
         android:showDividers="middle"
-        >
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="50dp">
 
-       <!-- <TextView
+        <!-- <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:textSize="35sp"
@@ -42,87 +42,29 @@
             android:id="@+id/banner"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textSize="28sp"
             android:gravity="center_horizontal"
             android:singleLine="false"
+            android:text="Network On"
             android:textColor="@color/LineLableColor"
-            android:text="Network Down"
-            />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal|center"
-        android:orientation="vertical"
-        android:layout_margin="5dp"
-        android:showDividers="middle"
-        >
+            android:textSize="28sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:background="@color/main_layuot_bg_color"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="@string/title_line1"
-                android:layout_marginRight="30dp"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
-                android:layout_margin="5dp"
-            />
-            <Button
-                android:id="@+id/button_sensor1"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="Open"
-                android:textSize="22sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textAllCaps="false"
-                android:background="@drawable/circle_1"
-                android:layout_margin="5dp"
-            />
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="top|center_horizontal"
+            android:orientation="vertical"
+            android:showDividers="middle">
 
+            <LinearLayout
+                android:id="@+id/water_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="1dp"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:background="@color/main_layuot_bg_color">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="@string/title_line2"
-                android:layout_marginRight="30dp"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
-                android:layout_margin="5dp"
-                />
-            <Button
-                android:id="@+id/button_sensor2"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="Open"
-                android:textSize="22sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textAllCaps="false"
-                android:background="@drawable/circle_1"
-                android:layout_margin="5dp"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
 
     </LinearLayout>
 
