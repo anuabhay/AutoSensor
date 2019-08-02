@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -42,20 +43,20 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     private static TextView textBanner;
 
     Context context ;
-    Logger logger = null;
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
     AppConfig config ;
-    private static final DateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     private String unitID;
 
-    Button btnSensor1;
-    Button btnSensor2;
-    private boolean isSensorOpen_1 = false;
-    private boolean isSensorOpen_2 = false;
+
     MediaPlayer mp;
-    private Handler handler;
     private static AlarmManager alarmManager = null;
     static HeartBeatCallBack hbcallback = null;
+
+    //@TODO read from config
+    private int ZONE_COUNT = 3;
+    private int LINE_COUNT = 3;
+
+    private static boolean isActivityInitialized = false;
 
     //private boolean network_status = true;
     //private Date last_heart_beat = new Date();
@@ -119,20 +120,41 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
-        try {
-            Subscriber.connect();
-        } catch (MqttException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        mp = MediaPlayer.create(this, R.raw.click);
 
+        if (isActivityInitialized == false) {
+            isActivityInitialized = true;
+            try {
+                Subscriber.connect();
+            } catch (MqttException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            mp = MediaPlayer.create(this, R.raw.click);
+        }
 
         context = MonitorActivity.this.getApplicationContext();
         config = new AppConfig(MonitorActivity.this.getApplicationContext());
         this.unitID = config.readFirstConfig();
         checkInitialized();
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment fragment1 = WaterLineFragment.newInstance("1", "1", "2", unitID, mp);
+        ft.add(R.id.water_line, fragment1, "fragment_one");
+
+        Fragment fragment2 = WaterLineFragment.newInstance("2", "1", "2", unitID, mp);
+        ft.add(R.id.water_line, fragment2, "fragment_two");
+
+        ft.commit();
+
+        //Init Navigation
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+//        for ( int zcount=0 ; zcount < ZONE_COUNT ; zcount++) {
+//            for (int lcount = 0; lcount < LINE_COUNT; lcount++) {
+//            }
+//        }
 //
 //        checkInitialized();
 //
@@ -190,12 +212,11 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 //
 
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-// Replace the contents of the container with the new fragment
-        ft.replace(R.id.water_line, WaterLineFragment.newInstance("1","1","2",unitID,mp));
+        //ft.add(R.id.water_line, WaterLineFragment.newInstance("1","1","2",unitID,mp));
+        //ft.add(R.id.water_line, WaterLineFragment.newInstance("2","1","2",unitID,mp));
 // or ft.add(R.id.your_placeholder, new FooFragment());
 // Complete the changes added above
-        ft.commit();
+        //ft.commit();
         // Now later we can lookup the fragment by tag
 
 

@@ -1,6 +1,7 @@
 package auto.ausiot.autosensor;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -89,20 +90,46 @@ public class WaterLineFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RadioGroup radioGroup = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment);
+        RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
         //Button btnSensor = (Button) view.findViewById(R.id.water_line);
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup_1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // find which radio button is selected
-                if(checkedId == R.id.on) {
+                Button btn = (Button) getView().findViewById(R.id.button_indicator_1);
+                if(checkedId == R.id.on_1) {
+                   btn.setBackgroundResource(R.drawable.circle_indicator);
                    mp.start();
                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
-                } else if(checkedId == R.id.off) {
+                } else if(checkedId == R.id.off_1) {
+                    btn.setBackgroundResource(R.drawable.circle_indicator_off);
                     mp.start();
                     sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_CLOSE);
+                }
+            }
+
+        });
+
+
+        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
+        //Button btnSensor = (Button) view.findViewById(R.id.water_line);
+
+        radioGroup_2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // find which radio button is selected
+                Button btn = (Button) getView().findViewById(R.id.button_indicator_2);
+                if(checkedId == R.id.on_2) {
+                    btn.setBackgroundResource(R.drawable.circle_indicator);
+                    mp.start();
+                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_OPEN);
+                } else if(checkedId == R.id.off_2) {
+                    btn.setBackgroundResource(R.drawable.circle_indicator_off);
+                    mp.start();
+                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_CLOSE);
                 }
             }
 
@@ -122,7 +149,6 @@ public class WaterLineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_water_line, container, false);
     }
 

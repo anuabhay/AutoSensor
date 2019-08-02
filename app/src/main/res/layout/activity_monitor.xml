@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="50dp"
-        android:gravity="center_horizontal"
+        android:gravity="top"
         android:orientation="vertical"
         android:showDividers="middle"
         tools:layout_editor_absoluteX="84dp"
@@ -52,125 +52,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:gravity="center_horizontal|center"
+            android:gravity="top|center_horizontal"
             android:orientation="vertical"
             android:showDividers="middle">
 
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="20dp"-->
-                <!--android:background="@drawable/layout_border"-->
-                <!--android:gravity="center_horizontal"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/layout_border"-->
-                    <!--android:gravity="center_horizontal"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:background="@drawable/layout_border"-->
-                        <!--android:gravity="center_vertical"-->
-                        <!--android:orientation="horizontal">-->
-
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="50dp"-->
-                            <!--android:layout_margin="5dp"-->
-                            <!--android:layout_marginRight="30dp"-->
-                            <!--android:text="Zone1"-->
-                            <!--android:textColor="@color/colorPrimary"-->
-                            <!--android:textSize="20sp"-->
-                            <!--android:textStyle="bold" />-->
-                    <!--</LinearLayout>-->
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:background="@drawable/layout_border"-->
-                        <!--android:gravity="center_horizontal"-->
-                        <!--android:orientation="vertical">-->
-
-                        <!--<LinearLayout-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:background="@drawable/layout_border"-->
-                            <!--android:gravity="center_horizontal"-->
-                            <!--android:orientation="horizontal">-->
-
-                            <!--<TextView-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="50dp"-->
-                                <!--android:layout_margin="5dp"-->
-                                <!--android:layout_marginRight="30dp"-->
-                                <!--android:text="Line1"-->
-                                <!--android:textColor="@color/colorPrimary"-->
-                                <!--android:textSize="20sp"-->
-                                <!--android:textStyle="bold" />-->
-
-                            <!--<Switch-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="50dp"-->
-                                <!--android:thumbTint="@color/LineLableColor" />-->
-
-                            <!--<Button-->
-                                <!--android:id="@+id/button_sensor2"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="50dp"-->
-                                <!--android:layout_margin="5dp"-->
-                                <!--android:layout_marginBottom="10dp"-->
-                                <!--android:layout_marginTop="10dp"-->
-                                <!--android:background="@drawable/circle_1"-->
-                                <!--android:text="Open"-->
-                                <!--android:textAllCaps="false"-->
-                                <!--android:textSize="22sp" />-->
-                        <!--</LinearLayout>-->
-
-                        <!--<LinearLayout-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:background="@drawable/layout_border"-->
-                            <!--android:gravity="center_horizontal"-->
-                            <!--android:orientation="horizontal">-->
-
-                            <!--<TextView-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="50dp"-->
-                                <!--android:layout_margin="5dp"-->
-                                <!--android:layout_marginRight="30dp"-->
-                                <!--android:text="Line2"-->
-                                <!--android:textColor="@color/colorPrimary"-->
-                                <!--android:textSize="20sp"-->
-                                <!--android:textStyle="bold" />-->
-
-                        <!--</LinearLayout>-->
-
-
-                    <!--</LinearLayout>-->
-
-
-                <!--</LinearLayout>-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="20dp"-->
-                    <!--android:background="@color/main_layuot_bg_color"-->
-                    <!--android:gravity="center_horizontal"-->
-                    <!--android:orientation="horizontal"></LinearLayout>-->
-
-            <!--</LinearLayout>-->
-
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/water_line"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </FrameLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
 
         </LinearLayout>
 
