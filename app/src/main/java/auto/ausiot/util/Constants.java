@@ -50,8 +50,8 @@ public class Constants {
 
 
     // Frequency of checking the status in Mili seconds
-    public static int STATUS_CHECK_FREQUENCY = 60000;
+    public static int STATUS_CHECK_FREQUENCY = 30000;
     // iN MINUTES
-    public static int MAX_HEART_BEAT_MISS_DURATION = 2;
+    public static int MAX_HEART_BEAT_MISS_DURATION = 1;
 
 }

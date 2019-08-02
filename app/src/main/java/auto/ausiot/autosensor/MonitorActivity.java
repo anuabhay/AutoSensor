@@ -250,7 +250,7 @@ public class MonitorActivity extends AppCompatActivity {
                 hbcallback = new HeartBeatCallBack() {
                     @Override
                     public void onCallBack(String msg) {
-                        if (msg.compareTo("NETWORKON") == 0) {
+                        if (msg.compareTo("NetworkON") == 0) {
                             HeartBeatCallBack.last_heart_beat = new Date();
                             //setNetworkStatusBanner();
                         }
