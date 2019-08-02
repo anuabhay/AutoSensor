@@ -68,7 +68,7 @@ public class MonitorActivity extends AppCompatActivity {
     private Handler handler;
     private static AlarmManager alarmManager = null;
     static HeartBeatCallBack hbcallback = null;
-
+    static boolean initCalled = false;
     //private boolean network_status = true;
     //private Date last_heart_beat = new Date();
 
@@ -201,8 +201,9 @@ public class MonitorActivity extends AppCompatActivity {
         //setNetworkStatusBanner();
         subscribeToStatus(unitID);
         sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
-
         setAlarm(unitID);
+        // This needed when oncreate is called multiple times
+        setNetworkStatusBanner();
         //handler = new Handler(Looper.getMainLooper());
         //handler.postDelayed(runnable, Constants.STATUS_CHECK_FREQUENCY);
     }
@@ -235,60 +236,47 @@ public class MonitorActivity extends AppCompatActivity {
     }
 
     public void subscribeToStatus(String topic)  {
-
-        // Set calender to One hour behind from the current time
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(new Date());
-//        cal.add(Calendar.HOUR, -1);
-//        Date oneHourBack = cal.getTime();
-//        HeartBeatCallBack.setLast_heart_beat(oneHourBack);
-        textBanner.setText("Network Down");
-        textBanner.setTextColor(Color.RED);
-
-        try {
-            hbcallback = new HeartBeatCallBack()
-            {
-                @Override
-                public void onCallBack(String msg) {
-                    if (msg.compareTo("NETWORKON") == 0) {
-                        HeartBeatCallBack.last_heart_beat = new Date();
-                        //setNetworkStatusBanner();
+        if(initCalled == false) {
+            initCalled = true;
+            textBanner.setText("Network Down");
+            textBanner.setTextColor(Color.RED);
+            // Set calender to One hour behind from the current time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.HOUR, -1);
+            Date oneHourBack = cal.getTime();
+            HeartBeatCallBack.last_heart_beat = oneHourBack;
+            try {
+                hbcallback = new HeartBeatCallBack() {
+                    @Override
+                    public void onCallBack(String msg) {
+                        if (msg.compareTo("NETWORKON") == 0) {
+                            HeartBeatCallBack.last_heart_beat = new Date();
+                            //setNetworkStatusBanner();
+                        }
                     }
-                }
-            };
-            HeartBeatCallBack.textBanner = textBanner;
-            Subscriber.connect();
-            Subscriber.subscribe_to_heartbeat(topic);
-            Subscriber.setHbcallback(hbcallback);
-
-//            Subscriber.setHbcallback(new HeartBeatCallBack(){
-//                @Override
-//                public void onCallBack(String msg) {
-//                    if (msg.compareTo("NETWORKON") == 0) {
-//                        HeartBeatCallBack.last_heart_beat = new Date();
-//                        setNetworkStatusBanner();
-//                    }else if(msg.compareTo("STATUS") == 0){
-//                        setNetworkStatusBanner();
-//                    }
-//
-//                }
-//            });
-
-        }  catch (MqttException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+                };
+                HeartBeatCallBack.textBanner = textBanner;
+                Subscriber.connect();
+                Subscriber.subscribe_to_heartbeat(topic);
+                Subscriber.setHbcallback(hbcallback);
+            } catch (MqttException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void setNetworkStatusBanner(){
-
-        if ( compareDates(HeartBeatCallBack.getLast_heart_beat(),new Date(),Constants.MAX_HEART_BEAT_MISS_DURATION)){
-            textBanner.setText("Network Down");
-            textBanner.setTextColor(Color.RED);
-        }else{
-            textBanner.setText("Network On");
-            textBanner.setTextColor(getResources().getColor(R.color.LineLableColor));
+        if (HeartBeatCallBack.getLast_heart_beat()!= null) {
+            if (compareDates(HeartBeatCallBack.getLast_heart_beat(), new Date(), Constants.MAX_HEART_BEAT_MISS_DURATION)) {
+                textBanner.setText("Network Down");
+                textBanner.setTextColor(Color.RED);
+            } else {
+                textBanner.setText("Network On");
+                textBanner.setTextColor(getResources().getColor(R.color.LineLableColor));
+            }
         }
     }
     public boolean compareDates(Date startTime , Date nowTime, int gapInMinutes) {

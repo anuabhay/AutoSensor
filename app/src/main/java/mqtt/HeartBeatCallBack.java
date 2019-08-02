@@ -10,7 +10,7 @@ import java.util.Date;
  */
 
 public class HeartBeatCallBack implements MQTTCallBack {
-    public static Date last_heart_beat = new Date();
+    public static Date last_heart_beat;
     public static TextView textBanner = null;
 
     @Override
@@ -30,7 +30,7 @@ public class HeartBeatCallBack implements MQTTCallBack {
         return last_heart_beat;
     }
 
-    public static void setLast_heart_beat(Date last_heart_beat) {
-        HeartBeatCallBack.last_heart_beat = last_heart_beat;
-    }
+//    public static void setLast_heart_beat(Date last_heart_beat) {
+//        HeartBeatCallBack.last_heart_beat = last_heart_beat;
+//    }
 }

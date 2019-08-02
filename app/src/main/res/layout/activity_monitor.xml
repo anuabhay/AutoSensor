@@ -46,7 +46,7 @@
             android:gravity="center_horizontal"
             android:singleLine="false"
             android:textColor="@color/LineLableColor"
-            android:text="Network On"
+            android:text="Network Down"
             />
 
     <LinearLayout
