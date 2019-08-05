@@ -96,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Add Icon to Action Bar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+
         Resources res = getResources();
         context = MainActivity.this.getApplicationContext();
         config = new AppConfig(MainActivity.this.getApplicationContext());
@@ -107,24 +113,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //hideWeekly();
-        //@TODO If Weekly schedules are needed make this visible
-//        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioConfigType);
-
-        //@TODO If Weekly schedules are needed make this visible
-//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                // find which radio button is selected
-//            if (checkedId == R.id.radioButton_daily) {
-//                    hideWeekly();
-//            } else if (checkedId == R.id.radioButton_weekly) {
-//                    hideDaily();
-//            }
-//            }
-//        });
-
         mainLayout = findViewById(R.id.lo_all_content);
         line_1 = findViewById(R.id.radioButton_sensor1);
         line_2 = findViewById(R.id.radioButton_sensor2);
@@ -135,21 +123,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // find which radio button is selected
+                setSelectionBanner();
                 if (checkedId == R.id.radioButton_sensor1) {
                     sensorID = "1";
-                    //RelativeLayout l =  (RelativeLayout) findViewById(R.id.XXXXX);
-                    //l.setBackgroundColor(Color.CYAN);
                     line_2.setTextColor(Color.GRAY);
                     line_1.setTextColor(getResources().getColor(R.color.colorPrimary));
-
+                    line_1.setTextSize(30);
+                    line_2.setTextSize(18);
+                    line_2.setBackgroundResource(R.drawable.layout_border);
+                    line_1.setBackgroundResource(0);
                     //mainLayout.setBackgroundColor(getResources().getColor(R.color.schedule_1_background));
                 } else {
                         sensorID = "2";
                     //RelativeLayout l =  (RelativeLayout) findViewById(R.id.XXXXX);
                     line_1.setTextColor(Color.GRAY);
                     line_2.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    //mainLayout.setBackgroundColor(getResources().getColor(R.color.schedule_2_background));
-                    //l.setBackgroundColor(Color.GRAY              );
+                    line_2.setTextSize(30);
+                    line_1.setTextSize(18);
+                    line_1.setBackgroundResource(R.drawable.layout_border);
+                    line_2.setBackgroundResource(0);
                 }
                 loadScheduleData();
             }
@@ -237,8 +229,9 @@ public class MainActivity extends AppCompatActivity {
         CheckBox chkEnabled = (CheckBox) findViewById(R.id.checkBox_enable);
         chkEnabled.setChecked(enabled);
 
-
+        setSelectionBanner();
     }
+
     private void initListners(){
         // Save button
         saveBtn = (Button) findViewById(R.id.button);
@@ -354,39 +347,9 @@ public class MainActivity extends AppCompatActivity {
         tvDuration.addTextChangedListener(twDuration);
     }
 
-    /**
-     * Hide weekly Schedule Controls
-     */
-//    private void hideWeekly(){
-//        RadioGroup rdays = (RadioGroup) findViewById(R.id.radioDays);
-//        rdays.setVisibility(View.VISIBLE);
-//
-//        LinearLayout lout = (LinearLayout) findViewById(R.id.lo_weeks);
-//        lout.setVisibility(View.INVISIBLE);
-//    }
-//
-//    private void hideDaily(){
-//        RadioGroup rdays = (RadioGroup) findViewById(R.id.radioDays);
-//        rdays.setVisibility(View.INVISIBLE);
-//
-//        LinearLayout lout = (LinearLayout) findViewById(R.id.lo_weeks);
-//        lout.setVisibility(View.VISIBLE);
-//    }
 
     public void onButtonClick(Button view) throws MqttException, URISyntaxException {
         view.startAnimation(buttonClick);
-
-//        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-//        Date x = schedulebo.getTimeForDay(Days.Monday);
-//        calendar.setTime(x);
-//        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-//        Date newdate = new Date();
-//
-//        //newdate.setYear(calendar.get(Calendar.YEAR));
-//        //newdate.setMonth(calendar.get(Calendar.MONTH));
-//        newdate.setDate(calendar.get(Calendar.DATE));
-//        newdate.setHours(calendar.get(Calendar.HOUR));
-//        newdate.setMinutes(calendar.get(Calendar.MINUTE));
         saveScheduleData();
     }
 
@@ -427,57 +390,50 @@ public class MainActivity extends AppCompatActivity {
         RestCallBack rcallback =  new RestCallBack() {
              @Override
              public void onResponse(Schedule scvo) {
-                 schedulebo = ScheduleBO.getScheduleBO(scvo);
-                 Days selected_day = getDayFromCheckID(radioGroupDays.getCheckedRadioButtonId());
+                 if (scvo != null) {
+                     schedulebo = ScheduleBO.getScheduleBO(scvo);
+                     Days selected_day = getDayFromCheckID(radioGroupDays.getCheckedRadioButtonId());
 
-                 Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-                 calendar.setTime(schedulebo.getTimeForDay(selected_day));
-                 calendar.setTimeZone(TimeZone.getDefault());
+                     Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+                     calendar.setTime(schedulebo.getTimeForDay(selected_day));
+                     calendar.setTimeZone(TimeZone.getDefault());
 
-                 /*int m = calendar.get(Calendar.MINUTE);
-                 int h = calendar.get(Calendar.HOUR_OF_DAY);
-                 long timeCPH = calendar.getTimeInMillis();
-
-                 calendar.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));
-
-                 m = calendar.get(Calendar.MINUTE);
-                 h = calendar.get(Calendar.HOUR_OF_DAY);
-                 timeCPH = calendar.getTimeInMillis();*/
+                     String str = DateHelper.convertHoursMinutes2HHmm(calendar.get(Calendar.MINUTE), calendar.get(Calendar.HOUR_OF_DAY));
 
 
-                 String str = DateHelper.convertHoursMinutes2HHmm(calendar.get(Calendar.MINUTE),calendar.get(Calendar.HOUR_OF_DAY));
+                     TextView tvtimepicker = (TextView) findViewById(R.id.timePicker);
+                     tvtimepicker.setText(str);
+
+                     int duration = schedulebo.getDurationForDay(selected_day);
+
+                     TextView tvduration = (TextView) findViewById(R.id.chronometer2);
+                     tvduration.setText(DateHelper.convertMinutes2HHmm(duration));
 
 
-                 TextView tvtimepicker = (TextView) findViewById(R.id.timePicker);
-                 tvtimepicker.setText(str);
+                     boolean enabled = schedulebo.getEnabledForDay(selected_day);
+                     CheckBox chkEnabled = (CheckBox) findViewById(R.id.checkBox_enable);
+                     chkEnabled.setChecked(enabled);
 
-                 int duration = schedulebo.getDurationForDay(selected_day);
+                     Resources res = getResources();
+                     Context context = MainActivity.this.getApplicationContext();
 
-                 TextView tvduration = (TextView) findViewById(R.id.chronometer2);
-                 tvduration.setText(DateHelper.convertMinutes2HHmm(duration));
+                     for (Days day : Days.values()) {
+                         String val = Integer.toString(day.ordinal() + 1);
+                         int id = res.getIdentifier("checkBox_" + val, "id", context.getPackageName());
+                         CheckBox ch = (CheckBox) findViewById(id);
 
-
-                 boolean enabled = schedulebo.getEnabledForDay(selected_day);
-                 CheckBox chkEnabled = (CheckBox) findViewById(R.id.checkBox_enable);
-                 chkEnabled.setChecked(enabled);
-
-                 Resources res = getResources();
-                 Context context = MainActivity.this.getApplicationContext();
-
-                 for (Days day : Days.values()) {
-                     String val = Integer.toString(day.ordinal() + 1);
-                     int id = res.getIdentifier("checkBox_" + val, "id", context.getPackageName());
-                     CheckBox ch = (CheckBox) findViewById(id);
-
-                     if (schedulebo.getEnabledForDay(day)) {
+                         if (schedulebo.getEnabledForDay(day)) {
 //                         ch.setChecked(true);
+                         }
                      }
+                 }else{
+                     disableallcontrols();
                  }
              }
 
              @Override
              public void onFailure() {
-
+                 disableallcontrols();
              }
 
          };
@@ -521,5 +477,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    void setSelectionBanner(){
+        String label = "";
+        TextView tvselection = (TextView) findViewById(R.id.textBanner_Selection);
+        RadioGroup radioGroupSensor = (RadioGroup) findViewById(R.id.radioSensorID);
+        line_1 = findViewById(R.id.radioButton_sensor1);
+        line_2 = findViewById(R.id.radioButton_sensor2);
+        if (radioGroupSensor.getCheckedRadioButtonId() == R.id.radioButton_sensor1) {
+            label = label +  line_1.getText().toString();
+        } else {
+            label = label + line_2.getText().toString();
+        }
+
+        radioGroupDays = (RadioGroup) findViewById(R.id.radioDays);
+        Days day = getDayFromCheckID(radioGroupDays.getCheckedRadioButtonId());
+
+        label = label + " Schedule for " + day.name();
+        tvselection.setText(label);
+    }
+
+    void disableallcontrols(){
+        RadioButton sensor1 = (RadioButton) findViewById(R.id.radioButton_sensor1);
+        RadioButton sensor2 = (RadioButton) findViewById(R.id.radioButton_sensor2);
+
+
+        ((RadioButton) findViewById(R.id.radio_1)).setEnabled(false);
+        ((RadioButton) findViewById(R.id.radio_2)).setEnabled(false);
+        ((RadioButton) findViewById(R.id.radio_3)).setEnabled(false);
+        ((RadioButton) findViewById(R.id.radio_4)).setEnabled(false);
+        ((RadioButton) findViewById(R.id.radio_5)).setEnabled(false);
+        ((RadioButton) findViewById(R.id.radio_6)).setEnabled(false);
+        ((RadioButton) findViewById(R.id.radio_7)).setEnabled(false);
+
+
+        radioGroupDays.setEnabled(false);
+        sensor1.setEnabled(false);
+        sensor2.setEnabled(false);
+        TextView tvselection = (TextView) findViewById(R.id.textBanner_Selection);
+        tvselection.setText(Constants.ERROR_MSG_SCHEDULE_NOT_LOADED.toString());
+    }
 
 }
