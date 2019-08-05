@@ -8,9 +8,10 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="left|center_horizontal"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -22,11 +23,11 @@
             <TextView
                 android:id="@+id/label_zone_fragment"
                 android:layout_width="wrap_content"
-                android:textAllCaps="true"
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:layout_marginRight="30dp"
                 android:text="Zone1"
+                android:textAllCaps="true"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -49,22 +50,21 @@
                 <TextView
                     android:id="@+id/label_line1_fragment"
                     android:layout_width="wrap_content"
-                    android:textAllCaps="true"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_marginRight="30dp"
                     android:text="Line1"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <!--<Switch-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:thumbTint="@color/LineLableColor" />-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:thumbTint="@color/LineLableColor" />-->
 
                 <RadioGroup
-                    android:checkedButton="@+id/off_1"
                     android:id="@+id/button_sensor_fragment_1"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
@@ -72,30 +72,30 @@
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
                     android:background="@drawable/pink_out_line"
+                    android:checkedButton="@+id/off_1"
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginLeft="1dp"
                         android:id="@+id/off_1"
-                        android:background="@drawable/toggle_widget_background_off"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginTop="1dp"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_widget_background_off"
                         android:button="@null"
                         android:gravity="center"
                         android:text=" OFF "
-                        android:textColor="@color/white"
-                        />
+                        android:textColor="@color/white" />
 
                     <RadioButton
-                        android:layout_marginRight="1dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
                         android:id="@+id/on_1"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="1dp"
                         android:layout_weight="1"
                         android:background="@drawable/toggle_widget_background_on"
                         android:button="@null"
@@ -116,11 +116,11 @@
                 <TextView
                     android:id="@+id/label_line2_fragment"
                     android:layout_width="wrap_content"
-                    android:textAllCaps="true"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_marginRight="30dp"
                     android:text="Line2"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -131,7 +131,6 @@
                 <!--android:thumbTint="@color/LineLableColor" />-->
 
                 <RadioGroup
-                    android:checkedButton="@+id/off_2"
                     android:id="@+id/button_sensor_fragment_2"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
@@ -139,30 +138,30 @@
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
                     android:background="@drawable/pink_out_line"
+                    android:checkedButton="@+id/off_2"
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginLeft="1dp"
                         android:id="@+id/off_2"
-                        android:background="@drawable/toggle_widget_background_off"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginTop="1dp"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_widget_background_off"
                         android:button="@null"
                         android:gravity="center"
                         android:text=" OFF "
-                        android:textColor="@color/white"
-                        />
+                        android:textColor="@color/white" />
 
                     <RadioButton
-                        android:layout_marginRight="1dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
                         android:id="@+id/on_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="1dp"
                         android:layout_weight="1"
                         android:background="@drawable/toggle_widget_background_on"
                         android:button="@null"
@@ -174,43 +173,38 @@
             </LinearLayout>
 
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_indicator_1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/circle_indicator_off"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/button_indicator_2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/circle_indicator_off"
+                android:textAllCaps="false" />
 
 
         </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button_indicator_1"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/circle_indicator_off"
-            android:textAllCaps="false"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            />
-
-        <Button
-            android:id="@+id/button_indicator_2"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/circle_indicator_off"
-            android:textAllCaps="false"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            />
-
-
-
-    </LinearLayout>
 
     </LinearLayout>
 

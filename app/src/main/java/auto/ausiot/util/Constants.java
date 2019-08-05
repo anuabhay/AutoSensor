@@ -54,4 +54,7 @@ public class Constants {
     // iN MINUTES
     public static int MAX_HEART_BEAT_MISS_DURATION = 1;
 
+
+    public static String ERROR_MSG_SCHEDULE_NOT_LOADED = "Could not load the schedule.Try restarting the app";
+
 }

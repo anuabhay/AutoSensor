@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -124,6 +125,12 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
 
+        //Add Icon to Action Bar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+
         if (isActivityInitialized == false) {
             isActivityInitialized = true;
             try {
@@ -141,16 +148,20 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         this.unitID = config.readFirstConfig();
         checkInitialized();
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment fragment1 = WaterLineFragment.newInstance("1", "1", "2", unitID, mp);
-        ft.add(R.id.water_line, fragment1, "fragment_one");
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment oldFragment = fm.findFragmentByTag("fragment_one");
 
-        Fragment fragment2 = WaterLineFragment.newInstance("2", "1", "2", unitID, mp);
-        ft.add(R.id.water_line, fragment2, "fragment_two");
+        if (oldFragment == null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment fragment1 = WaterLineFragment.newInstance("1", "1", "2", unitID, mp);
+            ft.add(R.id.water_line, fragment1, "fragment_one");
 
-        ft.commit();
+            //Fragment fragment2 = WaterLineFragment.newInstance("2", "1", "2", unitID, mp);
+            //ft.add(R.id.water_line, fragment2, "fragment_two");
 
-        //Init Navigation
+            ft.commit();
+        }
+         //Init Navigation
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 

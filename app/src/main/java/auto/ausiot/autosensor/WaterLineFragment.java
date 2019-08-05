@@ -67,7 +67,7 @@ public class WaterLineFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_ZONE, zoneString);
         args.putString(ARG_LINE1, line1String);
-        args.putString(ARG_LINE2, line1String);
+        args.putString(ARG_LINE2, line2String);
         args.putString(ARG_UNIT_ID, unitID);
         mp = mplayer;
         fragment.setArguments(args);
