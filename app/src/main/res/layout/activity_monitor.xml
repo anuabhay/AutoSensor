@@ -44,7 +44,6 @@
             android:layout_height="50dp"
             android:gravity="center_horizontal"
             android:singleLine="false"
-<<<<<<< HEAD
             android:text="Network Down"
             android:textColor="@color/off"
             android:textSize="28sp" />
@@ -67,11 +66,6 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"/>
 
-=======
-            android:text="Network On"
-            android:textColor="@color/LineLableColor"
-            android:textSize="28sp" />
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -23,22 +23,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
         <activity android:name=".MainActivity" android:screenOrientation="portrait"/>
-        1
         <activity android:name=".EventViewer"  android:screenOrientation="portrait"/>
         <activity android:name=".MonitorActivity" android:screenOrientation="portrait"/>
         <activity android:name=".AddUser" android:screenOrientation="portrait"/>
         <activity android:name=".AppSettings" android:screenOrientation="portrait"/>
         <activity android:name=".Disclaimer" android:screenOrientation="portrait"/>
-=======
-        <activity android:name=".MainActivity"></activity>1
-        <activity android:name=".EventViewer"></activity>
-        <activity android:name=".MonitorActivity"/>
-        <activity android:name=".AddUser"></activity>
         <receiver android:name=".AlarmReceiver" android:enabled="true"></receiver>
 
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
 
         <receiver
             android:name=".AlarmReceiver"

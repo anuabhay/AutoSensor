@@ -15,11 +15,8 @@
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
-<<<<<<< HEAD
         <item name="colorControlNormal">@color/on</item>
         <item name="colorControlActivated">@color/off</item>
-=======
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
     </style>
 
     <style name="LargeLabel">
@@ -30,14 +27,12 @@
     <style name="SmallLabel">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
-<<<<<<< HEAD
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-=======
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

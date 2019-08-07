@@ -29,11 +29,7 @@
                 android:text="Zone1"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimary"
-<<<<<<< HEAD
                 android:textSize="16sp"
-=======
-                android:textSize="20sp"
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -60,12 +56,8 @@
                     android:text="Line1"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary"
-<<<<<<< HEAD
                     android:textSize="16sp"
-=======
-                    android:textSize="20sp"
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
-                    android:textStyle="bold" />
+               android:textStyle="bold" />
 
                 <!--<Switch-->
                 <!--android:layout_width="wrap_content"-->
@@ -75,11 +67,7 @@
                 <RadioGroup
                     android:id="@+id/button_sensor_fragment_1"
                     android:layout_width="wrap_content"
-<<<<<<< HEAD
                     android:layout_height="44dp"
-=======
-                    android:layout_height="30dp"
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
                     android:layout_margin="5dp"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
@@ -99,13 +87,9 @@
                         android:button="@null"
                         android:gravity="center"
                         android:text=" OFF "
-<<<<<<< HEAD
                         android:textColor="@color/white"
                         android:textSize="22sp"
                         />
-=======
-                        android:textColor="@color/white" />
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
 
                     <RadioButton
                         android:id="@+id/on_1"
@@ -119,12 +103,8 @@
                         android:button="@null"
                         android:gravity="center"
                         android:text=" ON  "
-<<<<<<< HEAD
                         android:textColor="@color/white"
                         android:textSize="22sp"/>
-=======
-                        android:textColor="@color/white" />
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
                 </RadioGroup>
 
             </LinearLayout>
@@ -145,11 +125,7 @@
                     android:text="Line2"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary"
-<<<<<<< HEAD
                     android:textSize="16sp"
-=======
-                    android:textSize="20sp"
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
                     android:textStyle="bold" />
 
                 <!--<Switch-->
@@ -160,11 +136,7 @@
                 <RadioGroup
                     android:id="@+id/button_sensor_fragment_2"
                     android:layout_width="wrap_content"
-<<<<<<< HEAD
                     android:layout_height="44dp"
-=======
-                    android:layout_height="30dp"
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
                     android:layout_margin="5dp"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
@@ -184,12 +156,8 @@
                         android:button="@null"
                         android:gravity="center"
                         android:text=" OFF "
-<<<<<<< HEAD
                         android:textColor="@color/white"
                         android:textSize="22sp"/>
-=======
-                        android:textColor="@color/white" />
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
 
                     <RadioButton
                         android:id="@+id/on_2"
@@ -203,12 +171,8 @@
                         android:button="@null"
                         android:gravity="center"
                         android:text=" ON  "
-<<<<<<< HEAD
                         android:textColor="@color/white"
                         android:textSize="22sp"/>
-=======
-                        android:textColor="@color/white" />
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
                 </RadioGroup>
 
             </LinearLayout>

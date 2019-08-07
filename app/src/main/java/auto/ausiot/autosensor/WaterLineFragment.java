@@ -1,10 +1,7 @@
 package auto.ausiot.autosensor;
 
 import android.content.Context;
-<<<<<<< HEAD
 import android.graphics.Color;
-=======
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -14,15 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-<<<<<<< HEAD
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-=======
 import android.widget.RadioGroup;
 import android.widget.TextView;
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
+
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -124,11 +119,7 @@ public class WaterLineFragment extends Fragment {
         });
 
 
-<<<<<<< HEAD
-        final RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
-=======
         RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
         //Button btnSensor = (Button) view.findViewById(R.id.water_line);
 
         radioGroup_2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -150,7 +141,6 @@ public class WaterLineFragment extends Fragment {
 
         });
         setLabels();
-<<<<<<< HEAD
         disable_all_Controls();
     }
 
@@ -158,10 +148,6 @@ public class WaterLineFragment extends Fragment {
 //        Toast.makeText(getView().getContext(),"AAAAAAAA",Toast.LENGTH_LONG);
 //    }
 
-=======
-    }
-
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
     void setLabels(){
         TextView zone = (TextView) getView().findViewById(R.id.label_zone_fragment);
         TextView line1 = (TextView) getView().findViewById(R.id.label_line1_fragment);
@@ -229,7 +215,6 @@ public class WaterLineFragment extends Fragment {
         //Topic
 
     }
-<<<<<<< HEAD
 
     public void disable_all_Controls(){
         final RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
@@ -305,6 +290,4 @@ public class WaterLineFragment extends Fragment {
         ma.textBanner_2.setText("");
 
      }
-=======
->>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
 }
