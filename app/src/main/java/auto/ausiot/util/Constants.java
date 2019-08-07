@@ -48,11 +48,13 @@ public class Constants {
 //    // iN MINUTES
 //    public static int MAX_HEART_BEAT_MISS_DURATION = 5;
 
+    //
+    public static String SENSOR_STATUS_ON_MSG = "NetworkON";
 
-    // Frequency of checking the status in Mili seconds
-    public static int STATUS_CHECK_FREQUENCY = 30000;
-    // iN MINUTES
-    public static int MAX_HEART_BEAT_MISS_DURATION = 1;
+    // Frequency of checking the status in mili seconds
+    public static int STATUS_CHECK_FREQUENCY = 20000;
+    // In mili seconds
+    public static int MAX_HEARTBEAT_MISSES = 3;
 
 
     public static String ERROR_MSG_SCHEDULE_NOT_LOADED = "Could not load the schedule.Try restarting the app";

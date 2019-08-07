@@ -1,5 +1,7 @@
 package auto.ausiot.autosensor;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,47 +35,15 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static MonitorActivity monitorActivity = null;
     @Override
     public void onReceive(Context context, Intent intent) {
-//        Toast.makeText(context, "Alarm Triggered", Toast.LENGTH_LONG).show();
-//        setNetworkStatusBanner();
-//        sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
         if (monitorActivity != null){
             monitorActivity.processAlarmCallBack();
         }
+
+        Intent intent1 = new Intent(context, AlarmReceiver.class);
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, 0);
+        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Constants.STATUS_CHECK_FREQUENCY, pendingIntent);
+
     }
-
-//    public void xx(){
-//        int x = 10;
-//    }
-//
-//    public void sendMQTTMsg(String topic, String action) {
-//        try {
-//            Subscriber.sendMsg(topic, action);
-//        } catch (MqttException e) {
-//            e.printStackTrace();
-//        } catch (URISyntaxException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void setNetworkStatusBanner(){
-//        if ( compareDates(HeartBeatCallBack.getLast_heart_beat(),new Date(),Constants.MAX_HEART_BEAT_MISS_DURATION)){
-//            textBanner.setText("Network Down");
-//            textBanner.setTextColor(Color.RED);
-//        }else{
-//            textBanner.setText("Network On");
-//            textBanner.setTextColor(Color.GREEN);
-//        }
-//    }
-//    public boolean compareDates(Date startTime , Date nowTime, int gapInMinutes) {
-//        boolean ret = false;
-//        long diff = nowTime.getTime() - startTime.getTime();
-//        long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
-//
-//        if ( minutes >= gapInMinutes){
-//            ret = true;
-//        }
-//        return ret;
-//    }
-
 
 }

@@ -4,12 +4,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -21,27 +19,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.animation.AlphaAnimation;
 //import android.widget.Button;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.URISyntaxException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import auto.ausiot.util.AppConfig;
 import auto.ausiot.util.Constants;
-import auto.ausiot.util.Logger;
 import mqtt.HeartBeatCallBack;
 import mqtt.Subscriber;
 
 public class MonitorActivity extends AppCompatActivity implements WaterLineFragment.OnFragmentInteractionListener {
 
     private TextView mTextMessage;
-    private static TextView textBanner;
+    public static TextView textBanner;
+    public static TextView textBanner_2;
+
 
     Context context ;
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
@@ -50,7 +45,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
 
     MediaPlayer mp;
-    private static AlarmManager alarmManager = null;
+    public static AlarmManager alarmManager = null;
     static HeartBeatCallBack hbcallback = null;
     static boolean initCalled = false;
 
@@ -61,7 +56,15 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     private static boolean isActivityInitialized = false;
 
+    public boolean isNetwork_on() {
+        return network_on;
+    }
 
+    public void setNetwork_on(boolean network_on) {
+        this.network_on = network_on;
+    }
+
+    private boolean network_on = false;
     //private boolean network_status = true;
     //private Date last_heart_beat = new Date();
 
@@ -107,15 +110,15 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.add_user) {
+        if (item.getItemId() == R.id.help) {
             //startActivity(new Intent(this, CoursesActivity.class));
             startActivity(new Intent(this, AddUser.class));
         }
-        if (item.getItemId() == R.id.manage_sensor) {
-            //startActivity(new Intent(this, AddUser.class));
+        if (item.getItemId() == R.id.app_settings) {
+            startActivity(new Intent(this, AppSettings.class));
         }
-        if (item.getItemId() == R.id.manage_something) {
-            //startActivity(new Intent(this, HandicapActivity.class));
+        if (item.getItemId() == R.id.disclaimer) {
+            startActivity(new Intent(this, Disclaimer.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -130,6 +133,10 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
+        textBanner = (TextView) findViewById(R.id.banner);
+        textBanner_2 = (TextView) findViewById(R.id.banner_2);
+
+
 
         if (isActivityInitialized == false) {
             isActivityInitialized = true;
@@ -140,7 +147,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-            mp = MediaPlayer.create(this, R.raw.click);
+
         }
 
         context = MonitorActivity.this.getApplicationContext();
@@ -152,6 +159,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         Fragment oldFragment = fm.findFragmentByTag("fragment_one");
 
         if (oldFragment == null) {
+            mp = MediaPlayer.create(this, R.raw.click);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             Fragment fragment1 = WaterLineFragment.newInstance("1", "1", "2", unitID, mp);
             ft.add(R.id.water_line, fragment1, "fragment_one");
@@ -165,91 +173,24 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-//        for ( int zcount=0 ; zcount < ZONE_COUNT ; zcount++) {
-//            for (int lcount = 0; lcount < LINE_COUNT; lcount++) {
-//            }
-//        }
-//
-//        checkInitialized();
-//
-//        mTextMessage = (TextView) findViewById(R.id.message);
-//        textBanner = (TextView) findViewById(R.id.banner);
-//
-//
-//        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-//
-//        logger = new Logger(context);
-//        mp = MediaPlayer.create(this, R.raw.click);
-//
-//        btnSensor1 = (Button) findViewById(R.id.button_sensor2);
-//        btnSensor1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                GradientDrawable drawable = (GradientDrawable) btnSensor1.getBackground();
-//                if (isSensorOpen_1) {
-//                    btnSensor1.setText("Open");
-//                    drawable.setColor(getResources().getColor(R.color.buttonOn));
-//                    mp.start();
-//                    sendMQTTMsg(unitID,Constants.ACTION_R1_CLOSE);
-//                }else{
-//                    btnSensor1.setText("Close");
-//                    drawable.setColor(Color.RED);
-//                    view.playSoundEffect(SoundEffectConstants.CLICK);
-//                    mp.start();
-//                    sendMQTTMsg(unitID,Constants.ACTION_R1_OPEN);
-//                }
-//                isSensorOpen_1 = !isSensorOpen_1;
-//
-//       }});
-//
-//        btnSensor2 = (Button) findViewById(R.id.button_sensor2);
-//        btnSensor2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                GradientDrawable drawable = (GradientDrawable) btnSensor2.getBackground();
-//                if (isSensorOpen_2) {
-//                    btnSensor2.setText("Open");
-//                    drawable.setColor(getResources().getColor(R.color.buttonOn));
-//                    mp.start();
-//                    sendMQTTMsg(unitID,Constants.ACTION_R2_CLOSE);
-//                }else{
-//                    btnSensor2.setText("Close");
-//                    drawable.setColor(Color.RED);
-//                    view.playSoundEffect(SoundEffectConstants.CLICK);
-//                    mp.start();
-//                    sendMQTTMsg(unitID,Constants.ACTION_R2_OPEN);
-//                }
-//                isSensorOpen_2 = !isSensorOpen_2;
-//
-//            }});
-//
-
-
-        //ft.add(R.id.water_line, WaterLineFragment.newInstance("1","1","2",unitID,mp));
-        //ft.add(R.id.water_line, WaterLineFragment.newInstance("2","1","2",unitID,mp));
-// or ft.add(R.id.your_placeholder, new FooFragment());
-// Complete the changes added above
-        //ft.commit();
-        // Now later we can lookup the fragment by tag
-
-
-        // Get Status
-        // Subscribe to the same topic
-        // Send Message STATUS
-        // And look for Message format NETWORKON
-        //HeartBeatCallBack.textBanner = textBanner;
-
-
-        //setNetworkStatusBanner();
-        subscribeToStatus(unitID);
-        sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
-        setAlarm(unitID);
+        //subscribeToStatus(unitID);
+        //sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
+        //setAlarm(unitID);
         // This needed when oncreate is called multiple times
-        setNetworkStatusBanner();
+       // setNetworkStatusBanner();
 
         //handler = new Handler(Looper.getMainLooper());
         //handler.postDelayed(runnable, Constants.STATUS_CHECK_FREQUENCY);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        subscribeToStatus(unitID);
+        sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
+        setAlarm(unitID);
+        setNetworkStatusBanner();
+
     }
 
     @Override
@@ -258,15 +199,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         //setNetworkStatusBanner();
 
     }
-//    private Runnable runnable = new Runnable() {
-//        @Override
-//        public void run() {
-//      /* do what you need to do */
-//            setNetworkStatusBanner();
-//            sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);      /* and here comes the "trick" */
-//            handler.postDelayed(this, Constants.STATUS_CHECK_FREQUENCY);
-//        }
-//    };
+
     public void sendMQTTMsg(String topic, String action) {
         try {
             Subscriber.sendMsg(topic, action);
@@ -282,14 +215,16 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     public void subscribeToStatus(String topic)  {
         if(initCalled == false) {
             initCalled = true;
-            textBanner.setText("Network Down");
-            textBanner.setTextColor(Color.RED);
+            network_on = false;
+            //setNetWorkDown();
+            //textBanner.setText("Network Down");
+            //textBanner.setTextColor(Color.RED);
 
             try {
                 hbcallback = new HeartBeatCallBack() {
                     @Override
                     public void onCallBack(String msg) {
-                        if (msg.compareTo("NetworkON") == 0) {
+                        if (msg.compareTo(Constants.SENSOR_STATUS_ON_MSG) == 0) {
                             HeartBeatCallBack.last_heart_beat = new Date();
                             //setNetworkStatusBanner();
                         }
@@ -309,21 +244,23 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     public void setNetworkStatusBanner(){
         if (HeartBeatCallBack.getLast_heart_beat()!= null) {
-            if (compareDates(HeartBeatCallBack.getLast_heart_beat(), new Date(), Constants.MAX_HEART_BEAT_MISS_DURATION)) {
-                textBanner.setText("Network Down");
-                textBanner.setTextColor(Color.RED);
+            if (compareDates(HeartBeatCallBack.getLast_heart_beat(), new Date(), Constants.MAX_HEARTBEAT_MISSES * Constants.STATUS_CHECK_FREQUENCY)) {
+                setNetWorkDown();
+
             } else {
-                textBanner.setText("Network On");
-                textBanner.setTextColor(getResources().getColor(R.color.LineLableColor));
+                setNetWorkUp();
+
             }
+        }else{
+            setNetWorkDown();
         }
     }
-    public boolean compareDates(Date startTime , Date nowTime, int gapInMinutes) {
+    public boolean compareDates(Date startTime , Date nowTime, int gapInMiliSeconds) {
         boolean ret = false;
         long diff = nowTime.getTime() - startTime.getTime();
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
+        //long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
 
-        if ( minutes >= gapInMinutes){
+        if ( diff >= gapInMiliSeconds){
             ret = true;
         }
         return ret;
@@ -341,14 +278,22 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     }
 
     void setAlarm(String unitID){
+//        if (alarmManager == null) {
+//            alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//            AlarmReceiver.monitorActivity =this;
+//            Intent intent = new Intent(this, AlarmReceiver.class);
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 120, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constants.STATUS_CHECK_FREQUENCY, pendingIntent);
+//
+//        }
         if (alarmManager == null) {
-            alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             AlarmReceiver.monitorActivity =this;
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 120, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constants.STATUS_CHECK_FREQUENCY, pendingIntent);
-        }
+            Intent intent = new Intent(MonitorActivity.this, AlarmReceiver.class);
+            final PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, 0);
 
+            final AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Constants.STATUS_CHECK_FREQUENCY, pendingIntent);
+        }
     }
 
     public void processAlarmCallBack(){
@@ -361,6 +306,28 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    public void setNetWorkDown(){
+        FragmentManager fm = getSupportFragmentManager();
+        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        if (fragment!= null)
+            fragment.disable_all_Controls();
+
+        textBanner.setText("Network Down");
+        textBanner.setTextColor(Color.RED);
+        textBanner_2.setText(getResources().getString(R.string.try_again_text));
+        network_on = false;
+    }
+
+    public void setNetWorkUp(){
+        FragmentManager fm = getSupportFragmentManager();
+        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        if (fragment!= null)
+            fragment.enable_all_Controls();
+        network_on = true;
+    }
+
+
 }
 
 

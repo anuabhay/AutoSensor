@@ -117,7 +117,7 @@ public class InitViewer extends AppCompatActivity {
             button.setVisibility(View.INVISIBLE);
             editText.setVisibility(View.INVISIBLE);
             imageView.setVisibility(View.INVISIBLE);
-            btnReset.setText("Reset Sensor :- " + config.readConfig()[0].toString());
+            btnReset.setText("Assign Zone1 Unit ID :: " + config.readConfig()[0].toString());
         }else{
             btnReset.setEnabled(false);
             btnReset.setVisibility(View.INVISIBLE);

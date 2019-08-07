@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#519674</color>
     <color name="colorPrimaryDark">#0c6338</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#d60404</color>
     <color name="QRCodeWhiteColor">#ffffff</color>
     <color name="QRCodeBlackColor">#000000</color>
     <color name="LineLableColor">#0527e1</color>

@@ -1,6 +1,7 @@
 package auto.ausiot.autosensor;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -113,7 +116,7 @@ public class WaterLineFragment extends Fragment {
         });
 
 
-        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
+        final RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
         //Button btnSensor = (Button) view.findViewById(R.id.water_line);
 
         radioGroup_2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -135,7 +138,12 @@ public class WaterLineFragment extends Fragment {
 
         });
         setLabels();
+        disable_all_Controls();
     }
+
+//    public void onRadioButtonClicked(View v){
+//        Toast.makeText(getView().getContext(),"AAAAAAAA",Toast.LENGTH_LONG);
+//    }
 
     void setLabels(){
         TextView zone = (TextView) getView().findViewById(R.id.label_zone_fragment);
@@ -204,4 +212,79 @@ public class WaterLineFragment extends Fragment {
         //Topic
 
     }
+
+    public void disable_all_Controls(){
+        final RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
+        for (int i = 0; i < radioGroup_1.getChildCount(); i++) {
+            radioGroup_1.getChildAt(i).setEnabled(false);
+        }
+        final RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
+        final MonitorActivity ma = (MonitorActivity) getActivity();
+
+        for (int i = 0; i < radioGroup_2.getChildCount(); i++) {
+            radioGroup_2.getChildAt(i).setEnabled(false);
+        }
+
+        ma.textBanner.setText("Network Down");
+        ma.textBanner.setTextColor(Color.RED);
+        ma.textBanner_2.setText(getResources().getString(R.string.try_again_text));
+
+    }
+
+
+
+//    public void enable_all_Controls(){
+//        final RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
+//
+//        radioGroup_1.post(new Runnable() {
+//            public void run() {
+//                for (int i = 0; i < radioGroup_1.getChildCount(); i++) {
+//                    radioGroup_1.getChildAt(i).setEnabled(true);
+//                }
+//            }
+//        });
+//
+//        final RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
+//
+//        final MonitorActivity ma = (MonitorActivity) getActivity();
+//
+//        radioGroup_2.post(new Runnable() {
+//            public void run() {
+//                for (int i = 0; i < radioGroup_2.getChildCount(); i++) {
+//                    radioGroup_2.getChildAt(i).setEnabled(true);
+//                    //radioGroup_2.getChildAt(i).setEnabled(true);
+//                }
+//                ma.textBanner.post(new Runnable() {
+//                    public void run() {
+//                        ma.textBanner.setText("Network On");
+//                        ma.textBanner.setTextColor(Color.GREEN);
+//                    }
+//                });
+//                ma.textBanner_2.post(new Runnable() {
+//                    public void run() {
+//                        ma.textBanner_2.setText("");
+//                    }
+//                });
+//
+//            }
+//        });
+//    }
+//
+
+    public void enable_all_Controls(){
+        final Button on_1 = (RadioButton) getView().findViewById(R.id.on_1);
+        on_1.setEnabled(true);
+        final Button on_2 = (RadioButton) getView().findViewById(R.id.on_2);
+        on_2.setEnabled(true);
+        final Button off_1 = (RadioButton) getView().findViewById(R.id.off_1);
+        off_1.setEnabled(true);
+        final Button off_2 = (RadioButton) getView().findViewById(R.id.off_2);
+        off_2.setEnabled(true);
+
+        final MonitorActivity ma = (MonitorActivity) getActivity();
+        ma.textBanner.setText("Network On");
+        ma.textBanner.setTextColor(Color.GREEN);
+        ma.textBanner_2.setText("");
+
+     }
 }
