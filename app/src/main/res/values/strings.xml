@@ -10,6 +10,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+<<<<<<< HEAD
     <string name="title_activity_settings">Settings</string>
     <string name="try_again_text">All controls are disabled. Please try again when Network is ON</string>
     <string name="network_check_frequency">Network Check Freqency(secs)</string>>
@@ -29,4 +30,6 @@
         \n\n\n\n\n
 
     </string>
+=======
+>>>>>>> 43af98193767bddc744a9f3505e8448a30c630a3
 </resources>
