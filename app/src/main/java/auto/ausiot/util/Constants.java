@@ -54,7 +54,7 @@ public class Constants {
     // Frequency of checking the status in mili seconds
     public static int STATUS_CHECK_FREQUENCY = 20000;
     // In mili seconds
-    public static int MAX_HEARTBEAT_MISSES = 3;
+    public static int MAX_HEARTBEAT_MISSES = 2;
 
 
     public static String ERROR_MSG_SCHEDULE_NOT_LOADED = "Could not load the schedule.Try restarting the app";
