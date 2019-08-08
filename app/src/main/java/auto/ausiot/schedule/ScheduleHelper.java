@@ -49,4 +49,10 @@ public class ScheduleHelper {
         rs.login(useremail, password ,rcalback);
     }
 
+    public void register(User user, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.register(user ,rcalback);
+    }
+
+
 }

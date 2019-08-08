@@ -13,6 +13,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import auto.ausiot.schedule.AuthBody;
+import auto.ausiot.schedule.User;
 import auto.ausiot.util.Constants;
 import auto.ausiot.vo.Schedule;
 import okhttp3.ResponseBody;
@@ -154,4 +155,34 @@ public class RestStore /*implements ScheduleStore*/ {
         });
     }
 
+    public void register(User user , final RestCallBack restcallback){
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call call = service.register(user);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //@TODO Do We need to do anything here , save success
+                String token = null;
+                try {
+                    if(response.body() != null) {
+                        JSONObject json = new JSONObject(response.body().string());
+                        token = json.getString("token");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                restcallback.onResponse(token,null);
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //@TODO Do error check
+                restcallback.onFailure();
+            }
+        });
+    }
 }

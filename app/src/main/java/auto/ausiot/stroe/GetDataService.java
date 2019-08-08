@@ -1,6 +1,7 @@
 package auto.ausiot.stroe;
 
 import auto.ausiot.schedule.AuthBody;
+import auto.ausiot.schedule.User;
 import auto.ausiot.vo.Schedule;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -38,5 +39,9 @@ public interface GetDataService {
 
     @POST("api/auth/login")
     Call<ResponseBody> login(@Body AuthBody user);
+
+
+    @POST("api/auth/register")
+    Call<ResponseBody> register(@Body User user);
 
 }
