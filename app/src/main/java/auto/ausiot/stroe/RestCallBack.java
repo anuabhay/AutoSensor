@@ -9,6 +9,7 @@ import retrofit2.Callback;
 
 public interface RestCallBack{
     void onResponse(Schedule sc);
+    void onResponse(String token,String user);
     void onFailure();
 
 }

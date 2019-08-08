@@ -43,4 +43,10 @@ public class ScheduleHelper {
         rs.addSensorfromservice(sensorID,rcalback);
     }
 
+
+    public void login(String useremail, String password, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.login(useremail, password ,rcalback);
+    }
+
 }
