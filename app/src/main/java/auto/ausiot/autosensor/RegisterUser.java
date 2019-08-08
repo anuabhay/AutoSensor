@@ -3,25 +3,20 @@ package auto.ausiot.autosensor;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,22 +25,16 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
 
-import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.ScheduleHelper;
+import auto.ausiot.schedule.User;
 import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
-import auto.ausiot.util.DateHelper;
-import auto.ausiot.vo.Days;
 import auto.ausiot.vo.Schedule;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -53,7 +42,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class RegisterUser extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -82,12 +71,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+    private EditText mAddresssView;
+    private EditText mFullNameView;
+
     private boolean mAuthenticated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register_user);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -104,11 +96,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
-
-        mEmailView.setText(loginPreferences.getString("username", ""));
-        mPasswordView.setText(loginPreferences.getString("password", ""));
+        mAddresssView = (EditText) findViewById(R.id.address);
+        mFullNameView = (EditText) findViewById(R.id.name);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -118,14 +107,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button registerUserButton = (Button) findViewById(R.id.register_user_button);
-        registerUserButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(LoginActivity.this,RegisterUser.class);
-                startActivity(i);
-            }
-        });
+
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -148,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                    .setAction(android.R.string.ok, new OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
@@ -182,10 +164,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private void attemptLogin() {
 
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -193,10 +171,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-
-        loginPrefsEditor.putString("username", email);
-        loginPrefsEditor.putString("password", password);
-        loginPrefsEditor.commit();
 
         boolean cancel = false;
         View focusView = null;
@@ -219,7 +193,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        if (cancel) {
+        RestCallBack rcallback =  new RestCallBack() {
+            @Override
+            public void onResponse(Schedule scvo) {
+
+            }
+
+            @Override
+            public void onResponse(String token, String user) {
+                if (token != null){
+                    mAuthenticated = true;
+                    RestStore.authToken = "Bearer "+token;
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                ;
+            }
+
+        };
+        User user = new User();
+        user.setEmail(mEmailView.getText().toString());
+        user.setPassword(mPasswordView.getText().toString());
+        user.setFullname(mFullNameView.getText().toString());
+        user.setAddress(mAddresssView.getText().toString());
+        ScheduleHelper sh = new ScheduleHelper();
+        sh.register(user,null,rcallback);
+
+        /*if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
@@ -229,7 +233,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-        }
+        }*/
     }
 
     private boolean isEmailValid(String email) {
@@ -316,7 +320,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
+                new ArrayAdapter<>(RegisterUser.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
