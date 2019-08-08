@@ -10,5 +10,8 @@
     <item android:id="@+id/disclaimer"
         android:title="Disclaimer"
         app:showAsAction="never" />
+    <item android:id="@+id/login"
+        android:title="Login"
+        app:showAsAction="never" />
 
 </menu> 

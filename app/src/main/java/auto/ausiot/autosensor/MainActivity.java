@@ -436,6 +436,11 @@ public class MainActivity extends AppCompatActivity {
                  disableallcontrols();
              }
 
+            @Override
+            public void onResponse(String s,String user) {
+                int x = 1;
+            }
+
          };
         sh.loadScheduleFromService(unitID + "_" + sensorID ,context,rcallback);
     }
@@ -447,6 +452,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Schedule scvo) {
                 saveBtn.setText("Saved");
+            }
+
+            @Override
+            public void onResponse(String s,String user) {
+                int x = 1;
             }
 
             @Override

@@ -36,6 +36,7 @@ import java.util.GregorianCalendar;
 import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.stroe.RestCallBack;
+import auto.ausiot.stroe.RestStore;
 import auto.ausiot.util.AppConfig;
 import auto.ausiot.util.DateHelper;
 import auto.ausiot.util.Logger;
@@ -88,6 +89,11 @@ public class InitViewer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initialize);
+
+        if (RestStore.authToken == null){
+            Intent i = new Intent(InitViewer.this,LoginActivity.class);
+            startActivity(i);
+        }
 
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -195,6 +201,10 @@ public class InitViewer extends AppCompatActivity {
                 }
 
                 @Override
+                public void onResponse(String token, String user) {
+                }
+
+                @Override
                 public void onFailure() {
                     //@TODO
                     int x = 1;
@@ -222,7 +232,10 @@ public class InitViewer extends AppCompatActivity {
                     startActivity(i);
                 //}
             }
+            @Override
+            public void onResponse(String token, String user) {
 
+            }
             @Override
             public void onFailure() {
                 //@TODO
