@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 //import android.widget.Button;
 import android.widget.Button;
@@ -71,6 +72,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     private int LINE_COUNT = 3;
 
     private static boolean isActivityInitialized = false;
+    static Bundle m_savedInstanceState = new Bundle();
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -176,6 +178,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
          //Init Navigation
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        //m_savedInstanceState = savedInstanceState;
     }
 
     @Override
@@ -185,6 +188,17 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
         setAlarm(unitID);
         setNetworkStatusBanner();
+        //Restore Fragment values
+        restore_fragment_check_boxes(m_savedInstanceState);
+    }
+
+    private void restore_fragment_check_boxes(Bundle savedInstanceState){
+        if(savedInstanceState != null) {
+            FragmentManager fm = getSupportFragmentManager();
+            WaterLineFragment fragment = (WaterLineFragment) fm.findFragmentByTag("fragment_one");
+            if (fragment != null)
+                fragment.restore_state(savedInstanceState);
+        }
 
     }
 
@@ -192,7 +206,26 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     public void onResume() {
         super.onResume();
         //setNetworkStatusBanner();
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        FragmentManager fm = getSupportFragmentManager();
+        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        if (fragment!= null)
+            fragment.save_state(m_savedInstanceState);
+//        m_savedInstanceState.putInt("aaa",1);
+
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        FragmentManager fm = getSupportFragmentManager();
+        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        if (fragment!= null)
+            fragment.restore_state(savedInstanceState);
     }
 
     public void sendMQTTMsg(String topic, String action) {
@@ -221,6 +254,11 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
                     public void onCallBack(String msg) {
                         if (msg.compareTo(Constants.SENSOR_STATUS_ON_MSG) == 0) {
                             HeartBeatCallBack.last_heart_beat = new Date();
+                            //Interrupt the UI thread using an alarm
+                            Intent intent1 = new Intent(context, AlarmReceiver.class);
+                            final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, 0);
+                            final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1, pendingIntent);
                             //setNetworkStatusBanner();
                         }
                     }

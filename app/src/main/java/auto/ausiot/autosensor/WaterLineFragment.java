@@ -2,7 +2,6 @@ package auto.ausiot.autosensor;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,9 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -53,6 +49,7 @@ public class WaterLineFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private static boolean mIsClicked =true;
     public WaterLineFragment() {
         // Required empty public constructor
     }
@@ -92,6 +89,11 @@ public class WaterLineFragment extends Fragment {
 
 
     }
+
+//    public void onRadioButtonClicked(View view) {
+//        mIsClicked = true;
+//    }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -144,9 +146,6 @@ public class WaterLineFragment extends Fragment {
         disable_all_Controls();
     }
 
-//    public void onRadioButtonClicked(View v){
-//        Toast.makeText(getView().getContext(),"AAAAAAAA",Toast.LENGTH_LONG);
-//    }
 
     void setLabels(){
         TextView zone = (TextView) getView().findViewById(R.id.label_zone_fragment);
@@ -205,12 +204,18 @@ public class WaterLineFragment extends Fragment {
 
 
     public void sendMQTTMsg(String topic, String action) {
-        try {
-            Subscriber.sendMsg(topic, action);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        if (mIsClicked == true) {
+            try {
+                Subscriber.sendMsg(topic, action);
+            } catch (MqttException e) {
+                e.printStackTrace();
+                mIsClicked = true;
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                mIsClicked = true;
+            }
+        }else{
+            mIsClicked = true;
         }
         //Topic
 
@@ -235,45 +240,6 @@ public class WaterLineFragment extends Fragment {
     }
 
 
-
-//    public void enable_all_Controls(){
-//        final RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
-//
-//        radioGroup_1.post(new Runnable() {
-//            public void run() {
-//                for (int i = 0; i < radioGroup_1.getChildCount(); i++) {
-//                    radioGroup_1.getChildAt(i).setEnabled(true);
-//                }
-//            }
-//        });
-//
-//        final RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
-//
-//        final MonitorActivity ma = (MonitorActivity) getActivity();
-//
-//        radioGroup_2.post(new Runnable() {
-//            public void run() {
-//                for (int i = 0; i < radioGroup_2.getChildCount(); i++) {
-//                    radioGroup_2.getChildAt(i).setEnabled(true);
-//                    //radioGroup_2.getChildAt(i).setEnabled(true);
-//                }
-//                ma.textBanner.post(new Runnable() {
-//                    public void run() {
-//                        ma.textBanner.setText("Network On");
-//                        ma.textBanner.setTextColor(Color.GREEN);
-//                    }
-//                });
-//                ma.textBanner_2.post(new Runnable() {
-//                    public void run() {
-//                        ma.textBanner_2.setText("");
-//                    }
-//                });
-//
-//            }
-//        });
-//    }
-//
-
     public void enable_all_Controls(){
         final Button on_1 = (RadioButton) getView().findViewById(R.id.on_1);
         on_1.setEnabled(true);
@@ -290,4 +256,37 @@ public class WaterLineFragment extends Fragment {
         ma.textBanner_2.setText("");
 
      }
+
+    public void save_state(Bundle savedInstanceState){
+        RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
+        savedInstanceState.putInt("line_1", radioGroup_1.getCheckedRadioButtonId());
+
+        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
+        savedInstanceState.putInt("line_2", radioGroup_2.getCheckedRadioButtonId());
+
+    }
+
+    public void restore_state(Bundle savedInstanceState){
+        //Dont Send a MQTT Messages when restoring
+        if (savedInstanceState.getInt("line_1") != 0) {
+
+            //Compare whether the Selected ID Now and previous is different
+            //If so change the state , make sure to set mIsClicked to false
+            // This will prevent firing another MQTT Msg
+            final RadioButton on_1 = (RadioButton) getView().findViewById(savedInstanceState.getInt("line_1") );
+            if (on_1.isChecked() == false) {
+                mIsClicked = false;
+                on_1.setChecked(true);
+            }
+            //radioGroup_1.check(savedInstanceState.getInt("line_1"));
+        }
+
+        if (savedInstanceState.getInt("line_2") != 0) {
+            final RadioButton on_2 = (RadioButton) getView().findViewById(savedInstanceState.getInt("line_2") );
+            if (on_2.isChecked() == false) {
+                mIsClicked = false;
+                on_2.setChecked(true);
+            }
+        }
+    }
 }
