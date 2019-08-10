@@ -44,4 +44,8 @@ public interface GetDataService {
     @POST("api/auth/register")
     Call<ResponseBody> register(@Body User user);
 
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    @GET("/user/{id}")
+    Call<User> getUser(@Path("id") String id,@Header("Authorization") String auth);
+
 }

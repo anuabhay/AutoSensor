@@ -30,6 +30,7 @@ public class RestStore /*implements ScheduleStore*/ {
     Context context;
     String fileName;
     Schedule sc;
+    public static User user = null;
 
     static String DEFUALT_SCHEDULE = "WEEKLY::1,13:00,9,TRUE;2,13:00,9,TRUE;3,13:00,9,TRUE;4,13:00,9,TRUE;5,13:00,9,TRUE;6,13:00,9,TRUE;0,13:00,9,TRUE";
     public static String authToken = null;
@@ -58,7 +59,6 @@ public class RestStore /*implements ScheduleStore*/ {
                 //@TODO Do error check
             }
         });
-
         return sc;
     }
 
@@ -70,9 +70,7 @@ public class RestStore /*implements ScheduleStore*/ {
             public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
                 //@TODO Do We need to do anything here , save success
                 restcallback.onResponse(null);
-
             }
-
             @Override
             public void onFailure(Call<List<Schedule>> call, Throwable t) {
                 //@TODO Do error check
@@ -89,7 +87,6 @@ public class RestStore /*implements ScheduleStore*/ {
             public void onResponse(Call<String> call, Response<String> response) {
                 //@TODO Do We need to do anything here , save success
                 restcallback.onResponse(null);
-
             }
 
             @Override
@@ -184,5 +181,24 @@ public class RestStore /*implements ScheduleStore*/ {
                 restcallback.onFailure();
             }
         });
+    }
+
+    public User getUser(String id, final RestCallBack restcallback){
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call<User> call = service.getUser(id,authToken);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                user = (User) response.body();
+                //restcallback.onResponse(sc);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                //@TODO Do error check
+            }
+        });
+
+        return user;
     }
 }

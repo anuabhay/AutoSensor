@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Oz-Bach</string>
+    <string name="app_name">Oz-Bach-Wheather</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Schedule</string>
     <string name="title_notifications">Config</string>
@@ -46,5 +46,6 @@
     </string>
     <string name="prompt_user_full_name">Name</string>
     <string name="prompt_user_address">Address</string>
+    <string name="api_key">AIzaSyDiW-WR6E5cmlBLdjyuQK0etJP4Iwf_5i0</string>
 
 </resources>

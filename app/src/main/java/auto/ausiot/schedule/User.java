@@ -10,6 +10,8 @@ public class User {
 
     private boolean enabled;
     private String address;
+    private double latitude;
+    private double longitude;
     private Set<Role> roles;
     public String getId() {
         return id;
@@ -55,5 +57,19 @@ public class User {
         this.address = address;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 }

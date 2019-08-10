@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -18,20 +17,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 //import android.widget.Button;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.URISyntaxException;
 import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 
 import auto.ausiot.util.AppConfig;
@@ -119,7 +112,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.help) {
             //startActivity(new Intent(this, CoursesActivity.class));
-            startActivity(new Intent(this, AddUser.class));
+            startActivity(new Intent(this, UserInfo.class));
         }
         if (item.getItemId() == R.id.app_settings) {
             startActivity(new Intent(this, AppSettings.class));
@@ -127,7 +120,9 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         if (item.getItemId() == R.id.disclaimer) {
             startActivity(new Intent(this, Disclaimer.class));
         }
-
+        if (item.getItemId() == R.id.user_info) {
+            startActivity(new Intent(this, UserInfo.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 

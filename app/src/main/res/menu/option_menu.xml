@@ -10,6 +10,11 @@
     <item android:id="@+id/disclaimer"
         android:title="Disclaimer"
         app:showAsAction="never" />
+    <item android:id="@+id/user_info"
+        android:title="User Info"
+        app:showAsAction="never" />
+
+
 
 
 </menu> 

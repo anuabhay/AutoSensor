@@ -38,7 +38,7 @@
             android:name=".MonitorActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AddUser"
+            android:name=".UserInfo"
             android:screenOrientation="portrait" />
         <activity
             android:name=".AppSettings"
@@ -59,6 +59,7 @@
             android:label="@string/title_activity_login"></activity>
         <activity
             android:name=".RegisterUser"></activity>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDiW-WR6E5cmlBLdjyuQK0etJP4Iwf_5i0"/>
     </application>
 
 </manifest>

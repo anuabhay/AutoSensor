@@ -353,6 +353,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             // TODO: register the new account here.
             mAuthenticated = false;
+            final ScheduleHelper sh = new ScheduleHelper();
             RestCallBack rcallback =  new RestCallBack() {
                 @Override
                 public void onResponse(Schedule scvo) {
@@ -364,6 +365,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     if (token != null){
                         mAuthenticated = true;
                         RestStore.authToken = "Bearer "+token;
+                        // Get User Now
+                        sh.getUser(mEmail,null,null);
                     }else{
 
                     }
@@ -376,7 +379,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             };
 
-            ScheduleHelper sh = new ScheduleHelper();
+
             sh.login(mEmail,mPassword,null,rcallback);
             try {
                 // Simulate network access.

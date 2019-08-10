@@ -54,5 +54,8 @@ public class ScheduleHelper {
         rs.register(user ,rcalback);
     }
 
-
+    public void getUser(String useremail, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.getUser(useremail, rcalback);
+    }
 }
