@@ -48,4 +48,5 @@ public interface GetDataService {
     @GET("/user/{id}")
     Call<User> getUser(@Path("id") String id,@Header("Authorization") String auth);
 
+
 }

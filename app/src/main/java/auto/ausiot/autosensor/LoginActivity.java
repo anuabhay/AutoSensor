@@ -353,7 +353,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             // TODO: register the new account here.
             mAuthenticated = false;
+
             final ScheduleHelper sh = new ScheduleHelper();
+
             RestCallBack rcallback =  new RestCallBack() {
                 @Override
                 public void onResponse(Schedule scvo) {
@@ -378,7 +380,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
 
             };
-
 
             sh.login(mEmail,mPassword,null,rcallback);
             try {

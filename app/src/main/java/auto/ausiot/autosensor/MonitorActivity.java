@@ -120,9 +120,11 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         if (item.getItemId() == R.id.disclaimer) {
             startActivity(new Intent(this, Disclaimer.class));
         }
+
         if (item.getItemId() == R.id.user_info) {
             startActivity(new Intent(this, UserInfo.class));
         }
+
         return super.onOptionsItemSelected(item);
     }
 

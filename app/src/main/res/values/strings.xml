@@ -46,6 +46,9 @@
     </string>
     <string name="prompt_user_full_name">Name</string>
     <string name="prompt_user_address">Address</string>
+<<<<<<< HEAD
     <string name="api_key">AIzaSyDiW-WR6E5cmlBLdjyuQK0etJP4Iwf_5i0</string>
+=======
+>>>>>>> 34b0dc3d53f82535f8668627f3ff27725bdea4ef
 
 </resources>
