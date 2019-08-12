@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,10 +22,14 @@ import android.view.animation.AlphaAnimation;
 //import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.Map;
 
 
 import auto.ausiot.util.AppConfig;
@@ -185,7 +190,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         subscribeToStatus(unitID);
         sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
         setAlarm(unitID);
-        setNetworkStatusBanner();
+        setNetworkStatusBanner(false);
         //Restore Fragment values
         restore_fragment_check_boxes(m_savedInstanceState);
     }
@@ -196,6 +201,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
             WaterLineFragment fragment = (WaterLineFragment) fm.findFragmentByTag("fragment_one");
             if (fragment != null)
                 fragment.restore_state(savedInstanceState);
+                fragment.set_Indicators();
         }
 
     }
@@ -242,23 +248,56 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         if(initCalled == false) {
             initCalled = true;
             network_on = false;
-            //setNetWorkDown();
-            //textBanner.setText("Network Down");
-            //textBanner.setTextColor(Color.RED);
-
             try {
                 hbcallback = new HeartBeatCallBack() {
+                    /*
+                    Format
+
+                    {
+                        'UNIT' : 'ON' ,
+                        'R1'   :  'OFF' ,
+                        'R2'   : 'ON'
+                    }
+
+
+                     */
                     @Override
                     public void onCallBack(String msg) {
-                        if (msg.compareTo(Constants.SENSOR_STATUS_ON_MSG) == 0) {
-                            HeartBeatCallBack.last_heart_beat = new Date();
-                            //Interrupt the UI thread using an alarm
-                            Intent intent1 = new Intent(context, AlarmReceiver.class);
-                            final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, 0);
-                            final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1, pendingIntent);
-                            //setNetworkStatusBanner();
+                        Gson gson = new GsonBuilder().create();
+                        Object obj =  gson.fromJson(msg,Object.class);
+                        //@TODO Need to take off when all messages are JSON
+                        if ((obj instanceof String) == false) {
+                            Map<String, String> map = (Map<String, String>) obj;
+                            if (map.get("UNIT").compareTo("ON") == 0){
+                                HeartBeatCallBack.last_heart_beat = new Date();
+                            }
+                            if (map.get("R1").compareTo("ON") == 0){
+                                HeartBeatCallBack.STATUS_R1 = true;
+                            }
+                            if (map.get("R2").compareTo("ON") == 0){
+                                HeartBeatCallBack.STATUS_R2 = true;
+                            }
+                            if (map.get("R1").compareTo("OFF") == 0){
+                                HeartBeatCallBack.STATUS_R1 = false;
+                            }
+                            if (map.get("R2").compareTo("OFF") == 0){
+                                HeartBeatCallBack.STATUS_R2 = false;
+                            }
                         }
+
+//                        if (msg.compareTo(Constants.SENSOR_STATUS_ON_MSG) == 0) {
+//                            HeartBeatCallBack.last_heart_beat = new Date();
+//                            //Interrupt the UI thread using an alarm
+//                            Intent intent1 = new Intent(context, AlarmReceiver.class);
+//                            final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, 0);
+//                            final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1, pendingIntent);
+//                            //setNetworkStatusBanner();
+//                        }else if((msg.compareTo(Constants.STATUS_R1_CLOSE) == 0) || (msg.compareTo(Constants.STATUS_R1_OPEN)== 0)){
+//
+//                        }else if((msg.compareTo(Constants.STATUS_R2_CLOSE) == 0) || (msg.compareTo(Constants.STATUS_R2_OPEN)== 0)){
+//
+//                        }
                     }
                 };
                 HeartBeatCallBack.textBanner = textBanner;
@@ -273,14 +312,16 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         }
     }
 
-    public void setNetworkStatusBanner(){
+    public void setNetworkStatusBanner(boolean iscallback){
         if (HeartBeatCallBack.getLast_heart_beat()!= null) {
             if (compareDates(HeartBeatCallBack.getLast_heart_beat(), new Date(), Constants.MAX_HEARTBEAT_MISSES * Constants.STATUS_CHECK_FREQUENCY)) {
                 setNetWorkDown();
 
             } else {
                 setNetWorkUp();
-
+            }
+            if(iscallback){
+                setIndicators();
             }
         }else{
             setNetWorkDown();
@@ -329,7 +370,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     public void processAlarmCallBack(){
         //Toast.makeText(context, "Alarm Triggered", Toast.LENGTH_LONG).show();
-        setNetworkStatusBanner();
+        setNetworkStatusBanner(true);
         sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
     }
 
@@ -357,6 +398,14 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         if (fragment!= null)
             fragment.enable_all_Controls();
         network_on = true;
+    }
+
+    public void setIndicators(){
+        FragmentManager fm = getSupportFragmentManager();
+        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        if (fragment!= null)
+            fragment.set_Indicators();
+
     }
 
 }

@@ -295,6 +295,7 @@ public class RegisterUser extends AppCompatActivity {
 
             @Override
             public void onResponse(String token, String user) {
+
                 finish();
             }
 

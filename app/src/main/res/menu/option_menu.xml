@@ -14,8 +14,4 @@
         android:title="User Info"
         app:showAsAction="never" />
 
-
-
-
-
 </menu> 

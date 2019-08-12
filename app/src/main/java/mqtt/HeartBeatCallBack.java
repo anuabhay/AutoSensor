@@ -11,6 +11,9 @@ import java.util.Date;
 
 public class HeartBeatCallBack implements MQTTCallBack {
     public static Date last_heart_beat;
+
+    public static boolean STATUS_R1;
+    public static boolean STATUS_R2;
     public static TextView textBanner = null;
 
     @Override
