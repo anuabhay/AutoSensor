@@ -1,5 +1,6 @@
 package auto.ausiot.autosensor;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -74,7 +76,7 @@ public class InitViewer extends AppCompatActivity {
                     startActivity(i);
                     return true;
                 case R.id.navigation_dashboard:
-                    i = new Intent(InitViewer.this,MainActivity.class);
+                    i = new Intent(InitViewer.this,RepeatScheduleActivity.class);
                     startActivity(i);
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
@@ -146,7 +148,6 @@ public class InitViewer extends AppCompatActivity {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 IntentIntegrator integrator = new IntentIntegrator(InitViewer.this);
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
                 integrator.setPrompt("Scan");
@@ -154,10 +155,9 @@ public class InitViewer extends AppCompatActivity {
                 integrator.setBeepEnabled(false);
                 integrator.setBarcodeImageEnabled(false);
                 integrator.initiateScan();
-
             }
         });
-    }
+     }
 
 
     @Override
@@ -171,7 +171,7 @@ public class InitViewer extends AppCompatActivity {
                 Log.e("Scan", "Scanned");
                 tv_qr_readTxt.setText(result.getContents());
                 //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                //addSensor(result.getContents());
+                //addUnit(result.getContents());
                 editText.setText(result.getContents());
             }
         } else {
@@ -191,7 +191,7 @@ public class InitViewer extends AppCompatActivity {
             RestCallBack rcallback =  new RestCallBack() {
                 int count ;
                 @Override
-                public void onResponse(Schedule scvo) {
+                public void onResponse(Object obj) {
                     //@TODO Count Actual responses
                     //if(count++ == 2) {
                         config.writeConfig(sID);
@@ -211,8 +211,8 @@ public class InitViewer extends AppCompatActivity {
                 }
 
             };
-            sh.addSensorfromservice(null,rcallback,unitID + "_1"  );
-            sh.addSensorfromservice(null,rcallback,unitID + "_2"  );
+            sh.addSensorfromservice(null,rcallback,unitID);
+            //sh.addSensorfromservice(null,rcallback,unitID + "_2"  );
 
         }
 
@@ -224,7 +224,7 @@ public class InitViewer extends AppCompatActivity {
         RestCallBack rcallback =  new RestCallBack() {
             int count = 0;
             @Override
-            public void onResponse(Schedule scvo) {
+            public void onResponse(Object obj) {
                 //@TODO Count Actual responses
                 //if(count++ == 2) {
                     config.reset();
@@ -243,9 +243,7 @@ public class InitViewer extends AppCompatActivity {
             }
 
         };
-        sh.deleteScheduleFromService(null,rcallback,unitID + "_1");
-        sh.deleteScheduleFromService(null,rcallback,unitID + "_2");
-
+        sh.deleteUnit(unitID, null,rcallback);
 
 
     }

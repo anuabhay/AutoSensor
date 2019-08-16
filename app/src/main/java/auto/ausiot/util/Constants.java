@@ -62,7 +62,10 @@ public class Constants {
     // In mili seconds
     public static int MAX_HEARTBEAT_MISSES = 2;
 
+    public static long MAX_END_DATE = 193444070400000L;
+
 
     public static String ERROR_MSG_SCHEDULE_NOT_LOADED = "Could not load the schedule.Try restarting the app";
 
+    public static int MAX_SCHEDULE_COUNT = 6;
 }

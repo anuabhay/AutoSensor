@@ -289,7 +289,7 @@ public class RegisterUser extends AppCompatActivity {
 
         RestCallBack rcallback =  new RestCallBack() {
             @Override
-            public void onResponse(Schedule scvo) {
+            public void onResponse(Object scvo) {
 
             }
 

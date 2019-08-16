@@ -1,8 +1,12 @@
 package auto.ausiot.autosensor;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -18,17 +22,25 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import auto.ausiot.schedule.ScheduleBO;
@@ -42,8 +54,10 @@ import auto.ausiot.util.DateHelper;
 import auto.ausiot.util.Logger;
 import auto.ausiot.vo.Days;
 import auto.ausiot.vo.Schedule;
+import auto.ausiot.vo.ScheduleItem;
+import auto.ausiot.vo.ScheduleType;
 
-public class MainActivity extends AppCompatActivity {
+public class RepeatScheduleActivity extends AppCompatActivity {
     private TextView mTextMessage;
     Context context ;
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
@@ -52,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
     AppConfig config ;
     private RadioGroup radioGroupDays ;
     //@TODO THis need to change for user ID to support multiple sensors
-    private String unitID;
-    private String lineID = "1";
+    public String unitID;
+    public String lineID = "1";
     Button saveBtn;
     LinearLayout mainLayout;
-    RadioButton line_1;
-    RadioButton  line_2;
+    //RadioButton line_1;
+    //RadioButton  line_2;
     private static int scheduleID = 1;
 
 
@@ -69,13 +83,13 @@ public class MainActivity extends AppCompatActivity {
             Intent i;
              switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    i = new Intent(MainActivity.this,MonitorActivity.class);
+                    i = new Intent(RepeatScheduleActivity.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
                 case R.id.navigation_dashboard:
                     return true;
                 case R.id.navigation_notifications:
-                    i = new Intent(MainActivity.this,InitViewer.class);
+                    i = new Intent(RepeatScheduleActivity.this,InitViewer.class);
                     startActivity(i);
 
                     return true;
@@ -86,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     void checkInitialized(){
         if (config.checkInitialized() == false){
-            Intent i = new Intent(MainActivity.this,InitViewer.class);
+            Intent i = new Intent(RepeatScheduleActivity.this,InitViewer.class);
             startActivity(i);
 
         }
@@ -94,8 +108,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_repeat_schedule);
 
+        String sid = getIntent().getStringExtra("scheduleid");
+        lineID = getIntent().getStringExtra("lineID");
+        unitID = getIntent().getStringExtra("unitID");
+        boolean isnew = getIntent().getBooleanExtra("schedulenew",false);
+
+        if (isnew == false) {
+            schedulebo = RestStore.getScheduleByID(sid);
+        }else{
+            int id = getIntent().getIntExtra("schedule_index",0);
+            Map<Days, ScheduleItem> si = new HashMap<>();
+            sid = RestStore.user.getId() + "_"+ unitID + "_"+ lineID +"_" + new Integer(id).toString();
+            Schedule defaultschedule = new Schedule( sid, "Schedule -" + new Integer(id).toString(),
+                    RestStore.user.getId() , unitID, lineID,
+                    new Date() , new Date() ,
+                    si,true );
+            //@TODO Move to constant file
+            String schedule = "WEEKLY::1,13:00,9,TRUE;2,13:00,9,TRUE;3,13:00,9,TRUE;4,13:00,9,TRUE;5,13:00,9,TRUE;6,13:00,9,TRUE;0,13:00,9,TRUE";
+            try {
+                defaultschedule.createSheduleFromString(schedule);
+                schedulebo =ScheduleBO.getScheduleBO(defaultschedule);
+                int x = 1;
+            } catch (ParseException  e) {
+                e.printStackTrace();
+            }
+
+        }
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
@@ -103,10 +143,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         Resources res = getResources();
-        context = MainActivity.this.getApplicationContext();
-        config = new AppConfig(MainActivity.this.getApplicationContext());
-        unitID = config.readFirstConfig();
+        context = RepeatScheduleActivity.this.getApplicationContext();
+        config = new AppConfig(RepeatScheduleActivity.this.getApplicationContext());
 
+        EditText txtName = (EditText) findViewById(R.id.text_input_name);
+        txtName.setText(schedulebo.getName());
+        //txtDes.setText("Schedule for Unit: " + unitID + " and Line: " + lineID);
+
+
+        //@TODO Depricated
+        //unitID = config.readFirstConfig();
         checkInitialized();
 
         mTextMessage = (TextView) findViewById(R.id.message);
@@ -114,42 +160,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         mainLayout = findViewById(R.id.lo_all_content);
-        line_1 = findViewById(R.id.radioButton_sensor1);
-        line_2 = findViewById(R.id.radioButton_sensor2);
-
-        RadioGroup radioGroupSensor = (RadioGroup) findViewById(R.id.radioSensorID);
-        radioGroupSensor.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-                setSelectionBanner();
-                if (checkedId == R.id.radioButton_sensor1) {
-                    lineID = "1";
-                    line_2.setTextColor(Color.GRAY);
-                    line_1.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    line_1.setTextSize(30);
-                    line_2.setTextSize(18);
-                    line_2.setBackgroundResource(R.drawable.layout_border);
-                    line_1.setBackgroundResource(0);
-                    //mainLayout.setBackgroundColor(getResources().getColor(R.color.schedule_1_background));
-                } else {
-                        lineID = "2";
-                    //RelativeLayout l =  (RelativeLayout) findViewById(R.id.XXXXX);
-                    line_1.setTextColor(Color.GRAY);
-                    line_2.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    line_2.setTextSize(30);
-                    line_1.setTextSize(18);
-                    line_1.setBackgroundResource(R.drawable.layout_border);
-                    line_2.setBackgroundResource(0);
-                }
-                loadScheduleData();
-            }
-        });
-
-
-        //RadioGroup radioGroupconfig = (RadioGroup) findViewById(R.id.radioConfigType);
-        //radioGroupconfig.setVisibility(View.INVISIBLE);
 
         radioGroupDays = (RadioGroup) findViewById(R.id.radioDays);
         radioGroupDays.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -167,15 +177,67 @@ public class MainActivity extends AppCompatActivity {
         TextView tvtime = (TextView) findViewById(R.id.timePicker);
         tvtime.setText("00:00");
         //loadScheduleData();
-        RadioButton radiobutton_sensor_1 = (RadioButton) findViewById(R.id.radioButton_sensor1);
-        radiobutton_sensor_1.setChecked(true);
+//        RadioButton radiobutton_sensor_1 = (RadioButton) findViewById(R.id.radioButton_sensor1);
+//        radiobutton_sensor_1.setChecked(true);
 
         //No Alarms From the app any more
         //setAlarm();
 
         initListners();
         logger = new Logger(context);
+        setDatePickers();
     }
+
+    private void setDatePickers(){
+        final Calendar calendar_start = Calendar.getInstance();
+        calendar_start.setTime(schedulebo.getStartDate());
+        final TextView txtStart = (TextView) findViewById(R.id.text_startdate);
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd");
+
+        txtStart.setText(sdf.format(calendar_start.getTime()));
+        txtStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(RepeatScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+                        Calendar cl = Calendar.getInstance();
+                        cl.set(arg1,arg2,arg3);
+                        schedulebo.setStartDate(cl.getTime());
+                        txtStart.setText(sdf.format(cl.getTime()));
+                    }
+
+                }, calendar_start.get(Calendar.YEAR), calendar_start.get(Calendar.MONTH), calendar_start.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
+
+        final Calendar calendar_end = Calendar.getInstance();
+        calendar_end.setTime(schedulebo.getEndDate());
+        final TextView txtEnd = (TextView) findViewById(R.id.text_enddate);
+        txtEnd.setText(sdf.format(calendar_end.getTime()));
+        txtEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(RepeatScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+                        Calendar cl = Calendar.getInstance();
+                        cl.set(arg1,arg2,arg3);
+                        schedulebo.setEndDate(cl.getTime());
+                        txtEnd.setText(sdf.format(cl.getTime()));
+                        //txtEnd.setText(new Integer(arg1).toString() + new Integer(arg2).toString() +new Integer(arg3).toString());
+                        // arg1 = year
+                        // arg2 = month
+                        // arg3 = dayarg
+                    }
+
+                }, calendar_end.get(Calendar.YEAR), calendar_end.get(Calendar.MONTH), calendar_end.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
+    }
+
 
     private Days getDayFromCheckID(int checkedId) {
         Days day = Days.Friday;
@@ -287,7 +349,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        addTextWatchers(tvDuration, tvDate);
+        EditText txtName = (EditText) findViewById(R.id.text_input_name);
+
+        addTextWatchers(tvDuration, tvDate , txtName);
 
     }
 
@@ -297,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
      * @param tvDuration
      * @param tvDate
      */
-    private void addTextWatchers(TextView tvDuration , TextView tvDate)
+    private void addTextWatchers(TextView tvDuration , TextView tvDate , EditText tvName)
     {
         TextWatcher twdate = new TextWatcher() {
             @Override
@@ -345,6 +409,27 @@ public class MainActivity extends AppCompatActivity {
 
         };
         tvDuration.addTextChangedListener(twDuration);
+
+        TextWatcher twName = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                schedulebo.setName(s.toString());
+                saveBtn.setText("Save");
+            }
+
+        };
+        tvName.addTextChangedListener(twName);
+
     }
 
 
@@ -422,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
                      chkEnabled.setChecked(enabled);
 
                      Resources res = getResources();
-                     Context context = MainActivity.this.getApplicationContext();
+                     Context context = RepeatScheduleActivity.this.getApplicationContext();
 
                      for (Days day : Days.values()) {
                          String val = Integer.toString(day.ordinal() + 1);
@@ -472,7 +557,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
         };
-        sh.saveScheduleFromService(context,rcallback,schedulebo.getScheduleVO());
+        if (validateSchedules(schedulebo)) {
+            sh.saveScheduleFromService(context, rcallback, schedulebo.getScheduleVO());
+        }
     }
 
     void cancelAlarm(){
@@ -498,25 +585,25 @@ public class MainActivity extends AppCompatActivity {
     void setSelectionBanner(){
         String label = "";
         TextView tvselection = (TextView) findViewById(R.id.textBanner_Selection);
-        RadioGroup radioGroupSensor = (RadioGroup) findViewById(R.id.radioSensorID);
-        line_1 = findViewById(R.id.radioButton_sensor1);
-        line_2 = findViewById(R.id.radioButton_sensor2);
-        if (radioGroupSensor.getCheckedRadioButtonId() == R.id.radioButton_sensor1) {
-            label = label +  line_1.getText().toString();
-        } else {
-            label = label + line_2.getText().toString();
-        }
+//        RadioGroup radioGroupSensor = (RadioGroup) findViewById(R.id.radioSensorID);
+//        line_1 = findViewById(R.id.radioButton_sensor1);
+//        line_2 = findViewById(R.id.radioButton_sensor2);
+//        if (radioGroupSensor.getCheckedRadioButtonId() == R.id.radioButton_sensor1) {
+//            label = label +  line_1.getText().toString();
+//        } else {
+//            label = label + line_2.getText().toString();
+//        }
 
         radioGroupDays = (RadioGroup) findViewById(R.id.radioDays);
         Days day = getDayFromCheckID(radioGroupDays.getCheckedRadioButtonId());
 
-        label = label + " Schedule for " + day.name();
+        label = lineID + " Schedule for " + day.name();
         tvselection.setText(label);
     }
 
     void disableallcontrols(){
-        RadioButton sensor1 = (RadioButton) findViewById(R.id.radioButton_sensor1);
-        RadioButton sensor2 = (RadioButton) findViewById(R.id.radioButton_sensor2);
+//        RadioButton sensor1 = (RadioButton) findViewById(R.id.radioButton_sensor1);
+//        RadioButton sensor2 = (RadioButton) findViewById(R.id.radioButton_sensor2);
 
 
         ((RadioButton) findViewById(R.id.radio_1)).setEnabled(false);
@@ -529,10 +616,106 @@ public class MainActivity extends AppCompatActivity {
 
 
         radioGroupDays.setEnabled(false);
-        sensor1.setEnabled(false);
-        sensor2.setEnabled(false);
+//        sensor1.setEnabled(false);
+//        sensor2.setEnabled(false);
         TextView tvselection = (TextView) findViewById(R.id.textBanner_Selection);
         tvselection.setText(Constants.ERROR_MSG_SCHEDULE_NOT_LOADED.toString());
     }
 
+
+    boolean validateSchedules(ScheduleBO sbonew){
+        boolean valid = true;
+        List<ScheduleBO> sbolist = RestStore.userScheduleBOs;
+        for(int i=0; i < sbolist.size();i++){
+            if (sbolist.get(i).getId().compareTo(sbonew.getId())!=0){
+                ScheduleBO sboex = sbolist.get(i);
+                if(sboex.getEndDate().before(sbonew.getStartDate())||
+                        sboex.getStartDate().after(sbonew.getEndDate())){
+
+                }else{
+                    Date dt;
+                    if (sboex.getStartDate().before(sbonew.getStartDate())){
+                        dt = sboex.getStartDate();
+
+
+                    }else{
+                        dt = sbonew.getStartDate();
+                    }
+                    int count = 1;
+                    boolean exit = false;
+                    String msg = "Check the schedule for ";
+                    while (dt.before(sbonew.getEndDate()) &&
+                            dt.before(sboex.getEndDate()) &&
+                            (count < 7) &&
+                            (exit == false)) {
+
+                        int x = dt.getDay();
+                        if (compareSchedules(dt,sbonew,sboex) == true){
+                            valid = false;
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("EEEE");
+                            msg = msg + sboex.getName() + "  : " + sdf2.format(dt) + "\n";
+                        }
+                        count++;
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(dt);
+                        c.add(Calendar.DATE, 1);
+                        dt = c.getTime();
+                    }
+
+                    if (valid == false){
+                         new AlertDialog.Builder(RepeatScheduleActivity.this)
+                            .setTitle("Overlaping Schedules")
+                            .setMessage(msg)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                     return;
+                                }
+                             }).show();/*.setNegativeButton("No", null).show();*/
+                    }
+                }
+               //they overlap
+            }
+        }
+        return valid;
+    }
+
+    public boolean compareSchedules(Date dt, ScheduleBO sbonew, ScheduleBO sboex) {
+        boolean ret = false;
+         try {
+            // If disable dont compare
+             if (( sbonew.getcheduleItem( Days.get(dt.getDay() )).isEnabled() == false ) ||
+                     ( sboex.getcheduleItem( Days.get(dt.getDay())).isEnabled() == false )){
+                    return false;
+             }
+            Date newStart = sbonew.getcheduleItem( Days.get(dt.getDay())).getTime();
+            Date exStart = sboex.getcheduleItem( Days.get(dt.getDay())).getTime();
+            int newGap = sbonew.getcheduleItem( Days.get(dt.getDay() )).getDuration();
+            int exGap = sboex.getcheduleItem( Days.get(dt.getDay() )).getDuration();
+            Calendar newcal = GregorianCalendar.getInstance(); // creates a new calendar instance
+            newcal.setTime(newStart);   // assigns calendar to given date
+
+            Calendar excal = GregorianCalendar.getInstance(); // creates a new calendar instance
+            excal.setTime(exStart);   // assigns calendar to given date
+
+            int newStartM = newcal.get(Calendar.HOUR_OF_DAY) * 60 +  newcal.get(Calendar.MINUTE);
+            int exStartM = excal.get(Calendar.HOUR_OF_DAY) * 60 +  excal.get(Calendar.MINUTE) ;
+
+            int newEndM = newStartM + newGap;
+            int exEndM = exStartM + exGap;
+
+            if((exEndM < newStartM) || (exStartM > newEndM)){
+
+            }else{
+                ret = true;
+            }
+            return ret;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+
+        }
 }

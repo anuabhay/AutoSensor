@@ -1,8 +1,11 @@
 package auto.ausiot.stroe;
 
+import java.util.List;
+
 import auto.ausiot.schedule.AuthBody;
 import auto.ausiot.schedule.User;
 import auto.ausiot.vo.Schedule;
+import auto.ausiot.vo.Unit;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -34,8 +37,17 @@ public interface GetDataService {
     Call<String> deleteSchedule(@Path("id") String id,@Header("Authorization") String auth);
 
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
-    @POST("/sensor")
-    Call<ResponseBody> addSensor(@Body String sensorID,@Header("Authorization") String auth);
+    @POST("/unit")
+    Call<ResponseBody> addUnit(@Body Unit unit, @Header("Authorization") String auth);
+
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    @GET("/units/{id}")
+    Call <List<Unit>> getUnits(@Path("id") String id, @Header("Authorization") String auth);
+
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    @DELETE("/units/{id}")
+    Call<String> deleteUnits(@Path("id") String id,@Header("Authorization") String auth);
+
 
     @POST("api/auth/login")
     Call<ResponseBody> login(@Body AuthBody user);
@@ -47,6 +59,12 @@ public interface GetDataService {
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     @GET("/user/{id}")
     Call<User> getUser(@Path("id") String id,@Header("Authorization") String auth);
+
+
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    @GET("/user/schedules/{id}")
+    Call<List<Schedule>> getUserSchedules(@Path("id") String userId,@Header("Authorization") String auth);
+
 
 
 }

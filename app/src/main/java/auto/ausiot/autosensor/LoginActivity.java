@@ -358,7 +358,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             RestCallBack rcallback =  new RestCallBack() {
                 @Override
-                public void onResponse(Schedule scvo) {
+                public void onResponse(Object obj) {
 
                 }
 

@@ -46,7 +46,6 @@
     </string>
     <string name="prompt_user_full_name">Name</string>
     <string name="prompt_user_address">Address (Search)</string>
-    <string name="api_key">AIzaSyDiW-WR6E5cmlBLdjyuQK0etJP4Iwf_5i0</string>
-
-
+    <string name="api_key">AIzaSyBudePesYzgj6a0LEsv2sQjjJ-CNnqvpRo</string>
+    <string name="dialog_text">Warning</string>
 </resources>

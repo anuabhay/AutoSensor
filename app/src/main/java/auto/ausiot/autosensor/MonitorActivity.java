@@ -85,7 +85,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
                     //myBtn.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.navigation_dashboard:
-                    i = new Intent(MonitorActivity.this,MainActivity.class);
+                    i = new Intent(MonitorActivity.this,ManageSchedulesActivity.class);
                     startActivity(i);
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;

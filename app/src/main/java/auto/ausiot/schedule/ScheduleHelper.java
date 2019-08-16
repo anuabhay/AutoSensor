@@ -58,4 +58,20 @@ public class ScheduleHelper {
         RestStore rs = new RestStore(context);
         rs.getUser(useremail, rcalback);
     }
+
+
+    public void getUnits(String userID, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.getUnits(userID, rcalback);
+    }
+
+    public void deleteUnit(String unitID, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.deleteUnit(unitID, rcalback);
+    }
+
+    public void getUserSchedules(String userID, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.getUserSchedules(userID, rcalback);
+    }
 }

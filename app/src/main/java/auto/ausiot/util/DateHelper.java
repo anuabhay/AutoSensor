@@ -59,4 +59,9 @@ public class DateHelper {
         }
         return snewitime;
     }
+
+    public static String getPrintableDate(Date date){
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd");
+        return sdf.format(date);
+    }
 }

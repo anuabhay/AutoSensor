@@ -2,20 +2,18 @@ package auto.ausiot.stroe;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import auto.ausiot.schedule.AuthBody;
+import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.User;
-import auto.ausiot.util.Constants;
 import auto.ausiot.vo.Schedule;
+import auto.ausiot.vo.Unit;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +29,9 @@ public class RestStore /*implements ScheduleStore*/ {
     String fileName;
     Schedule sc;
     public static User user = null;
+    public static List<Unit> units = null;
+    public static  List<Schedule> userSchedules = null;
+    public static  List<ScheduleBO> userScheduleBOs = null;
 
     static String DEFUALT_SCHEDULE = "WEEKLY::1,13:00,9,TRUE;2,13:00,9,TRUE;3,13:00,9,TRUE;4,13:00,9,TRUE;5,13:00,9,TRUE;6,13:00,9,TRUE;0,13:00,9,TRUE";
     public static String authToken = null;
@@ -39,11 +40,6 @@ public class RestStore /*implements ScheduleStore*/ {
     }
 
     public Schedule loadfromservice(String sensorID, final RestCallBack restcallback){
-//        try {
-//            sensorID = URLEncoder.encode(sensorID,"utf-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         //@TODO Need hooking this up with QR code
         Call<Schedule> call = service.getSchedules(sensorID,authToken);
@@ -100,7 +96,8 @@ public class RestStore /*implements ScheduleStore*/ {
 
     public void addSensorfromservice(String sensorID,final RestCallBack restcallback){
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-        Call call = service.addSensor(sensorID,authToken);
+        Unit unit = new Unit(sensorID,user.getId());
+        Call call = service.addUnit(unit,authToken);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -183,6 +180,25 @@ public class RestStore /*implements ScheduleStore*/ {
         });
     }
 
+    public Unit getUnits(String userID, final RestCallBack restcallback){
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        //@TODO Need hooking this up with QR code
+        Call call = service.getUnits(userID,authToken);
+        call.enqueue(new Callback<List<Unit>>() {
+            @Override
+            public void onResponse(Call<List<Unit>> call, Response<List<Unit>> response) {
+                units = (List<Unit>) response.body();
+                restcallback.onResponse("Success");
+            }
+
+            @Override
+            public void onFailure(Call<List<Unit>> call, Throwable t) {
+
+            }
+        });
+        return null;
+    }
+
     public User getUser(String id, final RestCallBack restcallback){
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Call<User> call = service.getUser(id,authToken);
@@ -202,4 +218,55 @@ public class RestStore /*implements ScheduleStore*/ {
         return user;
     }
 
+
+    public void deleteUnit(String unitID,final RestCallBack restcallback){
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call call = service.deleteUnits(unitID,authToken);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                //@TODO Do We need to do anything here , save success
+                restcallback.onResponse(null);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                restcallback.onFailure();
+                //@TODO Do error check
+            }
+        });
+    }
+
+    public Schedule getUserSchedules(String userID, final RestCallBack restcallback){
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        //@TODO Need hooking this up with QR code
+        Call<List<Schedule>> call = service.getUserSchedules(userID,authToken);
+        call.enqueue(new Callback<List<Schedule>>() {
+            @Override
+            public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
+                userSchedules = (List<Schedule>) response.body();
+                userScheduleBOs = new ArrayList<>();
+                for (int i=0;i<userSchedules.size();i++){
+                    userScheduleBOs.add(ScheduleBO.getScheduleBO(userSchedules.get(i)));
+                }
+                restcallback.onResponse(userSchedules);
+            }
+
+            @Override
+            public void onFailure(Call<List<Schedule>> call, Throwable t) {
+                //@TODO Do error check
+            }
+        });
+        return sc;
+    }
+
+    public static ScheduleBO getScheduleByID(String id){
+        ScheduleBO ret = null;
+        for (int i = 0 ; i < userScheduleBOs.size(); i++){
+            if (id.compareTo(userScheduleBOs.get(i).getId()) == 0){
+                    ret = userScheduleBOs.get(i);
+            }
+        }
+        return ret;
+    }
 }

@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="auto.ausiot.autosensor.MainActivity">
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <LinearLayout
+        android:id="@+id/parent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:showDividers="middle"
+        >
+
+    <!--<RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="438dp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"> -->
+
+
+        <LinearLayout
+            android:id="@+id/layout_sensor_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/text_label_name"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:text="Name: "
+                android:textSize="14dp"
+                android:textStyle="bold"/>
+            <EditText
+                android:id="@+id/text_input_name"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:inputType="text"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"/>
+
+         <LinearLayout
+                android:id="@+id/layout_daterange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+         <TextView
+                 android:id="@+id/text_label_startdate"
+                 android:layout_width="wrap_content"
+                 android:layout_height="30dp"
+                 android:layout_marginRight="5dp"
+                 android:layout_marginLeft="5dp"
+                 android:text="Start Date:"
+                android:textSize="14dp"
+                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/text_startdate"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="01/01/2017"
+            android:textSize="14dp"
+            android:textStyle="bold"/>
+
+        <TextView
+                 android:id="@+id/text_label_enddate"
+                 android:layout_width="wrap_content"
+                 android:layout_height="30dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="20dp"
+                 android:text="End Date:"
+                android:textSize="14dp"
+                android:textStyle="bold"/>
+             <TextView
+                android:id="@+id/text_enddate"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="01/01/2017"
+                android:textStyle="bold" />
+         </LinearLayout>
+
+        <!--<RadioGroup-->
+                <!--android:id="@+id/radioSensorID"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_marginLeft="25dp">-->
+
+                <!--<RadioButton-->
+                    <!--android:id="@+id/radioButton_sensor1"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_marginEnd="14dp"-->
+                    <!--android:layout_marginRight="14dp"-->
+                    <!--android:layout_toLeftOf="@+id/textView_3"-->
+                    <!--android:layout_toStartOf="@+id/textView_3"-->
+                    <!--android:text="xxxxx"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:textSize="24sp"-->
+                    <!--android:textStyle="bold" />-->
+
+                <!--<RadioButton-->
+                    <!--android:id="@+id/radioButton_sensor2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_marginEnd="14dp"-->
+                    <!--android:layout_marginRight="14dp"-->
+                    <!--android:layout_toLeftOf="@+id/textView_3"-->
+                    <!--android:layout_toStartOf="@+id/textView_3"-->
+                    <!--android:checked="true"-->
+                    <!--android:text="@string/title_line2"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:textSize="24sp"-->
+                    <!--android:textStyle="bold"/>-->
+            <!--</RadioGroup>-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"/>
+        <LinearLayout
+                android:id="@+id/lo_all_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+            >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lo_weeks"
+            android:layout_marginLeft="8dp"
+            >
+
+            <RadioGroup
+                android:id="@+id/radioDays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="12dp">
+
+                <RadioButton
+                    android:id="@+id/radio_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    style="@style/RadioWithTextOnTop"
+                    android:text="M"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radio_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_marginStart="14dp"
+                    style="@style/RadioWithTextOnTop"
+                    android:text="T"
+                    />
+                <RadioButton
+                    android:id="@+id/radio_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_marginStart="14dp"
+                    style="@style/RadioWithTextOnTop"
+                    android:text="W"
+                    />
+                <RadioButton
+                    android:id="@+id/radio_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_marginStart="14dp"
+                    style="@style/RadioWithTextOnTop"
+                    android:text="T"
+                    />
+                <RadioButton
+                    android:id="@+id/radio_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_marginStart="14dp"
+                    style="@style/RadioWithTextOnTop"
+                    android:text="F"
+                    />
+                <RadioButton
+                    android:id="@+id/radio_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_marginStart="14dp"
+                    style="@style/RadioWithTextOnTop"
+                    android:text="S"
+
+                    />
+                <RadioButton
+                    android:id="@+id/radio_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_marginStart="14dp"
+                    style="@style/RadioWithTextOnTop"
+                    android:text="S"
+                    />
+            </RadioGroup>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textBanner_Selection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/chronometer2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="Start Time"
+                style="@style/SmallLabel"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/lo_weeks"
+            android:layout_marginTop="10dp"
+            android:text="Duration"
+            style="@style/LargeLabel"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/chronometer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/textView2"
+            android:layout_marginTop="5dp"
+            android:scaleX=".9"
+            android:scaleY=".9"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/chronometer2"
+            android:layout_marginTop="10dp"
+            android:text="Start Time"
+            style="@style/LargeLabel"
+            android:textStyle="bold"
+            />
+
+
+        <TextView
+
+            android:id="@+id/timePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:scaleX=".9"
+            android:scaleY=".9"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:clickable="true"/>
+
+
+
+        <LinearLayout
+            android:id="@+id/checkBox_enable_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:weightSum="10"
+            android:layout_below="@+id/timePicker"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            tools:context="com.example.pager.MainActivity" >
+
+                <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Enabled"
+                    style="@style/LargeLabel"
+                    android:textStyle="bold"/>
+
+                <CheckBox
+                    android:id="@+id/checkBox_enable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/checkBox_enable_layout"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+
+            android:text="Save"
+            android:background="@drawable/circle"
+            android:textColor="#fff"
+            android:textSize="22sp"
+
+            tools:text="Save"
+            android:textAllCaps="false"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+    <!-- </RelativeLayout> -->
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
