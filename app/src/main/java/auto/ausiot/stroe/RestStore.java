@@ -269,4 +269,30 @@ public class RestStore /*implements ScheduleStore*/ {
         }
         return ret;
     }
+
+    public static List<ScheduleBO> getScheduleByUnitLine(String unitID,String lineID){
+        List<ScheduleBO> ret = new ArrayList<>();
+        for (int i = 0 ; i < userScheduleBOs.size(); i++){
+            if (unitID.compareTo(userScheduleBOs.get(i).getUnitID()) == 0){
+                if (lineID.compareTo(userScheduleBOs.get(i).getLineID()) == 0) {
+                    ret.add(userScheduleBOs.get(i));
+                }
+            }
+        }
+        return ret;
+    }
+
+
+    public static void deleteBO(String id){
+        for (int i = 0 ; i < userScheduleBOs.size(); i++){
+            if (id.compareTo(userScheduleBOs.get(i).getId()) == 0){
+                userScheduleBOs.remove(i);
+                break;
+            }
+        }
+    }
+
+    public static void addBO(ScheduleBO bo){
+        userScheduleBOs.add(bo);
+    }
 }

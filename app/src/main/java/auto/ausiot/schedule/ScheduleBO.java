@@ -182,7 +182,7 @@ public class ScheduleBO {
             ScheduleItem itemvo = new ScheduleItem("id",bo.getTime(),bo.getDuration(),bo.isEnabled(),null);
             mapSchedulevo.put((Days)pair.getKey(),itemvo);
         }
-        Schedule svo = new Schedule(id, name, userID , unitID, lineID, startDate, endDate, mapSchedulevo,true);
+        Schedule svo = new Schedule(id, name, userID , unitID, lineID, startDate, endDate, mapSchedulevo,true, type);
         return svo;
     }
 
@@ -206,7 +206,7 @@ public class ScheduleBO {
         ScheduleBO svo = new ScheduleBO(schedulevo.getId(), schedulevo.getName(),
                 schedulevo.getUserID(), schedulevo.getUnitID(), schedulevo.getLineID(),
                 schedulevo.getStartDate(), schedulevo.getEndDate(),
-                mapSchedulebo,ScheduleType.Weekly);
+                mapSchedulebo,schedulevo.getType());
         return svo;
     }
 

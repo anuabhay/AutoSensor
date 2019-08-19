@@ -54,113 +54,94 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/text_label_name"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
-                android:text="Name: "
-                android:textSize="14dp"
-                android:textStyle="bold"/>
-            <EditText
-                android:id="@+id/text_input_name"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:inputType="text"/>
-
+                <TextView
+                    android:id="@+id/text_label_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="Name        : "
+                    style="@style/LargeLabel"
+                    android:textStyle="bold"/>
+                <EditText
+                    android:id="@+id/text_input_name"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="22dp"
+                    android:inputType="text"/>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"/>
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
 
          <LinearLayout
                 android:id="@+id/layout_daterange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
-         <TextView
-                 android:id="@+id/text_label_startdate"
-                 android:layout_width="wrap_content"
-                 android:layout_height="30dp"
-                 android:layout_marginRight="5dp"
-                 android:layout_marginLeft="5dp"
-                 android:text="Start Date:"
-                android:textSize="14dp"
-                android:textStyle="bold"/>
-        <TextView
-            android:id="@+id/text_startdate"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:text="01/01/2017"
-            android:textSize="14dp"
-            android:textStyle="bold"/>
+             <LinearLayout
+                 android:id="@+id/layout_daterange_1"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal"
+                 android:gravity="left"
+                 android:layout_marginTop="5dp">
+                     <TextView
+                             android:id="@+id/text_label_startdate"
+                             android:layout_width="wrap_content"
+                             android:layout_height="30dp"
+                             android:layout_marginRight="5dp"
+                             android:layout_marginLeft="5dp"
+                             android:text="Start Date  :"
+                            style="@style/LargeLabel"
+                            android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/text_startdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="01/01/2017"
+                        android:textSize="22dp"
+                        android:textStyle="bold"/>
+             </LinearLayout>
 
-        <TextView
-                 android:id="@+id/text_label_enddate"
-                 android:layout_width="wrap_content"
-                 android:layout_height="30dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="20dp"
-                 android:text="End Date:"
-                android:textSize="14dp"
-                android:textStyle="bold"/>
-             <TextView
-                android:id="@+id/text_enddate"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="01/01/2017"
-                android:textStyle="bold" />
+             <LinearLayout
+                 android:id="@+id/layout_daterange_2"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal"
+                 android:gravity="left"
+                 android:layout_marginTop="5dp">
+
+                     <TextView
+                         android:id="@+id/text_label_enddate"
+                         android:layout_width="wrap_content"
+                         android:layout_height="30dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                         android:text="End Date    :"
+                        style="@style/LargeLabel"
+                        android:textStyle="bold"/>
+                     <TextView
+                        android:id="@+id/text_enddate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="01/01/2017"
+                        android:textStyle="bold"
+                        android:textSize="22dp"/>
+             </LinearLayout>
          </LinearLayout>
 
-        <!--<RadioGroup-->
-                <!--android:id="@+id/radioSensorID"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:layout_marginLeft="25dp">-->
-
-                <!--<RadioButton-->
-                    <!--android:id="@+id/radioButton_sensor1"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentTop="true"-->
-                    <!--android:layout_marginEnd="14dp"-->
-                    <!--android:layout_marginRight="14dp"-->
-                    <!--android:layout_toLeftOf="@+id/textView_3"-->
-                    <!--android:layout_toStartOf="@+id/textView_3"-->
-                    <!--android:text="xxxxx"-->
-                    <!--android:textColor="@color/colorPrimary"-->
-                    <!--android:textSize="24sp"-->
-                    <!--android:textStyle="bold" />-->
-
-                <!--<RadioButton-->
-                    <!--android:id="@+id/radioButton_sensor2"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentTop="true"-->
-                    <!--android:layout_marginEnd="14dp"-->
-                    <!--android:layout_marginRight="14dp"-->
-                    <!--android:layout_toLeftOf="@+id/textView_3"-->
-                    <!--android:layout_toStartOf="@+id/textView_3"-->
-                    <!--android:checked="true"-->
-                    <!--android:text="@string/title_line2"-->
-                    <!--android:textColor="@color/colorPrimary"-->
-                    <!--android:textSize="24sp"-->
-                    <!--android:textStyle="bold"/>-->
-            <!--</RadioGroup>-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"/>
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
         <LinearLayout
                 android:id="@+id/lo_all_content"
                 android:layout_width="match_parent"
@@ -274,89 +255,99 @@
                 />
         </LinearLayout>
 
-        <View
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"/>
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+        <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:orientation="horizontal"
+           android:layout_marginLeft="15dp" >
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+                <TextView
+                android:id="@+id/textView2"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/lo_weeks"
+                    android:layout_marginTop="10dp"
+                    android:text="Duration  "
+                    style="@style/LargeLabel"
+                    android:textStyle="bold"
+                />
+                <TextView
+                    android:id="@+id/chronometer2"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/textView2"
+                    android:layout_marginTop="5dp"
+                    android:scaleX=".9"
+                    android:scaleY=".9"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    android:textStyle="bold"
+                    android:textSize="30sp"
+                    android:clickable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/lo_weeks"
-            android:layout_marginTop="10dp"
-            android:text="Duration"
-            style="@style/LargeLabel"
-            android:textStyle="bold"
-            />
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp">
 
-        <TextView
-            android:id="@+id/chronometer2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/textView2"
-            android:layout_marginTop="5dp"
-            android:scaleX=".9"
-            android:scaleY=".9"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:clickable="true"/>
+             <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Start Time"
+                    style="@style/LargeLabel"
+                    android:textStyle="bold"
+             />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/chronometer2"
-            android:layout_marginTop="10dp"
-            android:text="Start Time"
-            style="@style/LargeLabel"
-            android:textStyle="bold"
-            />
-
-
-        <TextView
-
-            android:id="@+id/timePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView3"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:scaleX=".9"
-            android:scaleY=".9"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:clickable="true"/>
-
+            <TextView
+                android:id="@+id/timePicker"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:scaleX=".9"
+                android:scaleY=".9"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="right"
+                android:layout_gravity="right"
+                android:clickable="true"/>
+        </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/checkBox_enable_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:weightSum="10"
-            android:layout_below="@+id/timePicker"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            tools:context="com.example.pager.MainActivity" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp">
+
 
                 <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Enabled"
-                    style="@style/LargeLabel"
-                    android:textStyle="bold"/>
+                android:text="Enabled     "
+                style="@style/LargeLabel"
+                 android:textStyle="bold"/>
 
                 <CheckBox
                     android:id="@+id/checkBox_enable"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_gravity="right"
                 />
         </LinearLayout>
 

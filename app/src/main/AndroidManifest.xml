@@ -65,6 +65,9 @@
         <activity
             android:name=".RepeatScheduleActivity"></activity>
 
+        <activity
+            android:name=".SingleScheduleActivity"></activity>
+
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDiW-WR6E5cmlBLdjyuQK0etJP4Iwf_5i0"/>
     </application>
 

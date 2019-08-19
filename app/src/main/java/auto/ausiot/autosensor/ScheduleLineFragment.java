@@ -20,9 +20,12 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import java.net.URISyntaxException;
 
 import auto.ausiot.schedule.ScheduleBO;
+import auto.ausiot.schedule.ScheduleHelper;
+import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
 import auto.ausiot.util.Constants;
 import auto.ausiot.util.DateHelper;
+import auto.ausiot.vo.ScheduleType;
 import mqtt.HeartBeatCallBack;
 import mqtt.Subscriber;
 
@@ -91,30 +94,66 @@ public class ScheduleLineFragment extends Fragment {
         TextView tvName = (TextView) getView().findViewById(R.id.label_schedule_name);
         tvName.setText(schedulebo.getName());
 
-        TextView tvRange = (TextView) getView().findViewById(R.id.label_date_range);
-        String daterange = DateHelper.getPrintableDate(schedulebo.getStartDate()) +  " " +
-                            DateHelper.getPrintableDate(schedulebo.getEndDate());
-        tvRange.setText(daterange);
+        TextView tvStart = (TextView) getView().findViewById(R.id.label_date_start);
+        tvStart.setText(DateHelper.getPrintableDate(schedulebo.getStartDate()));
+
+        TextView tvEnd = (TextView) getView().findViewById(R.id.label_date_end);
+        tvEnd.setText(DateHelper.getPrintableDate(schedulebo.getEndDate()));
+
+        //TextView tvType = (TextView) getView().findViewById(R.id.label_schedule_type);
+        if (schedulebo.getType() == ScheduleType.Weekly){
+            //tvType.setText("R");
+        }else{
+            //tvType.setText("S");
+            tvEnd.setVisibility(View.INVISIBLE);
+        }
 
 
         Button editBtn = (Button) getView().findViewById(R.id.button_edit);
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getContext(),RepeatScheduleActivity.class);
-                Bundle bundle = new Bundle();
-                i.putExtra("scheduleid", mParamSI);
-                i.putExtra("schedulenew", false);
-                i.putExtra("lineID", mParamLineID);
-                i.putExtra("unitID", mParamUnitID);
-                startActivity(i);
+                if (schedulebo.getType() == ScheduleType.Weekly){
+                    loadRepeatEdit();
+                }else{
+                    loadSingleEdit();
+                }
             }
         });
+
+        Button deleteBtn = (Button) getView().findViewById(R.id.button_delete);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteSensor();
+            }
+        });
+    }
+
+    void loadSingleEdit(){
+        Intent i = new Intent(getContext(),SingleScheduleActivity.class);
+        Bundle bundle = new Bundle();
+        i.putExtra("scheduleid", mParamSI);
+        i.putExtra("schedulenew", false);
+        i.putExtra("lineID", mParamLineID);
+        i.putExtra("unitID", mParamUnitID);
+        startActivity(i);
+
+    }
+
+    void loadRepeatEdit(){
+        Intent i = new Intent(getContext(),RepeatScheduleActivity.class);
+        Bundle bundle = new Bundle();
+        i.putExtra("scheduleid", mParamSI);
+        i.putExtra("schedulenew", false);
+        i.putExtra("lineID", mParamLineID);
+        i.putExtra("unitID", mParamUnitID);
+        startActivity(i);
 
     }
 
 
-       @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -160,5 +199,37 @@ public class ScheduleLineFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    void deleteSensor(){
+        ScheduleHelper sh = new ScheduleHelper();
+        RestCallBack rcallback =  new RestCallBack() {
+            int count = 0;
+            @Override
+            public void onResponse(Object obj) {
+                //@TODO Count Actual responses
+                int x = 1;
+                //if(count++ == 2) {
+//                config.reset();
+                RestStore.deleteBO(mParamSI);
+                Intent i = new Intent(getContext(), ManageSchedulesActivity.class);
+                i.putExtra("lineID", mParamLineID);
+                i.putExtra("unitID", mParamUnitID);
+            startActivity(i);
+                //}
+            }
+            @Override
+            public void onResponse(String token, String user) {
+
+            }
+            @Override
+            public void onFailure() {
+                //@TODO
+                int x = 1;
+            }
+
+        };
+        sh.deleteScheduleFromService(getContext(), rcallback, mParamSI);
+
+
+    }
 
 }

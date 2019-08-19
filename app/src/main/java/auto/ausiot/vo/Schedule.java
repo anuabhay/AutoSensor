@@ -107,7 +107,7 @@ public class Schedule {
     public Schedule(String id, String name,
                     String userID , String unitID, String lineID,
                     Date startDate , Date endDate ,
-                    Map<Days, ScheduleItem> mapSchedule, boolean enabled  ){
+                    Map<Days, ScheduleItem> mapSchedule, boolean enabled ,ScheduleType type ){
         this.id = id;
         this.name = name;
         this.mapSchedule = mapSchedule;
@@ -118,6 +118,7 @@ public class Schedule {
 
         this.startDate = startDate;
         this.endDate = endDate;
+        this.type = type;
     }
     public boolean isInitialized(){
         boolean ret = true;

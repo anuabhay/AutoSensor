@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.ScheduleHelper;
@@ -56,19 +57,17 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
         addButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (scheduleCount < Constants.MAX_SCHEDULE_COUNT)                {
-                    Intent i = new Intent(ManageSchedulesActivity.this,RepeatScheduleActivity.class);
-                    Bundle bundle = new Bundle();
-                    i.putExtra("schedule_index", scheduleCount);
-                    i.putExtra("scheduleid", "");
-                    i.putExtra("schedulenew", true);
-                    i.putExtra("lineID", lineID);
-                    i.putExtra("unitID", unitID);
-                    startActivity(i);
+                if (scheduleCount < Constants.MAX_SCHEDULE_COUNT) {
+                    Spinner type = (Spinner) findViewById(R.id.spinner_schedule_type);
+                    if (type.getSelectedItemId() == 0){
+                        loadRepeatEdit();
+                    }else{
+                        loadSingleEdit();
+                    }
                 } else{
                     new AlertDialog.Builder(ManageSchedulesActivity.this)
                             .setTitle("Maximum Schedules Exeeded")
-                            .setMessage("Try agian by deleting uwanted schedules")
+                            .setMessage("Tryin agian by deleting uwanted schedules")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -84,7 +83,33 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
         loadScheduleData();
     }
 
+    void loadRepeatEdit(){
+        Intent i = new Intent(ManageSchedulesActivity.this,RepeatScheduleActivity.class);
+        Bundle bundle = new Bundle();
+        String uniqueID = UUID.randomUUID().toString();
+        long seconds = System.currentTimeMillis() / 1000l;
 
+        i.putExtra("schedule_index", scheduleCount);
+        i.putExtra("scheduleid", Long.toString(seconds));
+        i.putExtra("schedulenew", true);
+        i.putExtra("lineID", lineID);
+        i.putExtra("unitID", unitID);
+        startActivity(i);
+    }
+
+    void loadSingleEdit(){
+        Intent i = new Intent(ManageSchedulesActivity.this,SingleScheduleActivity.class);
+        Bundle bundle = new Bundle();
+        String uniqueID = UUID.randomUUID().toString();
+        long seconds = System.currentTimeMillis() / 1000l;
+
+        i.putExtra("schedule_index", scheduleCount);
+        i.putExtra("scheduleid", Long.toString(seconds));
+        i.putExtra("schedulenew", true);
+        i.putExtra("lineID", lineID);
+        i.putExtra("unitID", unitID);
+        startActivity(i);
+    }
     void addScheduleFragments(List<Schedule> sl){
         FragmentManager fm = getSupportFragmentManager();
         removeActiveCenterFragments(fm);
@@ -131,6 +156,25 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
         ArrayAdapter aau = new ArrayAdapter(this,android.R.layout.simple_spinner_item,unitNames);
         aau.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_unit.setAdapter(aau);
+
+        String lineID_1 = getIntent().getStringExtra("lineID");
+        String unitID_1 = getIntent().getStringExtra("unitID");
+        if(lineID_1 != null){
+            spin_line.setSelection(Arrays.asList(lineNames).indexOf(lineID_1));
+            lineID = lineID_1;
+        }
+        if(unitID_1 != null){
+            spin_unit.setSelection(Arrays.asList(unitNames).indexOf(unitID_1));
+            unitID = unitID_1;
+        }
+
+        String[] scheduleTypes={"Reccuring","Daily"};
+        Spinner spin_types = (Spinner) findViewById(R.id.spinner_schedule_type);
+        spin_types.setOnItemSelectedListener(this);
+
+        ArrayAdapter aat = new ArrayAdapter(this,android.R.layout.simple_spinner_item,scheduleTypes);
+        aal.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_types.setAdapter(aat);
     }
 
     void loadUnits(){

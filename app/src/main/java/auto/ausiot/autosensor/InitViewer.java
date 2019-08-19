@@ -76,7 +76,7 @@ public class InitViewer extends AppCompatActivity {
                     startActivity(i);
                     return true;
                 case R.id.navigation_dashboard:
-                    i = new Intent(InitViewer.this,RepeatScheduleActivity.class);
+                    i = new Intent(InitViewer.this,ManageSchedulesActivity.class);
                     startActivity(i);
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;

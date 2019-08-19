@@ -67,5 +67,5 @@ public class Constants {
 
     public static String ERROR_MSG_SCHEDULE_NOT_LOADED = "Could not load the schedule.Try restarting the app";
 
-    public static int MAX_SCHEDULE_COUNT = 6;
+    public static int MAX_SCHEDULE_COUNT = 7;
 }

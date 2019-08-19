@@ -26,12 +26,29 @@
             android:gravity="top"
             android:orientation="horizontal"
             android:showDividers="middle">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Unit  "
+            style="@style/LargeLabel"
+            android:layout_marginRight="20dp"
+            android:textStyle="bold"
 
-        <Spinner
+            />
+            <Spinner
             android:id="@+id/spinner_units"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                style="@style/LargeLabel"
+                android:layout_marginRight="20dp"
+                android:text="Line  "
+                android:textStyle="bold"
+                />
+
 
             <Spinner
                 android:id="@+id/spinner_lines"
@@ -39,6 +56,19 @@
                 android:layout_height="wrap_content"
                 />
         </LinearLayout>
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Select Unit and Line from the drop down"
+              android:layout_gravity="center_horizontal"
+              style="@style/SmallLabel"
+             />
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@android:color/darker_gray"
+              android:layout_marginTop="5dp"
+              android:layout_marginBottom="5dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,8 +83,17 @@
                 android:gravity="left"
                 android:singleLine="false"
                 android:text="Add Schedule"
-                android:textSize="28sp" />
-
+                style="@style/LargeLabel"
+                android:textStyle="bold"
+                android:layout_marginRight="20dp"
+                />
+            <Spinner
+                android:id="@+id/spinner_schedule_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:textStyle="bold"
+                />
             <ImageButton
                 android:id="@+id/button_add_schedule"
                 android:layout_width="wrap_content"
@@ -63,7 +102,30 @@
                 android:src="@android:drawable/ic_input_add" />
         </LinearLayout>
 
-        <LinearLayout
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Select type of the schedule from the drop down"
+              android:layout_gravity="center_horizontal"
+              style="@style/SmallLabel"
+              />
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@android:color/darker_gray"
+              android:layout_marginTop="5dp"
+              android:layout_marginBottom="5dp"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+            <LinearLayout
             android:id="@+id/schedule_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -119,7 +181,7 @@
             android:orientation="vertical"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="1dp"/>
-
-
+        </LinearLayout>
+      </ScrollView>
     </LinearLayout>
 </LinearLayout>
