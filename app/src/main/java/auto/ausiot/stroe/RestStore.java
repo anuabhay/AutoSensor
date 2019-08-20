@@ -1,14 +1,12 @@
 package auto.ausiot.stroe;
 
 import android.content.Context;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import auto.ausiot.schedule.AuthBody;
 import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.User;
@@ -82,6 +80,7 @@ public class RestStore /*implements ScheduleStore*/ {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 //@TODO Do We need to do anything here , save success
+
                 restcallback.onResponse(null);
             }
 
@@ -98,16 +97,17 @@ public class RestStore /*implements ScheduleStore*/ {
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Unit unit = new Unit(sensorID,user.getId());
         Call call = service.addUnit(unit,authToken);
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<Unit>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Unit> call, Response<Unit> response) {
                 //@TODO Do We need to do anything here , save success
-                restcallback.onResponse(null);
+                Unit u = (Unit) response.body();
+                restcallback.onResponse(u);
 
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Unit> call, Throwable t) {
                 //@TODO Do error check
                 restcallback.onFailure();
             }
@@ -206,7 +206,7 @@ public class RestStore /*implements ScheduleStore*/ {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 user = (User) response.body();
-                //restcallback.onResponse(sc);
+                restcallback.onResponse(user);
             }
 
             @Override
@@ -290,9 +290,32 @@ public class RestStore /*implements ScheduleStore*/ {
                 break;
             }
         }
+
+        for (int i = 0 ; i < userSchedules.size(); i++){
+            if (id.compareTo(userSchedules.get(i).getId()) == 0){
+                userSchedules.remove(i);
+                break;
+            }
+        }
     }
 
     public static void addBO(ScheduleBO bo){
+        userSchedules.add(bo.getScheduleVO());
         userScheduleBOs.add(bo);
     }
+
+    public static void addUnit(Unit unit){
+        units.add(unit);
+    }
+
+    public static void deleteUnit(String id){
+        for (int i = 0 ; i < units.size(); i++){
+            if (id.compareTo(units.get(i).getId()) == 0){
+                units.remove(i);
+                break;
+            }
+        }
+    }
+
+
 }

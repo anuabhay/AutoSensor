@@ -4,12 +4,10 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -28,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -39,7 +36,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -48,12 +44,11 @@ import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
 import auto.ausiot.ui.TimePickerFragment;
-import auto.ausiot.util.AppConfig;
+import auto.ausiot.util.UserConfig;
 import auto.ausiot.util.Constants;
 import auto.ausiot.util.DateHelper;
 import auto.ausiot.util.Logger;
 import auto.ausiot.util.ScheduleValidation;
-import auto.ausiot.util.TimeIgnoringComparator;
 import auto.ausiot.vo.Days;
 import auto.ausiot.vo.Schedule;
 import auto.ausiot.vo.ScheduleItem;
@@ -65,7 +60,7 @@ public class RepeatScheduleActivity extends AppCompatActivity {
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
     private Logger logger = null;
     ScheduleBO schedulebo = null;
-    AppConfig config ;
+    //AppConfig config ;
     private RadioGroup radioGroupDays ;
     //@TODO THis need to change for user ID to support multiple sensors
     public String unitID;
@@ -90,8 +85,9 @@ public class RepeatScheduleActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_dashboard:
                     i = new Intent(RepeatScheduleActivity.this,ManageSchedulesActivity.class);
+                    i.putExtra("lineID", lineID);
+                    i.putExtra("unitID", unitID);
                     startActivity(i);
-
                     return true;
                 case R.id.navigation_notifications:
                     i = new Intent(RepeatScheduleActivity.this,InitViewer.class);
@@ -103,12 +99,6 @@ public class RepeatScheduleActivity extends AppCompatActivity {
         }
     };
 
-    void checkInitialized(){
-        if (config.checkInitialized() == false){
-            Intent i = new Intent(RepeatScheduleActivity.this,InitViewer.class);
-            startActivity(i);
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,14 +136,15 @@ public class RepeatScheduleActivity extends AppCompatActivity {
 
         Resources res = getResources();
         context = RepeatScheduleActivity.this.getApplicationContext();
-        config = new AppConfig(RepeatScheduleActivity.this.getApplicationContext());
+        //config = new AppConfig(RepeatScheduleActivity.this.getApplicationContext());
 
         EditText txtName = (EditText) findViewById(R.id.text_input_name);
         txtName.setText(schedulebo.getName());
         //txtDes.setText("Schedule for Unit: " + unitID + " and Line: " + lineID);
         //@TODO Depricated
         //unitID = config.readFirstConfig();
-        checkInitialized();
+        //checkInitialized();
+        UserConfig.checkInitialized(this);
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -514,7 +505,7 @@ public class RepeatScheduleActivity extends AppCompatActivity {
         radioGroupDays = (RadioGroup) findViewById(R.id.radioDays);
         Days day = getDayFromCheckID(radioGroupDays.getCheckedRadioButtonId());
 
-        label = lineID + " Schedule for " + day.name();
+        label = "You are modifying Schedule for " + day.name();
         tvselection.setText(label);
     }
 

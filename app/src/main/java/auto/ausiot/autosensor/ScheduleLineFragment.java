@@ -1,9 +1,9 @@
 package auto.ausiot.autosensor;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,23 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.eclipse.paho.client.mqttv3.MqttException;
-
-import java.net.URISyntaxException;
 
 import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
-import auto.ausiot.util.Constants;
 import auto.ausiot.util.DateHelper;
 import auto.ausiot.vo.ScheduleType;
-import mqtt.HeartBeatCallBack;
-import mqtt.Subscriber;
 
 
 /**
@@ -100,12 +92,13 @@ public class ScheduleLineFragment extends Fragment {
         TextView tvEnd = (TextView) getView().findViewById(R.id.label_date_end);
         tvEnd.setText(DateHelper.getPrintableDate(schedulebo.getEndDate()));
 
-        //TextView tvType = (TextView) getView().findViewById(R.id.label_schedule_type);
+        LinearLayout mLayout = (LinearLayout) getView().findViewById(R.id.mainlayout);
         if (schedulebo.getType() == ScheduleType.Weekly){
-            //tvType.setText("R");
+            mLayout.setBackgroundColor(getResources().getColor(R.color.repeated_schedule_color));
         }else{
             //tvType.setText("S");
             tvEnd.setVisibility(View.INVISIBLE);
+            mLayout.setBackgroundColor(getResources().getColor(R.color.single_schedule_color));
         }
 
 
@@ -125,7 +118,16 @@ public class ScheduleLineFragment extends Fragment {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteSensor();
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("You are trying to delete the Schedule.")
+                        .setMessage("This will delete the Schedule. Are you really sure you want to do this ?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteSchedule();
+                            }
+                        }).setNegativeButton("No", null).show();
+
             }
         });
     }
@@ -199,7 +201,7 @@ public class ScheduleLineFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    void deleteSensor(){
+    void deleteSchedule(){
         ScheduleHelper sh = new ScheduleHelper();
         RestCallBack rcallback =  new RestCallBack() {
             int count = 0;

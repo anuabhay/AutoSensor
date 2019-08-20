@@ -17,6 +17,6 @@
     <color name="dialog_cancel_bgcolor">#0527e1</color>
     <color name="dialog_ok_bgcolor">#E10505</color>
     <color name="main_layuot_nofill_color"> #00000000</color>
-    <color name="repeated_schedule_color">#8BC34A</color>
-    <color name="single_schedule_color">#CDDC39</color>
+    <color name="repeated_schedule_color">#dee2ea</color>
+    <color name="single_schedule_color">#C7C8CE</color>
 </resources>

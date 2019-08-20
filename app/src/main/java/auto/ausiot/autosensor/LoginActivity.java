@@ -367,8 +367,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     if (token != null){
                         mAuthenticated = true;
                         RestStore.authToken = "Bearer "+token;
-                        // Get User Now
-                        sh.getUser(mEmail,null,null);
+                        loadUserData();
                     }else{
 
                     }
@@ -391,6 +390,32 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return mAuthenticated;
         }
 
+
+        public void loadUserData(){
+            final ScheduleHelper sh = new ScheduleHelper();
+
+            RestCallBack rcallback =  new RestCallBack() {
+                @Override
+                public void onResponse(Object obj) {
+                    //Load Data
+                    loadScheduleData();
+                    loadUnits();
+                }
+
+                @Override
+                public void onResponse(String token, String user) {
+
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+
+            };
+            sh.getUser(mEmail,null,rcallback);
+        }
+
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
@@ -410,5 +435,52 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+
+    void loadUnits(){
+        final ScheduleHelper sh = new ScheduleHelper();
+        RestCallBack rcallback =  new RestCallBack() {
+            @Override
+            public void onResponse(Object obj) {
+
+                //poulateSpinners();
+            }
+            @Override
+            public void onResponse(String token, String user) {
+
+            }
+            @Override
+            public void onFailure() {
+                ;
+            }
+
+        };
+
+        sh.getUnits(RestStore.user.getId(),null,rcallback);
+
+
+    }
+
+    void   loadScheduleData(){
+        ScheduleHelper sh = new ScheduleHelper();
+        RestCallBack rcallback =  new RestCallBack() {
+            @Override
+            public void onResponse(Object obj) {
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+
+            @Override
+            public void onResponse(String s,String user) {
+                int x = 1;
+            }
+
+        };
+        sh.getUserSchedules(RestStore.user.getId(), getApplicationContext(),rcallback);
+    }
+
 }
 

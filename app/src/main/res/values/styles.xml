@@ -24,6 +24,11 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
+    <style name="MediumLabel">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
     <style name="SmallLabel">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/colorPrimary</item>

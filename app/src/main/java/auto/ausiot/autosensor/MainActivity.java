@@ -36,7 +36,7 @@ import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
 import auto.ausiot.ui.TimePickerFragment;
-import auto.ausiot.util.AppConfig;
+import auto.ausiot.util.UserConfig;
 import auto.ausiot.util.Constants;
 import auto.ausiot.util.DateHelper;
 import auto.ausiot.util.Logger;
@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
     private Logger logger = null;
     ScheduleBO schedulebo = null;
-    AppConfig config ;
+    //AppConfig config ;
     private RadioGroup radioGroupDays ;
     //@TODO THis need to change for user ID to support multiple sensors
-    private String unitID;
+    private String unitID = null;
     private String lineID = "1";
     Button saveBtn;
     LinearLayout mainLayout;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     void checkInitialized(){
-        if (config.checkInitialized() == false){
+        if (unitID == null){
             Intent i = new Intent(MainActivity.this,InitViewer.class);
             startActivity(i);
 
@@ -104,10 +104,14 @@ public class MainActivity extends AppCompatActivity {
 
         Resources res = getResources();
         context = MainActivity.this.getApplicationContext();
-        config = new AppConfig(MainActivity.this.getApplicationContext());
-        unitID = config.readFirstConfig();
-
-        checkInitialized();
+        //config = new AppConfig(MainActivity.this.getApplicationContext());
+        //unitID = config.readFirstConfig();
+//        if(RestStore.units != null) {
+//            unitID = RestStore.units.get(0).getId();
+//        }
+//
+//        checkInitialized();
+        unitID = UserConfig.checkInitialized(this);
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

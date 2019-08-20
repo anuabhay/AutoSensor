@@ -19,6 +19,7 @@ public class ScheduleValidation {
     public static boolean validateSchedules(ScheduleBO sbonew , String unitID, String lineID, StringBuffer msg){
         boolean valid = true;
         List<ScheduleBO> sbolist = RestStore.getScheduleByUnitLine(unitID,lineID);
+        msg.append("Check the schedule for ");
         for(int i=0; i < sbolist.size();i++){
             if (sbolist.get(i).getId().compareTo(sbonew.getId())!=0){
                 ScheduleBO sboex = sbolist.get(i);
@@ -36,7 +37,6 @@ public class ScheduleValidation {
                     }
                     int count = 1;
                     boolean exit = false;
-                    msg.append("Check the schedule for ");
                     while (TimeIgnoringComparator.beforeIncudingCurrentDay(dt,sbonew.getEndDate()) &&
                             TimeIgnoringComparator.beforeIncudingCurrentDay(dt,sboex.getEndDate()) &&
                             (count < 7) &&

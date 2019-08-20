@@ -1,7 +1,6 @@
 package auto.ausiot.autosensor;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,18 +16,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import auto.ausiot.schedule.ScheduleBO;
-import auto.ausiot.schedule.ScheduleHelper;
-import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
+import auto.ausiot.util.UserConfig;
 import auto.ausiot.util.Constants;
 import auto.ausiot.vo.Schedule;
 
@@ -38,7 +34,7 @@ import auto.ausiot.vo.Schedule;
 public class ManageSchedulesActivity extends AppCompatActivity implements ScheduleLineFragment.OnFragmentInteractionListener
                             , AdapterView.OnItemSelectedListener {
 
-    private String unitID;
+    private String unitID = null;
     private String lineID = "1";
     private static int scheduleID = 1;
     Context context ;
@@ -53,6 +49,8 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
         setContentView(R.layout.manage_schedules);
         // Set up the login form.
 
+        unitID = UserConfig.checkInitialized(this);
+
         ImageButton addButton = (ImageButton) findViewById(R.id.button_add_schedule);
         addButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -66,8 +64,8 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
                     }
                 } else{
                     new AlertDialog.Builder(ManageSchedulesActivity.this)
-                            .setTitle("Maximum Schedules Exeeded")
-                            .setMessage("Tryin agian by deleting uwanted schedules")
+                            .setTitle("Maximum Schedules Exceeded")
+                            .setMessage("Try agian by deleting unwanted Schedules")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -79,8 +77,15 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
             }
         });
         context = getApplicationContext();
-        loadUnits();
-        loadScheduleData();
+//        poulateSpinners();
+        //loadUnits();
+        //loadScheduleData();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        poulateSpinners();
     }
 
     void loadRepeatEdit(){
@@ -142,7 +147,7 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
         Spinner spin_line = (Spinner) findViewById(R.id.spinner_lines);
         spin_line.setOnItemSelectedListener(this);
 
-        ArrayAdapter aal = new ArrayAdapter(this,android.R.layout.simple_spinner_item,lineNames);
+        ArrayAdapter aal = new ArrayAdapter(this,R.layout.spinner_item,lineNames);
         aal.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_line.setAdapter(aal);
 
@@ -153,7 +158,7 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
         Spinner spin_unit = (Spinner) findViewById(R.id.spinner_units);
         spin_unit.setOnItemSelectedListener(this);
 
-        ArrayAdapter aau = new ArrayAdapter(this,android.R.layout.simple_spinner_item,unitNames);
+        ArrayAdapter aau = new ArrayAdapter(this,R.layout.spinner_item,unitNames);
         aau.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_unit.setAdapter(aau);
 
@@ -168,66 +173,66 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
             unitID = unitID_1;
         }
 
-        String[] scheduleTypes={"Reccuring","Daily"};
+        String[] scheduleTypes={"Repeated","Daily"};
         Spinner spin_types = (Spinner) findViewById(R.id.spinner_schedule_type);
         spin_types.setOnItemSelectedListener(this);
 
-        ArrayAdapter aat = new ArrayAdapter(this,android.R.layout.simple_spinner_item,scheduleTypes);
-        aal.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter aat = new ArrayAdapter(this,R.layout.spinner_item,scheduleTypes);
+        aat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_types.setAdapter(aat);
     }
 
-    void loadUnits(){
-        final ScheduleHelper sh = new ScheduleHelper();
-        RestCallBack rcallback =  new RestCallBack() {
-            @Override
-            public void onResponse(Object obj) {
-                poulateSpinners();
-            }
-            @Override
-            public void onResponse(String token, String user) {
-
-            }
-            @Override
-            public void onFailure() {
-                ;
-            }
-
-        };
-
-        sh.getUnits(RestStore.user.getId(),null,rcallback);
-
-
-    }
-
-     void   loadScheduleData(){
-        //ScheduleBO sc = new ScheduleBO();
-        //String schedule = "WEEKLY::1,13:00,PT9M,FALSE;2,13:00,PT9M,TRUE;3,13:00,PT9M,TRUE;4,13:00,PT9M,FALSE;5,13:00,PT9M,TRUE;6,13:00,PT9M,TRUE;0,13:00,PT9M,TRUE";
-
-        ScheduleHelper sh = new ScheduleHelper();
-        //ScheduleBO sc  = sh.loadSchedule(context);
-
-
-        RestCallBack rcallback =  new RestCallBack() {
-            @Override
-            public void onResponse(Object obj) {
-//                List<Schedule> sl = (List<Schedule>)obj;
-//                addScheduleFragments(sl);
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-
-            @Override
-            public void onResponse(String s,String user) {
-                int x = 1;
-            }
-
-        };
-        sh.getUserSchedules(RestStore.user.getId(), context,rcallback);
-    }
+//    void loadUnits(){
+//        final ScheduleHelper sh = new ScheduleHelper();
+//        RestCallBack rcallback =  new RestCallBack() {
+//            @Override
+//            public void onResponse(Object obj) {
+//                poulateSpinners();
+//            }
+//            @Override
+//            public void onResponse(String token, String user) {
+//
+//            }
+//            @Override
+//            public void onFailure() {
+//                ;
+//            }
+//
+//        };
+//
+//        sh.getUnits(RestStore.user.getId(),null,rcallback);
+//
+//
+//    }
+//
+//     void   loadScheduleData(){
+//        //ScheduleBO sc = new ScheduleBO();
+//        //String schedule = "WEEKLY::1,13:00,PT9M,FALSE;2,13:00,PT9M,TRUE;3,13:00,PT9M,TRUE;4,13:00,PT9M,FALSE;5,13:00,PT9M,TRUE;6,13:00,PT9M,TRUE;0,13:00,PT9M,TRUE";
+//
+//        ScheduleHelper sh = new ScheduleHelper();
+//        //ScheduleBO sc  = sh.loadSchedule(context);
+//
+//
+//        RestCallBack rcallback =  new RestCallBack() {
+//            @Override
+//            public void onResponse(Object obj) {
+////                List<Schedule> sl = (List<Schedule>)obj;
+////                addScheduleFragments(sl);
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(String s,String user) {
+//                int x = 1;
+//            }
+//
+//        };
+//        sh.getUserSchedules(RestStore.user.getId(), context,rcallback);
+//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

@@ -14,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +31,8 @@ import java.util.Date;
 import java.util.Map;
 
 
-import auto.ausiot.util.AppConfig;
+import auto.ausiot.stroe.RestStore;
+import auto.ausiot.util.UserConfig;
 import auto.ausiot.util.Constants;
 import mqtt.HeartBeatCallBack;
 import mqtt.Subscriber;
@@ -46,7 +46,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     Context context ;
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
-    AppConfig config ;
+    //AppConfig config ;
     private String unitID;
 
 
@@ -98,13 +98,13 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         }
     };
 
-    void checkInitialized(){
-        if (config.checkInitialized() == false){
-            Intent i = new Intent(MonitorActivity.this,InitViewer.class);
-            startActivity(i);
-
-        }
-    }
+//    void checkInitialized(){
+//        if (config.checkInitialized() == false){
+//            Intent i = new Intent(MonitorActivity.this,InitViewer.class);
+//            startActivity(i);
+//
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,6 +138,8 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
 
+        unitID = UserConfig.checkInitialized(this);
+
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
@@ -160,10 +162,9 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         }
 
         context = MonitorActivity.this.getApplicationContext();
-        config = new AppConfig(MonitorActivity.this.getApplicationContext());
-        this.unitID = config.readFirstConfig();
-        checkInitialized();
-
+        //config = new AppConfig(MonitorActivity.this.getApplicationContext());
+        //this.unitID = config.readFirstConfig();
+        //checkInitialized();
         FragmentManager fm = getSupportFragmentManager();
         Fragment oldFragment = fm.findFragmentByTag("fragment_one");
 
@@ -187,12 +188,14 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     @Override
     protected void onStart(){
         super.onStart();
-        subscribeToStatus(unitID);
-        sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
-        setAlarm(unitID);
-        setNetworkStatusBanner(false);
-        //Restore Fragment values
-        restore_fragment_check_boxes(m_savedInstanceState);
+        if(unitID != null) {
+            subscribeToStatus(unitID);
+            sendMQTTMsg(unitID, Constants.ACTION_GET_STATUS);
+            setAlarm(unitID);
+            setNetworkStatusBanner(false);
+            //Restore Fragment values
+            restore_fragment_check_boxes(m_savedInstanceState);
+        }
     }
 
     private void restore_fragment_check_boxes(Bundle savedInstanceState){

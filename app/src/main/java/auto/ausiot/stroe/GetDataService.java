@@ -38,7 +38,7 @@ public interface GetDataService {
 
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     @POST("/unit")
-    Call<ResponseBody> addUnit(@Body Unit unit, @Header("Authorization") String auth);
+    Call<Unit> addUnit(@Body Unit unit, @Header("Authorization") String auth);
 
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     @GET("/units/{id}")
