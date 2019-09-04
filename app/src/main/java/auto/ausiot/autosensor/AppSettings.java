@@ -41,7 +41,7 @@ public class AppSettings extends AppCompatActivity {
                     startActivity(i);
                     return true;
                 case R.id.navigation_dashboard:
-                    i = new Intent(AppSettings.this,MainActivity.class);
+                    i = new Intent(AppSettings.this,ManageSchedulesActivity.class);
                     startActivity(i);
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;

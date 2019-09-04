@@ -21,12 +21,12 @@
 
     <style name="LargeLabel">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimaryLabelText</item>
     </style>
 
     <style name="MediumLabel">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimaryLabelText</item>
     </style>
 
     <style name="SmallLabel">

@@ -70,6 +70,10 @@ public class RegisterUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
+        //Add Icon to Action Bar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
          // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);

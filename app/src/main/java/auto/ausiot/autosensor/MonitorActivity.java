@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.Map;
 
 
-import auto.ausiot.stroe.RestStore;
 import auto.ausiot.util.UserConfig;
 import auto.ausiot.util.Constants;
 import mqtt.HeartBeatCallBack;
@@ -90,7 +89,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
-                    i = new Intent(MonitorActivity.this,InitViewer.class);
+                    i = new Intent(MonitorActivity.this,Disclaimer.class);
                     startActivity(i);
                     return true;
             }
@@ -115,19 +114,19 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.help) {
-            //startActivity(new Intent(this, CoursesActivity.class));
-            startActivity(new Intent(this, UserInfo.class));
-        }
-        if (item.getItemId() == R.id.app_settings) {
-            startActivity(new Intent(this, AppSettings.class));
-        }
-        if (item.getItemId() == R.id.disclaimer) {
-            startActivity(new Intent(this, Disclaimer.class));
-        }
+//        if (item.getItemId() == R.id.help) {
+//            //startActivity(new Intent(this, CoursesActivity.class));
+//            startActivity(new Intent(this, UserInfo.class));
+//        }
+//        if (item.getItemId() == R.id.app_settings) {
+//            startActivity(new Intent(this, AppSettings.class));
+//        }
+//        if (item.getItemId() == R.id.disclaimer) {
+//            startActivity(new Intent(this, Disclaimer.class));
+//        }
 
-        if (item.getItemId() == R.id.user_info) {
-            startActivity(new Intent(this, UserInfo.class));
+        if (item.getItemId() == R.id.init_view) {
+            startActivity(new Intent(this, InitViewer.class));
         }
 
         return super.onOptionsItemSelected(item);

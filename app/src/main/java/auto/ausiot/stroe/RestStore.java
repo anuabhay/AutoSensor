@@ -300,8 +300,16 @@ public class RestStore /*implements ScheduleStore*/ {
     }
 
     public static void addBO(ScheduleBO bo){
-        userSchedules.add(bo.getScheduleVO());
-        userScheduleBOs.add(bo);
+        boolean found = false;
+        for (int i = 0 ; i < userScheduleBOs.size(); i++){
+            if (bo.getId().compareTo(userScheduleBOs.get(i).getId()) == 0){
+                found = true;
+            }
+        }
+        if(found == false) {
+            userSchedules.add(bo.getScheduleVO());
+            userScheduleBOs.add(bo);
+        }
     }
 
     public static void addUnit(Unit unit){

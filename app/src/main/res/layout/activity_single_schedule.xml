@@ -5,13 +5,14 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="auto.ausiot.autosensor.MainActivity">
+    tools:context="auto.ausiot.autosensor.MainActivity"
+    android:background="@color/light_bg_color">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
+        android:background="@color/light_bg_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -54,7 +55,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="15dp">
+                android:layout_marginBottom="15dp"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true">
 
                 <TextView
                     android:id="@+id/text_label_name"
@@ -70,9 +73,20 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:textSize="22dp"
-                    android:inputType="text"/>
+                    android:inputType="text"
+                    android:maxLength="30"
+                    />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_input_name_explanation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_gravity="center_horizontal"
+                style="@style/SmallLabel"
+                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

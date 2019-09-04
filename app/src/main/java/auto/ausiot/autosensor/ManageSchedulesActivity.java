@@ -6,10 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -50,6 +53,10 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
         // Set up the login form.
 
         unitID = UserConfig.checkInitialized(this);
+        //Add Icon to Action Bar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         ImageButton addButton = (ImageButton) findViewById(R.id.button_add_schedule);
         addButton.setOnClickListener(new OnClickListener() {
@@ -64,9 +71,9 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
                     }
                 } else{
                     new AlertDialog.Builder(ManageSchedulesActivity.this)
-                            .setTitle("Maximum Schedules Exceeded")
-                            .setMessage("Try agian by deleting unwanted Schedules")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            .setTitle(getResources().getString(R.string.warning_title_max_schedule))
+                            .setMessage(getResources().getString(R.string.warning_detail_max_schedule))
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
@@ -77,10 +84,35 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
             }
         });
         context = getApplicationContext();
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 //        poulateSpinners();
         //loadUnits();
         //loadScheduleData();
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent i;
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    i = new Intent(ManageSchedulesActivity.this,MonitorActivity.class);
+                    startActivity(i);
+                    return true;
+                case R.id.navigation_dashboard:
+                    return true;
+                case R.id.navigation_notifications:
+                    i = new Intent(ManageSchedulesActivity.this,Disclaimer.class);
+                    startActivity(i);
+
+                    return true;
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onStart(){
@@ -173,12 +205,13 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
             unitID = unitID_1;
         }
 
-        String[] scheduleTypes={"Repeated","Daily"};
+        String[] scheduleTypes={"Recurring","Daily"};
         Spinner spin_types = (Spinner) findViewById(R.id.spinner_schedule_type);
         spin_types.setOnItemSelectedListener(this);
 
         ArrayAdapter aat = new ArrayAdapter(this,R.layout.spinner_item,scheduleTypes);
         aat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //aat.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spin_types.setAdapter(aat);
     }
 

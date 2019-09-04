@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import auto.ausiot.autosensor.RepeatScheduleActivity;
 import auto.ausiot.schedule.ScheduleBO;
@@ -18,8 +19,17 @@ import auto.ausiot.vo.Days;
 public class ScheduleValidation {
     public static boolean validateSchedules(ScheduleBO sbonew , String unitID, String lineID, StringBuffer msg){
         boolean valid = true;
+        // End date is before the current day
+        if (TimeIgnoringComparator.before(sbonew.getEndDate(),new Date())){
+            msg.append("Schedule End date is already passed ..");
+            return false;
+        }else if (TimeIgnoringComparator.before(sbonew.getEndDate(),sbonew.getStartDate())){
+            msg.append("Schedule End date comes before the start day ..");
+            return false;
+        }
+
         List<ScheduleBO> sbolist = RestStore.getScheduleByUnitLine(unitID,lineID);
-        msg.append("Check the schedule for ");
+        msg.append("The following days have overlapping schedules \n");
         for(int i=0; i < sbolist.size();i++){
             if (sbolist.get(i).getId().compareTo(sbonew.getId())!=0){
                 ScheduleBO sboex = sbolist.get(i);
@@ -45,8 +55,8 @@ public class ScheduleValidation {
                         int x = dt.getDay();
                         if (compareSchedules(dt,sbonew,sboex) == true){
                             valid = false;
-                            SimpleDateFormat sdf2 = new SimpleDateFormat("EEEE");
-                            msg.append(sboex.getName() + "  : " + sdf2.format(dt) + "\n");
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("EEEE,dd MMM YYYY", Locale.US);
+                            msg.append(sboex.getName() + "   " + sdf2.format(dt) + "\n");
                         }
                         count++;
                         Calendar c = Calendar.getInstance();

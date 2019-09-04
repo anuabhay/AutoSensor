@@ -32,7 +32,6 @@ import auto.ausiot.vo.Unit;
 
 public class InitViewer extends AppCompatActivity {
 
-    ImageView imageView;
     Button button;
     Button btnScan;
     Button btnReset;
@@ -62,7 +61,8 @@ public class InitViewer extends AppCompatActivity {
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
-                    return true;
+                    i = new Intent(InitViewer.this,Disclaimer.class);
+                    startActivity(i);;
             }
             return false;
         }
@@ -84,7 +84,6 @@ public class InitViewer extends AppCompatActivity {
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
-        imageView = (ImageView)findViewById(R.id.imageView);
         editText = (EditText)findViewById(R.id.editText);
         button = (Button)findViewById(R.id.button);
         btnScan = (Button)findViewById(R.id.btnScan);
@@ -106,7 +105,6 @@ public class InitViewer extends AppCompatActivity {
             btnScan.setVisibility(View.INVISIBLE);
             button.setVisibility(View.INVISIBLE);
             editText.setVisibility(View.INVISIBLE);
-            imageView.setVisibility(View.INVISIBLE);
             btnReset.setText("Assign Zone1 Unit ID :: " + UserConfig.getFirstUnit());
             btnReset.setEnabled(true);
             btnReset.setVisibility(View.VISIBLE);
@@ -119,7 +117,6 @@ public class InitViewer extends AppCompatActivity {
             btnScan.setVisibility(View.VISIBLE);
             button.setVisibility(View.VISIBLE);
             editText.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
 
         }
 
@@ -135,14 +132,14 @@ public class InitViewer extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new AlertDialog.Builder(InitViewer.this)
-                        .setTitle("You are trying to delete the Unit.")
-                        .setMessage("This will delete the Unit and any Schedules attached to the Unit. Are you really sure you want to do this")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(getResources().getString(R.string.warning_title_unit_delete))
+                        .setMessage(R.string.warning_detail_unit_delete)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 deleteSensor(UserConfig.getFirstUnit());
                             }
-                        }).setNegativeButton("No", null).show();
+                        }).setNegativeButton("Cancel", null).show();
                // deleteSchedule(UserConfig.getFirstUnit());
             }
         });
@@ -170,7 +167,6 @@ public class InitViewer extends AppCompatActivity {
             btnScan.setVisibility(View.INVISIBLE);
             button.setVisibility(View.INVISIBLE);
             editText.setVisibility(View.INVISIBLE);
-            imageView.setVisibility(View.INVISIBLE);
             btnReset.setText("Assign Zone1 Unit ID :: " + UserConfig.getFirstUnit());
             btnReset.setEnabled(true);
             btnReset.setVisibility(View.VISIBLE);
@@ -183,7 +179,6 @@ public class InitViewer extends AppCompatActivity {
             btnScan.setVisibility(View.VISIBLE);
             button.setVisibility(View.VISIBLE);
             editText.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
         }
 
     }

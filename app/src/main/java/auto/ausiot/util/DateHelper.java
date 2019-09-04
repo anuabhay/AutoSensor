@@ -2,7 +2,9 @@ package auto.ausiot.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by anu on 22/06/19.
@@ -61,7 +63,20 @@ public class DateHelper {
     }
 
     public static String getPrintableDate(Date date){
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd");
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
         return sdf.format(date);
+    }
+
+    public static Date getDateFromPrintableDate(String s) throws ParseException {
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
+        return sdf.parse(s);
+     }
+
+    public static Date getEndDate(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.set(Calendar.YEAR,2100);
+        Date endDate = c.getTime();
+        return endDate;
     }
 }

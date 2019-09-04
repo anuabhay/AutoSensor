@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Oz-Bach-Weather</string>
+    <string name="app_name">Oz-Bach</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Schedule</string>
-    <string name="title_notifications">Config</string>
+    <string name="title_notifications">Info</string>
 
 
     <string name="title_line1">Line - 1</string>
@@ -17,11 +17,11 @@
     <string name="scan_qr_code">Scan Unit QR Code</string>
 
     <string name="disclaimer">
-        This software application is shipped with Oz Bach Multi-line Controller system (OBMCS). OBMCS consists of one or more controller units and water valves that allow you to manage multiple water lines connected to each zone.
+        This software application ( OzBachApp-v.1.0.1) is shipped with Oz Bach Multi-line Controller system (OBMCS). OBMCS consists of one or more controller units and water valves that allow you to manage multiple water lines connected to each zone.
 
 \n\nOz Bach controller and water valves have been tested and are guaranteed to perform with highest quality and accuracy under normal conditions. However no technology is warrantied to perform without error under all conditions.
 
-\n\nThese rare occurances can be due to varience in water pressure, in-correct workmanship in fitting and configuring these equipmentc etc. Please contact Oz Bach on XXXXX if you need any assistance in fixing or configuring OBMCS.
+\n\nThese rare occurances can be due to varience in water pressure, incorrect workmanship in fitting and configuring these equipmentc etc. Please contact Oz Bach on info@ozbach.com.au if you need any assistance in fixing or configuring OBMCS.
 
 \n\nThis software application provides you with the functionality to manage multiple water lines using your Android /IOS smart phone. This  application has been tested and will work without issues under normal conditions. However there could be network connectivity issues, hardware failure issues, etc which are beyond the control of Oz Bach Technologies.
 
@@ -48,4 +48,14 @@
     <string name="prompt_user_address">Address (Search)</string>
     <string name="api_key">AIzaSyBudePesYzgj6a0LEsv2sQjjJ-CNnqvpRo</string>
     <string name="dialog_text">Warning</string>
+
+
+    <!-- Strings for Warning dialogs  -->
+    <string name="warning_title_schedule_modify">You are about to modify a Schedule</string>
+    <string name="warning_detail_schedule_modify">You are about to modify or add a Schedule. Are you sure you want to do this?</string>
+    <string name="warning_title_unit_delete">You are trying to delete the Unit</string>
+    <string name="warning_detail_unit_delete">This will delete the Unit and any Schedules attached to the Unit. Are you really sure you want to do this?</string>
+    <string name="warning_title_overlap_schedule">Schedule Error</string>
+    <string name="warning_title_max_schedule">Maximum Schedules Exceeded</string>
+    <string name="warning_detail_max_schedule">Try agian by deleting unwanted Schedules</string>
 </resources>

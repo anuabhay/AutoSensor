@@ -32,7 +32,7 @@ public class UserInfo extends AppCompatActivity {
                     startActivity(i);
                     return true;
                 case R.id.navigation_dashboard:
-                    i = new Intent(UserInfo.this,MainActivity.class);
+                    i = new Intent(UserInfo.this,ManageSchedulesActivity.class);
                     startActivity(i);
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
@@ -57,6 +57,7 @@ public class UserInfo extends AppCompatActivity {
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setDomStorageEnabled(true);
         webview.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
+
 
         TextView tv = (TextView) findViewById(R.id.banner);
         tv.setText("Welcome " + RestStore.user.getFullname());

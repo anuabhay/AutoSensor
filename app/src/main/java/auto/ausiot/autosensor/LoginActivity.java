@@ -84,10 +84,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean mAuthenticated = false;
 
+    private boolean buser = false;
+    private boolean bunit = false;
+    private boolean bschedules = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //Add Icon to Action Bar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -366,6 +376,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 public void onResponse(String token, String user) {
                     if (token != null){
                         mAuthenticated = true;
+                        buser = true;
                         RestStore.authToken = "Bearer "+token;
                         loadUserData();
                     }else{
@@ -422,7 +433,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+                //finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -441,7 +452,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         RestCallBack rcallback =  new RestCallBack() {
             @Override
             public void onResponse(Object obj) {
-
+                bunit = true;
+                if(bschedules && bunit){
+                    finish();
+                }
                 //poulateSpinners();
             }
             @Override
@@ -465,6 +479,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         RestCallBack rcallback =  new RestCallBack() {
             @Override
             public void onResponse(Object obj) {
+                bschedules = true;
+                if(bschedules && bunit){
+                    finish();
+                }
 
             }
 

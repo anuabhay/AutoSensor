@@ -3,6 +3,9 @@ package auto.ausiot.util;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import auto.ausiot.autosensor.InitViewer;
 import auto.ausiot.stroe.RestStore;
 
@@ -37,4 +40,5 @@ public class UserConfig {
             return null;
         }
     }
+
 }

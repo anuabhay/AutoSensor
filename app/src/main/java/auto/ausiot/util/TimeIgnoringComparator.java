@@ -30,7 +30,7 @@ public class TimeIgnoringComparator implements Comparator<Date> {
                 ret = true;
             }
         }else if (c1.get(Calendar.MONTH) != c2.get(Calendar.MONTH)){
-            if (((c1.get(Calendar.YEAR) - c2.get(Calendar.YEAR)) < 0)){
+            if (((c1.get(Calendar.MONTH) - c2.get(Calendar.MONTH)) < 0)){
                 ret = true;
             }
         }else if (c1.get(Calendar.DAY_OF_MONTH) != c2.get(Calendar.DAY_OF_MONTH)) {
@@ -55,7 +55,7 @@ public class TimeIgnoringComparator implements Comparator<Date> {
                     ret = true;
             }
         }else if (c1.get(Calendar.MONTH) != c2.get(Calendar.MONTH)){
-            if (((c1.get(Calendar.YEAR) - c2.get(Calendar.YEAR)) < 0)){
+            if (((c1.get(Calendar.MONTH) - c2.get(Calendar.MONTH)) < 0)){
                 ret = true;
             }
         }else if (c1.get(Calendar.DAY_OF_MONTH) != c2.get(Calendar.DAY_OF_MONTH)) {

@@ -8,24 +8,33 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.applikeysolutions.cosmocalendar.dialog.CalendarDialog;
+import com.applikeysolutions.cosmocalendar.dialog.OnDaysSelectionListener;
+import com.applikeysolutions.cosmocalendar.model.Day;
+import com.applikeysolutions.cosmocalendar.utils.SelectionType;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -36,6 +45,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -90,7 +100,7 @@ public class RepeatScheduleActivity extends AppCompatActivity {
                     startActivity(i);
                     return true;
                 case R.id.navigation_notifications:
-                    i = new Intent(RepeatScheduleActivity.this,InitViewer.class);
+                    i = new Intent(RepeatScheduleActivity.this,Disclaimer.class);
                     startActivity(i);
 
                     return true;
@@ -115,9 +125,10 @@ public class RepeatScheduleActivity extends AppCompatActivity {
             int id = getIntent().getIntExtra("schedule_index",0);
             Map<Days, ScheduleItem> si = new HashMap<>();
             sid = RestStore.user.getId() + "_"+ unitID + "_"+ lineID +"_" + sid;
+
             Schedule defaultschedule = new Schedule( sid, "Schedule -" + new Integer(id).toString(),
                     RestStore.user.getId() , unitID, lineID,
-                    new Date() , new Date() ,
+                    new Date() , DateHelper.getEndDate() ,
                     si,true , ScheduleType.Weekly);
             //@TODO Move to constant file
             String schedule = "WEEKLY::1,00:00,0,TRUE;2,00:00,0,TRUE;3,00:00,0,TRUE;4,00:00,0,TRUE;5,00:00,0,TRUE;6,00:00,0,TRUE;0,00:00,0,TRUE";
@@ -140,6 +151,9 @@ public class RepeatScheduleActivity extends AppCompatActivity {
 
         EditText txtName = (EditText) findViewById(R.id.text_input_name);
         txtName.setText(schedulebo.getName());
+
+        TextView txtNameExp = (TextView) findViewById(R.id.text_input_name_explanation);
+        txtNameExp.setText("Unit " + unitID + " and Line " + lineID);
         //txtDes.setText("Schedule for Unit: " + unitID + " and Line: " + lineID);
         //@TODO Depricated
         //unitID = config.readFirstConfig();
@@ -174,19 +188,21 @@ public class RepeatScheduleActivity extends AppCompatActivity {
     }
 
     private void setCheckBoxForDay(){
-        RadioButton b = (RadioButton) findViewById(R.id.radio_2);
-        b.setChecked(true);
+        //RadioButton b = (RadioButton) findViewById(R.id.radio_2);
+        //b.setChecked(true);
         Date dt = schedulebo.getStartDate();
         Days day = Days.get(dt.getDay());
-        onDayChange(day.ordinal());
+        int resID = getResources().getIdentifier("radio_" + day.ordinal(),"id",getPackageName());
+        RadioButton b = (RadioButton) findViewById(resID);
+        b.setChecked(true);
+        onDayChange(resID);
     }
     private void setDatePickers(){
         final Calendar calendar_start = Calendar.getInstance();
         calendar_start.setTime(schedulebo.getStartDate());
         final TextView txtStart = (TextView) findViewById(R.id.text_startdate);
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MMM/dd");
 
-        txtStart.setText(sdf.format(calendar_start.getTime()));
+        txtStart.setText(DateHelper.getPrintableDate(calendar_start.getTime()));
         txtStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,18 +212,19 @@ public class RepeatScheduleActivity extends AppCompatActivity {
                         Calendar cl = Calendar.getInstance();
                         cl.set(arg1,arg2,arg3);
                         schedulebo.setStartDate(cl.getTime());
-                        txtStart.setText(sdf.format(cl.getTime()));
+                        txtStart.setText(DateHelper.getPrintableDate(cl.getTime()));
                     }
 
                 }, calendar_start.get(Calendar.YEAR), calendar_start.get(Calendar.MONTH), calendar_start.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
+                //showCalendar(txtStart,true);
             }
         });
 
         final Calendar calendar_end = Calendar.getInstance();
         calendar_end.setTime(schedulebo.getEndDate());
         final TextView txtEnd = (TextView) findViewById(R.id.text_enddate);
-        txtEnd.setText(sdf.format(calendar_end.getTime()));
+        txtEnd.setText(DateHelper.getPrintableDate(calendar_end.getTime()));
         txtEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,16 +234,40 @@ public class RepeatScheduleActivity extends AppCompatActivity {
                         Calendar cl = Calendar.getInstance();
                         cl.set(arg1,arg2,arg3);
                         schedulebo.setEndDate(cl.getTime());
-                        txtEnd.setText(sdf.format(cl.getTime()));
+                        txtEnd.setText(DateHelper.getPrintableDate(cl.getTime()));
                     }
 
                 }, calendar_end.get(Calendar.YEAR), calendar_end.get(Calendar.MONTH), calendar_end.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
+                //showCalendar(txtEnd,false);
             }
         });
     }
 
-
+    private void showCalendar(final TextView txt , final boolean bStart) {
+        CalendarDialog cld = new CalendarDialog(this, new OnDaysSelectionListener() {
+            @Override
+            public void onDaysSelected(List<Day> selectedDays) {
+                Calendar cl = Calendar.getInstance();
+                cl = selectedDays.get(0).getCalendar();
+//                        cl.set(arg1,arg2,arg3);
+                if (bStart == true) {
+                    schedulebo.setStartDate(cl.getTime());
+                } else {
+                    schedulebo.setEndDate(cl.getTime());
+                }
+                txt.setText(DateHelper.getPrintableDate(cl.getTime()));
+            }
+        });
+        cld.show();
+        cld.setSelectionType(SelectionType.SINGLE);
+        cld.setCalendarOrientation(LinearLayoutManager.HORIZONTAL);
+        cld.setCurrentDayTextColor(android.R.color.holo_red_dark);
+        cld.setWeekendDayTextColor(cld.getDayTextColor());
+        int textColor = Color.parseColor("#519674");
+        cld.setMonthTextColor(textColor);
+        cld.setCurrentDayTextColor(textColor);
+    }
     private Days getDayFromCheckID(int checkedId) {
         Days day = Days.Friday;
         switch (checkedId) {
@@ -423,7 +464,16 @@ public class RepeatScheduleActivity extends AppCompatActivity {
 
     public void onButtonClick(Button view) throws MqttException, URISyntaxException {
         view.startAnimation(buttonClick);
-        saveScheduleData();
+        new AlertDialog.Builder(RepeatScheduleActivity.this)
+                .setTitle(getResources().getString(R.string.warning_title_schedule_modify))
+                .setMessage(getResources().getString(R.string.warning_detail_schedule_modify))
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        saveScheduleData();;
+                    }
+                }).setNegativeButton("Cancel", null).show();;
+        //saveScheduleData();
     }
 
     public Date getSheduleTimeFromUI(){
@@ -510,69 +560,15 @@ public class RepeatScheduleActivity extends AppCompatActivity {
     }
 
     boolean validateSchedules(ScheduleBO sbonew){
-//        boolean valid = true;
-//        List<ScheduleBO> sbolist = RestStore.getScheduleByUnitLine(unitID,lineID);
-//        for(int i=0; i < sbolist.size();i++){
-//            if (sbolist.get(i).getId().compareTo(sbonew.getId())!=0){
-//                ScheduleBO sboex = sbolist.get(i);
-//                if(TimeIgnoringComparator.before(sboex.getEndDate() ,sbonew.getStartDate())||
-//                        TimeIgnoringComparator.after(sboex.getStartDate() ,sbonew.getEndDate())){
-//
-//                }else{
-//                    Date dt;
-//                    if (TimeIgnoringComparator.before(sboex.getStartDate(), sbonew.getStartDate())){
-//                        dt = sboex.getStartDate();
-//
-//
-//                    }else{
-//                        dt = sbonew.getStartDate();
-//                    }
-//                    int count = 1;
-//                    boolean exit = false;
-//                    String msg = "Check the schedule for ";
-//                    while (TimeIgnoringComparator.beforeIncudingCurrentDay(dt,sbonew.getEndDate()) &&
-//                            TimeIgnoringComparator.beforeIncudingCurrentDay(dt,sboex.getEndDate()) &&
-//                            (count < 7) &&
-//                            (exit == false)) {
-//
-//                        int x = dt.getDay();
-//                        if (compareSchedules(dt,sbonew,sboex) == true){
-//                            valid = false;
-//                            SimpleDateFormat sdf2 = new SimpleDateFormat("EEEE");
-//                            msg = msg + sboex.getName() + "  : " + sdf2.format(dt) + "\n";
-//                        }
-//                        count++;
-//                        Calendar c = Calendar.getInstance();
-//                        c.setTime(dt);
-//                        c.add(Calendar.DATE, 1);
-//                        dt = c.getTime();
-//                    }
-//
-//                    if (valid == false){
-//                         new AlertDialog.Builder(RepeatScheduleActivity.this)
-//                            .setTitle("Overlaping Schedules")
-//                            .setMessage(msg)
-//                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                     return;
-//                                }
-//                             }).show();/*.setNegativeButton("No", null).show();*/
-//                    }
-//                }
-//               //they overlap
-//            }
-//        }
-//        return valid;
         boolean valid  = true;
         //String msg = "";
         StringBuffer msg = new StringBuffer ("");
         valid = ScheduleValidation.validateSchedules(sbonew,unitID,lineID,msg);
         if (valid == false){
                 new AlertDialog.Builder(RepeatScheduleActivity.this)
-                   .setTitle("Overlaping Schedules")
+                   .setTitle(getResources().getString(R.string.warning_title_overlap_schedule))
                    .setMessage(msg.toString())
-                   .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                   .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                    @Override
                    public void onClick(DialogInterface dialog, int which) {
                          return;

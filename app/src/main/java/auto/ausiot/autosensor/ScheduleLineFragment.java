@@ -1,6 +1,7 @@
 package auto.ausiot.autosensor;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,14 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Date;
+
+import auto.ausiot.autosensor.widgets.CustomDialogClass;
 import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
 import auto.ausiot.util.DateHelper;
+import auto.ausiot.util.TimeIgnoringComparator;
 import auto.ausiot.vo.ScheduleType;
 
 
@@ -100,7 +107,11 @@ public class ScheduleLineFragment extends Fragment {
             tvEnd.setVisibility(View.INVISIBLE);
             mLayout.setBackgroundColor(getResources().getColor(R.color.single_schedule_color));
         }
-
+        // Give user indication on the end date
+        if (TimeIgnoringComparator.before(schedulebo.getEndDate(),new Date())){
+            FrameLayout imgValid = (FrameLayout) getView().findViewById(R.id.image_invalid);
+            imgValid.setVisibility(View.VISIBLE);
+        }
 
         Button editBtn = (Button) getView().findViewById(R.id.button_edit);
         editBtn.setOnClickListener(new View.OnClickListener() {
@@ -121,12 +132,26 @@ public class ScheduleLineFragment extends Fragment {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("You are trying to delete the Schedule.")
                         .setMessage("This will delete the Schedule. Are you really sure you want to do this ?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 deleteSchedule();
                             }
-                        }).setNegativeButton("No", null).show();
+                        }).setNegativeButton("Cancel", null).show();
+
+//                View.OnClickListener onclick = new View.OnClickListener(){
+//
+//                    @Override
+//                    public void onClick(View v) {
+//                        int x = 1;
+//                    }
+//                };
+//                CustomDialogClass cdd=new CustomDialogClass(getActivity(),onclick,
+//                        "You are trying to delete the Schedule.",
+//                        "This will delete the Schedule. Are you really sure you want to do this ?");
+//                cdd.show();
+
+
 
             }
         });
