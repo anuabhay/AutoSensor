@@ -37,7 +37,7 @@ public class Disclaimer extends AppCompatActivity {
                     startActivity(i);
                     return true;
                 case R.id.navigation_dashboard:
-                    i = new Intent(Disclaimer.this,MainActivity.class);
+                    i = new Intent(Disclaimer.this,ManageSchedulesActivity.class);
                     startActivity(i);
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
@@ -52,6 +52,11 @@ public class Disclaimer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_disclaimer);
+
+        //Add Icon to Action Bar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         TextView textview= (TextView) findViewById(R.id.text_disclaimer);
         textview.setMovementMethod(ScrollingMovementMethod.getInstance());

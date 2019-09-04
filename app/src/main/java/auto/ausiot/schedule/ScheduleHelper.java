@@ -43,4 +43,35 @@ public class ScheduleHelper {
         rs.addSensorfromservice(sensorID,rcalback);
     }
 
+
+    public void login(String useremail, String password, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.login(useremail, password ,rcalback);
+    }
+
+    public void register(User user, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.register(user ,rcalback);
+    }
+
+    public void getUser(String useremail, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.getUser(useremail, rcalback);
+    }
+
+
+    public void getUnits(String userID, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.getUnits(userID, rcalback);
+    }
+
+    public void deleteUnit(String unitID, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.deleteUnit(unitID, rcalback);
+    }
+
+    public void getUserSchedules(String userID, Context context , RestCallBack rcalback){
+        RestStore rs = new RestStore(context);
+        rs.getUserSchedules(userID, rcalback);
+    }
 }

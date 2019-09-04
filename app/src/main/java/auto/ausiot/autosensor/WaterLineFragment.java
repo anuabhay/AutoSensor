@@ -20,6 +20,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import java.net.URISyntaxException;
 
 import auto.ausiot.util.Constants;
+import mqtt.HeartBeatCallBack;
 import mqtt.Subscriber;
 
 
@@ -108,8 +109,8 @@ public class WaterLineFragment extends Fragment {
                 // find which radio button is selected
                 Button btn = (Button) getView().findViewById(R.id.button_indicator_1);
                 if(checkedId == R.id.on_1) {
-                   btn.setBackgroundResource(R.drawable.circle_indicator);
-                   mp.start();
+                    btn.setBackgroundResource(R.drawable.circle_indicator);
+                    mp.start();
                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
                 } else if(checkedId == R.id.off_1) {
                     btn.setBackgroundResource(R.drawable.circle_indicator_off);
@@ -139,6 +140,7 @@ public class WaterLineFragment extends Fragment {
                     mp.start();
                     sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_CLOSE);
                 }
+
             }
 
         });
@@ -257,6 +259,22 @@ public class WaterLineFragment extends Fragment {
 
      }
 
+     public void set_Indicators(){
+         Button btn_1 = (Button) getView().findViewById(R.id.button_indicator_1);
+         if(HeartBeatCallBack.STATUS_R1 == true) {
+             btn_1.setBackgroundResource(R.drawable.circle_indicator);
+         }else{
+             btn_1.setBackgroundResource(R.drawable.circle_indicator_off);
+         }
+
+         Button btn_2 = (Button) getView().findViewById(R.id.button_indicator_2);
+         if(HeartBeatCallBack.STATUS_R2 == true) {
+             btn_2.setBackgroundResource(R.drawable.circle_indicator);
+         }else{
+             btn_2.setBackgroundResource(R.drawable.circle_indicator_off);
+         }
+     }
+
     public void save_state(Bundle savedInstanceState){
         RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
         savedInstanceState.putInt("line_1", radioGroup_1.getCheckedRadioButtonId());
@@ -289,4 +307,5 @@ public class WaterLineFragment extends Fragment {
             }
         }
     }
+
 }

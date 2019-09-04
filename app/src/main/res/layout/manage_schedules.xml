@@ -1,0 +1,250 @@
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:gravity="center_horizontal"-->
+    <!--android:orientation="vertical"-->
+    <!--android:paddingBottom="@dimen/activity_vertical_margin"-->
+    <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+    <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+    <!--android:paddingTop="@dimen/activity_vertical_margin"-->
+    <!--tools:context="auto.ausiot.autosensor.LoginActivity">-->
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="auto.ausiot.autosensor.ManageSchedulesActivity"
+    android:background="@color/light_bg_color">
+
+      <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/light_bg_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
+
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="11"
+                android:layout_height="match_parent"
+                android:text="Unit"
+                style="@style/MediumLabel"
+                android:layout_marginRight="20dp"
+                android:textStyle="bold"
+             />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="33"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_spinner_thin_border"
+                android:layout_gravity="center"
+                >
+                <Spinner
+                    android:id="@+id/spinner_units"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="11"
+                android:layout_height="match_parent"
+                style="@style/MediumLabel"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="Line"
+                android:textStyle="bold"
+             />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="22"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_spinner_thin_border"
+                >
+                <Spinner
+                    android:id="@+id/spinner_lines"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Select Unit and Line from the drop down"
+              android:layout_gravity="center_horizontal"
+              style="@style/SmallLabel"
+             />
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@android:color/darker_gray"
+              android:layout_marginTop="5dp"
+              android:layout_marginBottom="5dp"/>
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+            <TextView
+                android:id="@+id/label_add_schedule"
+                android:layout_width="0dp"
+                android:layout_weight="15"
+                android:layout_height="60dp"
+                android:gravity="left"
+                android:singleLine="false"
+                android:text="Add Schedule"
+                style="@style/MediumLabel"
+                android:textStyle="bold"
+                android:layout_marginRight="5dp"
+                />
+             <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_weight="25"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/layout_spinner_thin_border"
+                  >
+                    <Spinner
+                        android:id="@+id/spinner_schedule_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="5dp"
+                        />
+             </LinearLayout>
+            <ImageButton
+                android:id="@+id/button_add_schedule"
+                android:layout_width="0dp"
+                android:layout_weight="15"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:layout_marginLeft="5dp"
+                android:src="@android:drawable/ic_input_add"
+                />
+        </LinearLayout>
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Select type of the schedule from the drop down"
+              android:layout_gravity="center_horizontal"
+              style="@style/SmallLabel"
+              />
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@android:color/darker_gray"
+              android:layout_marginTop="5dp"
+              android:layout_marginBottom="5dp"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+            <LinearLayout
+            android:id="@+id/schedule_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="1dp"/>
+
+
+          <LinearLayout
+              android:id="@+id/schedule_line_0"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginLeft="1dp"/>
+
+          <LinearLayout
+            android:id="@+id/schedule_line_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="1dp"/>
+
+        <LinearLayout
+            android:id="@+id/schedule_line_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="1dp"/>
+
+        <LinearLayout
+            android:id="@+id/schedule_line_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="1dp"/>
+
+        <LinearLayout
+            android:id="@+id/schedule_line_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="1dp"/>
+
+        <LinearLayout
+            android:id="@+id/schedule_line_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="1dp"/>
+
+                <LinearLayout
+                    android:id="@+id/schedule_line_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="1dp"/>
+        </LinearLayout>
+      </ScrollView>
+    </LinearLayout>
+<!--</LinearLayout>-->
+</android.support.constraint.ConstraintLayout>

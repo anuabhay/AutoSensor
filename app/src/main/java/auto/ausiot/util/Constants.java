@@ -22,9 +22,9 @@ public class Constants {
 //    public static String MQTT_USER = "sbpmtfqc";
 //    public static String MQTT_PASSWD = "GGGMHoXnNMz-";
 
-    public static String MQTT_HOST = "tcp://postman.cloudmqtt.com:10976";
-    public static String MQTT_USER = "ttfygwil";
-    public static String MQTT_PASSWD = "Zuvz27NYz943";
+    public static String MQTT_HOST = "tcp://postman.cloudmqtt.com:15305";
+    public static String MQTT_USER = "vckugjvl";
+    public static String MQTT_PASSWD = "2zJw2vbb-eUH";
 
 
 //    public static String MQTT_HOST = "tcp://postman.cloudmqtt.com:16469";
@@ -40,8 +40,8 @@ public class Constants {
     public static String QR_CODE_FOR_USER = "USER_1";
 
     //Connect URL to rest service
-    //public static final String BASE_URL = "http://10.0.2.2:8080";
-    public static final String BASE_URL = "http://35.224.124.185:8080";
+    public static final String BASE_URL = "http://10.0.2.2:8080";
+    //public static final String BASE_URL = "http://35.194.38.92:8080";
 
 //    // Frequency of checking the status in mili seconds
 //    public static int STATUS_CHECK_FREQUENCY = 120000;
@@ -51,12 +51,21 @@ public class Constants {
     //
     public static String SENSOR_STATUS_ON_MSG = "NetworkON";
 
+    public static String STATUS_R1_OPEN = "STATUS_R1ON";
+    public static String STATUS_R1_CLOSE = "STATUS_R1OFF";
+
+    public static String STATUS_R2_OPEN = "STATUS_R2ON";
+    public static String STATUS_R2_CLOSE = "STATUS_R2OFF";
+
     // Frequency of checking the status in mili seconds
     public static int STATUS_CHECK_FREQUENCY = 20000;
     // In mili seconds
     public static int MAX_HEARTBEAT_MISSES = 2;
 
+    public static long MAX_END_DATE = 193444070400000L;
+
 
     public static String ERROR_MSG_SCHEDULE_NOT_LOADED = "Could not load the schedule.Try restarting the app";
 
+    public static int MAX_SCHEDULE_COUNT = 7;
 }

@@ -2,6 +2,9 @@
 <resources>
     <color name="colorPrimary">#519674</color>
     <color name="colorPrimaryDark">#0c6338</color>
+    <color name="colorPrimaryText">#000000</color>
+    <color name="colorPrimaryTextLight">#FFFFFF</color>
+    <color name="colorPrimaryLabelText">#519674</color>
     <color name="colorAccent">#d60404</color>
     <color name="QRCodeWhiteColor">#ffffff</color>
     <color name="QRCodeBlackColor">#000000</color>
@@ -14,4 +17,10 @@
     <color name="black_border">#000000</color>
     <color name="transparent">#cddcf9</color>
     <color name="white">#f5f5f5</color>
+    <color name="dialog_cancel_bgcolor">#0527e1</color>
+    <color name="dialog_ok_bgcolor">#E10505</color>
+    <color name="main_layuot_nofill_color"> #00000000</color>
+    <color name="repeated_schedule_color">#99CC99</color>
+    <color name="single_schedule_color">#CCCC99</color>
+    <color name="light_bg_color">#E2F1F1</color>
 </resources>

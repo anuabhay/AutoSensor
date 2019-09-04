@@ -1,5 +1,6 @@
 package auto.ausiot.schedule;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,9 +24,89 @@ import auto.ausiot.vo.ScheduleType;
 public class ScheduleBO {
 
     String id;
+    String name;
 
     Map<Days, ScheduleItemBO> mapSchedule = new HashMap<>();
     ScheduleType type = ScheduleType.Daily;
+
+    private String userID;
+    private String unitID;
+    private String lineID;
+
+    private Date startDate = new Date();
+    private Date endDate = new Date(Constants.MAX_END_DATE);;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Map<Days, ScheduleItemBO> getMapSchedule() {
+        return mapSchedule;
+    }
+
+    public void setMapSchedule(Map<Days, ScheduleItemBO> mapSchedule) {
+        this.mapSchedule = mapSchedule;
+    }
+
+    public ScheduleType getType() {
+        return type;
+    }
+
+    public void setType(ScheduleType type) {
+        this.type = type;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getUnitID() {
+        return unitID;
+    }
+
+    public void setUnitID(String unitID) {
+        this.unitID = unitID;
+    }
+
+    public String getLineID() {
+        return lineID;
+    }
+
+    public void setLineID(String lineID) {
+        this.lineID = lineID;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
     public ScheduleBO(){
 
@@ -44,10 +125,19 @@ public class ScheduleBO {
 //
 //    }
 
-    public ScheduleBO(String id, Map<Days, ScheduleItemBO> mapSchedule , ScheduleType type){
+    public ScheduleBO(String id, String name,
+                      String userID , String unitID, String lineID,
+                      Date startDate , Date endDate ,
+                      Map<Days, ScheduleItemBO> mapSchedule , ScheduleType type){
         this.id = id;
+        this.name = name;
         this.type = type;
         this.mapSchedule = mapSchedule;
+        this.userID = userID;
+        this.unitID = unitID;
+        this.lineID = lineID;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public void createSchedule(ScheduleItemBO si){
@@ -92,7 +182,7 @@ public class ScheduleBO {
             ScheduleItem itemvo = new ScheduleItem("id",bo.getTime(),bo.getDuration(),bo.isEnabled(),null);
             mapSchedulevo.put((Days)pair.getKey(),itemvo);
         }
-        Schedule svo = new Schedule(id, mapSchedulevo,true);
+        Schedule svo = new Schedule(id, name, userID , unitID, lineID, startDate, endDate, mapSchedulevo,true, type);
         return svo;
     }
 
@@ -113,7 +203,10 @@ public class ScheduleBO {
             ScheduleItemBO itembo = new ScheduleItemBO(calendar.getTime(),bo.getDuration(),bo.isEnabled());
             mapSchedulebo.put((Days)pair.getKey(),itembo);
         }
-        ScheduleBO svo = new ScheduleBO(schedulevo.getId(),mapSchedulebo,ScheduleType.Weekly);
+        ScheduleBO svo = new ScheduleBO(schedulevo.getId(), schedulevo.getName(),
+                schedulevo.getUserID(), schedulevo.getUnitID(), schedulevo.getLineID(),
+                schedulevo.getStartDate(), schedulevo.getEndDate(),
+                mapSchedulebo,schedulevo.getType());
         return svo;
     }
 
@@ -218,4 +311,8 @@ public class ScheduleBO {
         return dumpString;
     }
 
+    public ScheduleItemBO getcheduleItem(Days day) throws ParseException {
+        ScheduleItemBO si = mapSchedule.get(day);
+        return si;
+    }
 }

@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -36,8 +34,9 @@ import java.util.TimeZone;
 import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.stroe.RestCallBack;
+import auto.ausiot.stroe.RestStore;
 import auto.ausiot.ui.TimePickerFragment;
-import auto.ausiot.util.AppConfig;
+import auto.ausiot.util.UserConfig;
 import auto.ausiot.util.Constants;
 import auto.ausiot.util.DateHelper;
 import auto.ausiot.util.Logger;
@@ -50,15 +49,16 @@ public class MainActivity extends AppCompatActivity {
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
     private Logger logger = null;
     ScheduleBO schedulebo = null;
-    AppConfig config ;
+    //AppConfig config ;
     private RadioGroup radioGroupDays ;
     //@TODO THis need to change for user ID to support multiple sensors
-    private String unitID;
-    private String sensorID = "1";
+    private String unitID = null;
+    private String lineID = "1";
     Button saveBtn;
     LinearLayout mainLayout;
     RadioButton line_1;
     RadioButton  line_2;
+    private static int scheduleID = 1;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     return true;
                 case R.id.navigation_notifications:
-                    i = new Intent(MainActivity.this,InitViewer.class);
+                    i = new Intent(MainActivity.this,Disclaimer.class);
                     startActivity(i);
 
                     return true;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     void checkInitialized(){
-        if (config.checkInitialized() == false){
+        if (unitID == null){
             Intent i = new Intent(MainActivity.this,InitViewer.class);
             startActivity(i);
 
@@ -104,10 +104,14 @@ public class MainActivity extends AppCompatActivity {
 
         Resources res = getResources();
         context = MainActivity.this.getApplicationContext();
-        config = new AppConfig(MainActivity.this.getApplicationContext());
-        unitID = config.readFirstConfig();
-
-        checkInitialized();
+        //config = new AppConfig(MainActivity.this.getApplicationContext());
+        //unitID = config.readFirstConfig();
+//        if(RestStore.units != null) {
+//            unitID = RestStore.units.get(0).getId();
+//        }
+//
+//        checkInitialized();
+        unitID = UserConfig.checkInitialized(this);
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -125,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 // find which radio button is selected
                 setSelectionBanner();
                 if (checkedId == R.id.radioButton_sensor1) {
-                    sensorID = "1";
+                    lineID = "1";
                     line_2.setTextColor(Color.GRAY);
                     line_1.setTextColor(getResources().getColor(R.color.colorPrimary));
                     line_1.setTextSize(30);
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                     line_1.setBackgroundResource(0);
                     //mainLayout.setBackgroundColor(getResources().getColor(R.color.schedule_1_background));
                 } else {
-                        sensorID = "2";
+                        lineID = "2";
                     //RelativeLayout l =  (RelativeLayout) findViewById(R.id.XXXXX);
                     line_1.setTextColor(Color.GRAY);
                     line_2.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -389,7 +393,14 @@ public class MainActivity extends AppCompatActivity {
 
         RestCallBack rcallback =  new RestCallBack() {
              @Override
-             public void onResponse(Schedule scvo) {
+             public void onResponse(Object obj) {
+                 Schedule scvo = (Schedule) obj;
+                 if (scvo.getUserID().equalsIgnoreCase("")==true){
+                     scvo.setUserID(RestStore.user.getId());
+                     scvo.setUnitID(unitID);
+                     scvo.setLineID(lineID);
+                     scvo.setId(RestStore.user.getId() + "_" + unitID + "_" + lineID + "_" + scheduleID);
+                 }
                  if (scvo != null) {
                      schedulebo = ScheduleBO.getScheduleBO(scvo);
                      Days selected_day = getDayFromCheckID(radioGroupDays.getCheckedRadioButtonId());
@@ -436,8 +447,13 @@ public class MainActivity extends AppCompatActivity {
                  disableallcontrols();
              }
 
+            @Override
+            public void onResponse(String s,String user) {
+                int x = 1;
+            }
+
          };
-        sh.loadScheduleFromService(unitID + "_" + sensorID ,context,rcallback);
+        sh.loadScheduleFromService(RestStore.user.getId() + "_" + unitID + "_" + lineID + "_" + scheduleID, context,rcallback);
     }
 
     void saveScheduleData(){
@@ -445,8 +461,13 @@ public class MainActivity extends AppCompatActivity {
         ScheduleHelper sh = new ScheduleHelper();
         RestCallBack rcallback =  new RestCallBack() {
             @Override
-            public void onResponse(Schedule scvo) {
+            public void onResponse(Object obj) {
                 saveBtn.setText("Saved");
+            }
+
+            @Override
+            public void onResponse(String s,String user) {
+                int x = 1;
             }
 
             @Override

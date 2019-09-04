@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -18,23 +17,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 //import android.widget.Button;
-import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.URISyntaxException;
 import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 
-import auto.ausiot.util.AppConfig;
+import auto.ausiot.util.UserConfig;
 import auto.ausiot.util.Constants;
 import mqtt.HeartBeatCallBack;
 import mqtt.Subscriber;
@@ -48,7 +45,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     Context context ;
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.6F);
-    AppConfig config ;
+    //AppConfig config ;
     private String unitID;
 
 
@@ -87,12 +84,12 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
                     //myBtn.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.navigation_dashboard:
-                    i = new Intent(MonitorActivity.this,MainActivity.class);
+                    i = new Intent(MonitorActivity.this,ManageSchedulesActivity.class);
                     startActivity(i);
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
-                    i = new Intent(MonitorActivity.this,InitViewer.class);
+                    i = new Intent(MonitorActivity.this,Disclaimer.class);
                     startActivity(i);
                     return true;
             }
@@ -100,13 +97,13 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         }
     };
 
-    void checkInitialized(){
-        if (config.checkInitialized() == false){
-            Intent i = new Intent(MonitorActivity.this,InitViewer.class);
-            startActivity(i);
-
-        }
-    }
+//    void checkInitialized(){
+//        if (config.checkInitialized() == false){
+//            Intent i = new Intent(MonitorActivity.this,InitViewer.class);
+//            startActivity(i);
+//
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,16 +114,21 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.help) {
-            //startActivity(new Intent(this, CoursesActivity.class));
-            startActivity(new Intent(this, AddUser.class));
+//        if (item.getItemId() == R.id.help) {
+//            //startActivity(new Intent(this, CoursesActivity.class));
+//            startActivity(new Intent(this, UserInfo.class));
+//        }
+//        if (item.getItemId() == R.id.app_settings) {
+//            startActivity(new Intent(this, AppSettings.class));
+//        }
+//        if (item.getItemId() == R.id.disclaimer) {
+//            startActivity(new Intent(this, Disclaimer.class));
+//        }
+
+        if (item.getItemId() == R.id.init_view) {
+            startActivity(new Intent(this, InitViewer.class));
         }
-        if (item.getItemId() == R.id.app_settings) {
-            startActivity(new Intent(this, AppSettings.class));
-        }
-        if (item.getItemId() == R.id.disclaimer) {
-            startActivity(new Intent(this, Disclaimer.class));
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -134,6 +136,8 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
+
+        unitID = UserConfig.checkInitialized(this);
 
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -157,10 +161,9 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         }
 
         context = MonitorActivity.this.getApplicationContext();
-        config = new AppConfig(MonitorActivity.this.getApplicationContext());
-        this.unitID = config.readFirstConfig();
-        checkInitialized();
-
+        //config = new AppConfig(MonitorActivity.this.getApplicationContext());
+        //this.unitID = config.readFirstConfig();
+        //checkInitialized();
         FragmentManager fm = getSupportFragmentManager();
         Fragment oldFragment = fm.findFragmentByTag("fragment_one");
 
@@ -184,12 +187,14 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     @Override
     protected void onStart(){
         super.onStart();
-        subscribeToStatus(unitID);
-        sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
-        setAlarm(unitID);
-        setNetworkStatusBanner();
-        //Restore Fragment values
-        restore_fragment_check_boxes(m_savedInstanceState);
+        if(unitID != null) {
+            subscribeToStatus(unitID);
+            sendMQTTMsg(unitID, Constants.ACTION_GET_STATUS);
+            setAlarm(unitID);
+            setNetworkStatusBanner(false);
+            //Restore Fragment values
+            restore_fragment_check_boxes(m_savedInstanceState);
+        }
     }
 
     private void restore_fragment_check_boxes(Bundle savedInstanceState){
@@ -198,6 +203,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
             WaterLineFragment fragment = (WaterLineFragment) fm.findFragmentByTag("fragment_one");
             if (fragment != null)
                 fragment.restore_state(savedInstanceState);
+                fragment.set_Indicators();
         }
 
     }
@@ -244,23 +250,56 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         if(initCalled == false) {
             initCalled = true;
             network_on = false;
-            //setNetWorkDown();
-            //textBanner.setText("Network Down");
-            //textBanner.setTextColor(Color.RED);
-
             try {
                 hbcallback = new HeartBeatCallBack() {
+                    /*
+                    Format
+
+                    {
+                        'UNIT' : 'ON' ,
+                        'R1'   :  'OFF' ,
+                        'R2'   : 'ON'
+                    }
+
+
+                     */
                     @Override
                     public void onCallBack(String msg) {
-                        if (msg.compareTo(Constants.SENSOR_STATUS_ON_MSG) == 0) {
-                            HeartBeatCallBack.last_heart_beat = new Date();
-                            //Interrupt the UI thread using an alarm
-                            Intent intent1 = new Intent(context, AlarmReceiver.class);
-                            final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, 0);
-                            final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1, pendingIntent);
-                            //setNetworkStatusBanner();
+                        Gson gson = new GsonBuilder().create();
+                        Object obj =  gson.fromJson(msg,Object.class);
+                        //@TODO Need to take off when all messages are JSON
+                        if ((obj instanceof String) == false) {
+                            Map<String, String> map = (Map<String, String>) obj;
+                            if (map.get("UNIT").compareTo("ON") == 0){
+                                HeartBeatCallBack.last_heart_beat = new Date();
+                            }
+                            if (map.get("R1").compareTo("ON") == 0){
+                                HeartBeatCallBack.STATUS_R1 = true;
+                            }
+                            if (map.get("R2").compareTo("ON") == 0){
+                                HeartBeatCallBack.STATUS_R2 = true;
+                            }
+                            if (map.get("R1").compareTo("OFF") == 0){
+                                HeartBeatCallBack.STATUS_R1 = false;
+                            }
+                            if (map.get("R2").compareTo("OFF") == 0){
+                                HeartBeatCallBack.STATUS_R2 = false;
+                            }
                         }
+
+//                        if (msg.compareTo(Constants.SENSOR_STATUS_ON_MSG) == 0) {
+//                            HeartBeatCallBack.last_heart_beat = new Date();
+//                            //Interrupt the UI thread using an alarm
+//                            Intent intent1 = new Intent(context, AlarmReceiver.class);
+//                            final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, 0);
+//                            final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1, pendingIntent);
+//                            //setNetworkStatusBanner();
+//                        }else if((msg.compareTo(Constants.STATUS_R1_CLOSE) == 0) || (msg.compareTo(Constants.STATUS_R1_OPEN)== 0)){
+//
+//                        }else if((msg.compareTo(Constants.STATUS_R2_CLOSE) == 0) || (msg.compareTo(Constants.STATUS_R2_OPEN)== 0)){
+//
+//                        }
                     }
                 };
                 HeartBeatCallBack.textBanner = textBanner;
@@ -275,14 +314,16 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         }
     }
 
-    public void setNetworkStatusBanner(){
+    public void setNetworkStatusBanner(boolean iscallback){
         if (HeartBeatCallBack.getLast_heart_beat()!= null) {
             if (compareDates(HeartBeatCallBack.getLast_heart_beat(), new Date(), Constants.MAX_HEARTBEAT_MISSES * Constants.STATUS_CHECK_FREQUENCY)) {
                 setNetWorkDown();
 
             } else {
                 setNetWorkUp();
-
+            }
+            if(iscallback){
+                setIndicators();
             }
         }else{
             setNetWorkDown();
@@ -331,7 +372,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     public void processAlarmCallBack(){
         //Toast.makeText(context, "Alarm Triggered", Toast.LENGTH_LONG).show();
-        setNetworkStatusBanner();
+        setNetworkStatusBanner(true);
         sendMQTTMsg(unitID,Constants.ACTION_GET_STATUS);
     }
 
@@ -359,6 +400,14 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         if (fragment!= null)
             fragment.enable_all_Controls();
         network_on = true;
+    }
+
+    public void setIndicators(){
+        FragmentManager fm = getSupportFragmentManager();
+        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        if (fragment!= null)
+            fragment.set_Indicators();
+
     }
 
 }
