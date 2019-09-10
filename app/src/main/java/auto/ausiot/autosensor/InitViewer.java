@@ -218,9 +218,21 @@ public class InitViewer extends AppCompatActivity {
                     //@TODO Count Actual responses
                     //if(count++ == 2) {
                         //config.writeConfig(sID);
-                        RestStore.addUnit((Unit)obj);
-                        Intent i = new Intent(InitViewer.this, InitViewer.class);
-                        startActivity(i);
+                        if (obj != null) {
+                            RestStore.addUnit((Unit) obj);
+                            Intent i = new Intent(InitViewer.this, InitViewer.class);
+                            startActivity(i);
+                        }else{
+                            new AlertDialog.Builder(InitViewer.this)
+                                    .setTitle(getResources().getString(R.string.warning_title_unit_add))
+                                    .setMessage(R.string.warning_detail_unit_add)
+                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            deleteSensor(UserConfig.getFirstUnit());
+                                        }
+                                    }).show();
+                        }
                     //}
                 }
 

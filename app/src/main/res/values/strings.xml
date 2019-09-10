@@ -57,4 +57,6 @@
     <string name="warning_title_overlap_schedule">Schedule Error</string>
     <string name="warning_title_max_schedule">Maximum Schedules Exceeded</string>
     <string name="warning_detail_max_schedule">Try agian by deleting unwanted Schedules</string>
+    <string name="warning_title_unit_add">Unkown Unit ID</string>
+    <string name="warning_detail_unit_add">You are trying to add a Unkown Unit or a Unit already in use. Please recheck your unit ID or contact support?</string>
 </resources>

@@ -10,6 +10,7 @@ import java.util.List;
 import auto.ausiot.schedule.AuthBody;
 import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.User;
+import auto.ausiot.util.Constants;
 import auto.ausiot.vo.Schedule;
 import auto.ausiot.vo.Unit;
 import okhttp3.ResponseBody;
@@ -188,6 +189,11 @@ public class RestStore /*implements ScheduleStore*/ {
             @Override
             public void onResponse(Call<List<Unit>> call, Response<List<Unit>> response) {
                 units = (List<Unit>) response.body();
+                if( units.size() > 0) {
+                    Constants.MQTT_HOST = units.get(0).getMqqttUrl();
+                    Constants.MQTT_USER = units.get(0).getMqqttUserID();
+                    Constants.MQTT_PASSWD = units.get(0).getMqqttPassword();
+                }
                 restcallback.onResponse("Success");
             }
 

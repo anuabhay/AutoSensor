@@ -192,7 +192,11 @@ public class RepeatScheduleActivity extends AppCompatActivity {
         //b.setChecked(true);
         Date dt = schedulebo.getStartDate();
         Days day = Days.get(dt.getDay());
-        int resID = getResources().getIdentifier("radio_" + day.ordinal(),"id",getPackageName());
+        int val = day.ordinal();
+        if (day.ordinal() == 0) {
+            val = 7;
+        }
+        int resID = getResources().getIdentifier("radio_" + val,"id",getPackageName());
         RadioButton b = (RadioButton) findViewById(resID);
         b.setChecked(true);
         onDayChange(resID);

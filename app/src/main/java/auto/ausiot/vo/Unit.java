@@ -9,6 +9,33 @@ public class Unit {
 
     private String id;
     private String userID;
+    private String mqqttUserID;
+    private String mqqttPassword;
+    private String mqqttUrl;
+
+    public String getMqqttUserID() {
+        return mqqttUserID;
+    }
+
+    public void setMqqttUserID(String mqqttUserID) {
+        this.mqqttUserID = mqqttUserID;
+    }
+
+    public String getMqqttPassword() {
+        return mqqttPassword;
+    }
+
+    public void setMqqttPassword(String mqqttPassword) {
+        this.mqqttPassword = mqqttPassword;
+    }
+
+    public String getMqqttUrl() {
+        return mqqttUrl;
+    }
+
+    public void setMqqttUrl(String mqqttUrl) {
+        this.mqqttUrl = mqqttUrl;
+    }
 
     public String getId() {
         return id;
