@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -36,11 +38,11 @@ public class Disclaimer extends AppCompatActivity {
                     i = new Intent(Disclaimer.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
-                case R.id.navigation_dashboard:
-                    i = new Intent(Disclaimer.this,ManageSchedulesActivity.class);
-                    startActivity(i);
-                    //mTextMessage.setText(R.string.title_dashboard);
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    i = new Intent(Disclaimer.this,ManageSchedulesActivity.class);
+//                    startActivity(i);
+//                    //mTextMessage.setText(R.string.title_dashboard);
+//                    return true;
                 case R.id.navigation_notifications:
                     return true;
             }

@@ -93,12 +93,12 @@ public class RepeatScheduleActivity extends AppCompatActivity {
                     i = new Intent(RepeatScheduleActivity.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
-                case R.id.navigation_dashboard:
-                    i = new Intent(RepeatScheduleActivity.this,ManageSchedulesActivity.class);
-                    i.putExtra("lineID", lineID);
-                    i.putExtra("unitID", unitID);
-                    startActivity(i);
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    i = new Intent(RepeatScheduleActivity.this,ManageSchedulesActivity.class);
+//                    i.putExtra("lineID", lineID);
+//                    i.putExtra("unitID", unitID);
+//                    startActivity(i);
+//                    return true;
                 case R.id.navigation_notifications:
                     i = new Intent(RepeatScheduleActivity.this,Disclaimer.class);
                     startActivity(i);

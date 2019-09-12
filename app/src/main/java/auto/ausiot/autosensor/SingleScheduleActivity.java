@@ -99,12 +99,12 @@ public class SingleScheduleActivity extends AppCompatActivity {
                     i = new Intent(SingleScheduleActivity.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
-                case R.id.navigation_dashboard:
-                    i = new Intent(SingleScheduleActivity.this,ManageSchedulesActivity.class);
-                    i.putExtra("lineID", lineID);
-                    i.putExtra("unitID", unitID);
-                    startActivity(i);
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    i = new Intent(SingleScheduleActivity.this,ManageSchedulesActivity.class);
+//                    i.putExtra("lineID", lineID);
+//                    i.putExtra("unitID", unitID);
+//                    startActivity(i);
+//                    return true;
                 case R.id.navigation_notifications:
                     i = new Intent(SingleScheduleActivity.this,Disclaimer.class);
                     startActivity(i);

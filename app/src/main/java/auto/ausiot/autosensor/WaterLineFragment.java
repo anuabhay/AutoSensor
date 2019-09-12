@@ -36,7 +36,7 @@ public class WaterLineFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ZONE = "1";
-    private static final String ARG_LINE1 = "Line1";
+    private static final String ARG_LINE1 = "Garage Controller";
     private static final String ARG_LINE2 = "Line2";
     private static final String ARG_UNIT_ID = "U00";
     private static final String ARG_MP = "Line2";
@@ -122,40 +122,40 @@ public class WaterLineFragment extends Fragment {
         });
 
 
-        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
-        //Button btnSensor = (Button) view.findViewById(R.id.water_line);
-
-        radioGroup_2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-                Button btn = (Button) getView().findViewById(R.id.button_indicator_2);
-                if(checkedId == R.id.on_2) {
-                    btn.setBackgroundResource(R.drawable.circle_indicator);
-                    mp.start();
-                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_OPEN);
-                } else if(checkedId == R.id.off_2) {
-                    btn.setBackgroundResource(R.drawable.circle_indicator_off);
-                    mp.start();
-                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_CLOSE);
-                }
-
-            }
-
-        });
+//        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
+//        //Button btnSensor = (Button) view.findViewById(R.id.water_line);
+//
+//        radioGroup_2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                // find which radio button is selected
+//                Button btn = (Button) getView().findViewById(R.id.button_indicator_2);
+//                if(checkedId == R.id.on_2) {
+//                    btn.setBackgroundResource(R.drawable.circle_indicator);
+//                    mp.start();
+//                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_OPEN);
+//                } else if(checkedId == R.id.off_2) {
+//                    btn.setBackgroundResource(R.drawable.circle_indicator_off);
+//                    mp.start();
+//                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_CLOSE);
+//                }
+//
+//            }
+//
+//        });
         setLabels();
         disable_all_Controls();
     }
 
 
     void setLabels(){
-        TextView zone = (TextView) getView().findViewById(R.id.label_zone_fragment);
+        //TextView zone = (TextView) getView().findViewById(R.id.label_zone_fragment);
         TextView line1 = (TextView) getView().findViewById(R.id.label_line1_fragment);
-        TextView line2 = (TextView) getView().findViewById(R.id.label_line2_fragment);
-        zone.setText("Zone " + mParamZone);
-        line1.setText("Line " + mParamLine1);
-        line2.setText("Line " + mParamLine2);
+        //TextView line2 = (TextView) getView().findViewById(R.id.label_line2_fragment);
+        //zone.setText("Zone " + mParamZone);
+        //line1.setText("Line " + mParamLine1);
+        //line2.setText("Line " + mParamLine2);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -228,12 +228,12 @@ public class WaterLineFragment extends Fragment {
         for (int i = 0; i < radioGroup_1.getChildCount(); i++) {
             radioGroup_1.getChildAt(i).setEnabled(false);
         }
-        final RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
+        //final RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
         final MonitorActivity ma = (MonitorActivity) getActivity();
 
-        for (int i = 0; i < radioGroup_2.getChildCount(); i++) {
-            radioGroup_2.getChildAt(i).setEnabled(false);
-        }
+//        for (int i = 0; i < radioGroup_2.getChildCount(); i++) {
+//            radioGroup_2.getChildAt(i).setEnabled(false);
+//        }
 
         ma.textBanner.setText("Network Down");
         ma.textBanner.setTextColor(Color.RED);
@@ -245,12 +245,12 @@ public class WaterLineFragment extends Fragment {
     public void enable_all_Controls(){
         final Button on_1 = (RadioButton) getView().findViewById(R.id.on_1);
         on_1.setEnabled(true);
-        final Button on_2 = (RadioButton) getView().findViewById(R.id.on_2);
-        on_2.setEnabled(true);
+//        final Button on_2 = (RadioButton) getView().findViewById(R.id.on_2);
+//        on_2.setEnabled(true);
         final Button off_1 = (RadioButton) getView().findViewById(R.id.off_1);
         off_1.setEnabled(true);
-        final Button off_2 = (RadioButton) getView().findViewById(R.id.off_2);
-        off_2.setEnabled(true);
+//        final Button off_2 = (RadioButton) getView().findViewById(R.id.off_2);
+//        off_2.setEnabled(true);
 
         final MonitorActivity ma = (MonitorActivity) getActivity();
         ma.textBanner.setText("Network On");
@@ -267,20 +267,20 @@ public class WaterLineFragment extends Fragment {
              btn_1.setBackgroundResource(R.drawable.circle_indicator_off);
          }
 
-         Button btn_2 = (Button) getView().findViewById(R.id.button_indicator_2);
-         if(HeartBeatCallBack.STATUS_R2 == true) {
-             btn_2.setBackgroundResource(R.drawable.circle_indicator);
-         }else{
-             btn_2.setBackgroundResource(R.drawable.circle_indicator_off);
-         }
+//         Button btn_2 = (Button) getView().findViewById(R.id.button_indicator_2);
+//         if(HeartBeatCallBack.STATUS_R2 == true) {
+//             btn_2.setBackgroundResource(R.drawable.circle_indicator);
+//         }else{
+//             btn_2.setBackgroundResource(R.drawable.circle_indicator_off);
+//         }
      }
 
     public void save_state(Bundle savedInstanceState){
         RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
         savedInstanceState.putInt("line_1", radioGroup_1.getCheckedRadioButtonId());
 
-        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
-        savedInstanceState.putInt("line_2", radioGroup_2.getCheckedRadioButtonId());
+//        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
+//        savedInstanceState.putInt("line_2", radioGroup_2.getCheckedRadioButtonId());
 
     }
 

@@ -102,8 +102,8 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
                     i = new Intent(ManageSchedulesActivity.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
-                case R.id.navigation_dashboard:
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    return true;
                 case R.id.navigation_notifications:
                     i = new Intent(ManageSchedulesActivity.this,Disclaimer.class);
                     startActivity(i);

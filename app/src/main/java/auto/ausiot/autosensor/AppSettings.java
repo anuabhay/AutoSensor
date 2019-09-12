@@ -40,11 +40,11 @@ public class AppSettings extends AppCompatActivity {
                     i = new Intent(AppSettings.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
-                case R.id.navigation_dashboard:
-                    i = new Intent(AppSettings.this,ManageSchedulesActivity.class);
-                    startActivity(i);
-                    //mTextMessage.setText(R.string.title_dashboard);
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    i = new Intent(AppSettings.this,ManageSchedulesActivity.class);
+//                    startActivity(i);
+//                    //mTextMessage.setText(R.string.title_dashboard);
+//                    return true;
                 case R.id.navigation_notifications:
                     return true;
             }

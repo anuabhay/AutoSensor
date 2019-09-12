@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
                     i = new Intent(MainActivity.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
-                case R.id.navigation_dashboard:
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    return true;
                 case R.id.navigation_notifications:
                     i = new Intent(MainActivity.this,Disclaimer.class);
                     startActivity(i);

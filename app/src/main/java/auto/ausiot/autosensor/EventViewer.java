@@ -49,11 +49,11 @@ public class EventViewer extends AppCompatActivity {
                      i = new Intent(EventViewer.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
-                case R.id.navigation_dashboard:
-                    i = new Intent(EventViewer.this,ManageSchedulesActivity.class);
-                    startActivity(i);
-                    //mTextMessage.setText(R.string.title_dashboard);
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    i = new Intent(EventViewer.this,ManageSchedulesActivity.class);
+//                    startActivity(i);
+//                    //mTextMessage.setText(R.string.title_dashboard);
+//                    return true;
                 case R.id.navigation_notifications:
                     //mTextMessage.setText(R.string.title_notifications);
                     return true;

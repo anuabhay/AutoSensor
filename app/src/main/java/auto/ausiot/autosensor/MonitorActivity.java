@@ -83,11 +83,11 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
                     //mTextMessage.setText(R.string.title_home);
                     //myBtn.setVisibility(View.VISIBLE);
                     return true;
-                case R.id.navigation_dashboard:
-                    i = new Intent(MonitorActivity.this,ManageSchedulesActivity.class);
-                    startActivity(i);
-                    //mTextMessage.setText(R.string.title_dashboard);
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    i = new Intent(MonitorActivity.this,ManageSchedulesActivity.class);
+//                    startActivity(i);
+//                    //mTextMessage.setText(R.string.title_dashboard);
+//                    return true;
                 case R.id.navigation_notifications:
                     i = new Intent(MonitorActivity.this,Disclaimer.class);
                     startActivity(i);

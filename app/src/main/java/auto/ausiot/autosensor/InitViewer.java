@@ -55,11 +55,11 @@ public class InitViewer extends AppCompatActivity {
                     i = new Intent(InitViewer.this,MonitorActivity.class);
                     startActivity(i);
                     return true;
-                case R.id.navigation_dashboard:
-                    i = new Intent(InitViewer.this,ManageSchedulesActivity.class);
-                    startActivity(i);
-                    //mTextMessage.setText(R.string.title_dashboard);
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    i = new Intent(InitViewer.this,ManageSchedulesActivity.class);
+//                    startActivity(i);
+//                    //mTextMessage.setText(R.string.title_dashboard);
+//                    return true;
                 case R.id.navigation_notifications:
                     i = new Intent(InitViewer.this,Disclaimer.class);
                     startActivity(i);;
