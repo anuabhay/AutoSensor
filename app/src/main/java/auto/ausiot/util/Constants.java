@@ -41,8 +41,8 @@ public class Constants {
 
     //Connect URL to rest service
 
-    public static String BASE_URL = "http://10.0.2.2:8080";
-    //public static final String BASE_URL = "http://35.194.38.92:8080";
+    //public static String BASE_URL = "http://10.0.2.2:8080";
+    public static String BASE_URL = "http://35.194.38.92:8080";
 
 
 //    // Frequency of checking the status in mili seconds
