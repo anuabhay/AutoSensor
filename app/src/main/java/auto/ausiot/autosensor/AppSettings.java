@@ -1,5 +1,8 @@
 package auto.ausiot.autosensor;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +23,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import java.net.URISyntaxException;
 
 import auto.ausiot.util.Constants;
+import auto.ausiot.util.SharedAppConfig;
 
 /**
  * Created by anu on 23/06/19.
@@ -62,6 +66,7 @@ public class AppSettings extends AppCompatActivity {
 
         final EditText config_hb = (EditText) findViewById(R.id.config_hb);
         final EditText config_network_freq = (EditText) findViewById(R.id.config_check_freq);
+        final EditText config_base_url = (EditText) findViewById(R.id.config_base_url);
 
         config_hb.setText(Integer.toString(Constants.MAX_HEARTBEAT_MISSES));
         config_network_freq.setText(Integer.toString(Constants.STATUS_CHECK_FREQUENCY / 1000));
@@ -101,13 +106,35 @@ public class AppSettings extends AppCompatActivity {
         });
 
 
+        final SharedAppConfig spc = new SharedAppConfig();
+        final Activity ac = this;
+        if(spc.get(this,"BASE_URL") != null){
+            config_base_url.setText(spc.get(this,"BASE_URL"));
+        }else{
+            config_base_url.setText(Constants.BASE_URL);
+        }
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Constants.MAX_HEARTBEAT_MISSES = Integer.parseInt(config_hb.getText().toString());
-                Constants.STATUS_CHECK_FREQUENCY = (Integer.parseInt(config_network_freq.getText().toString())) * 1000;
-                saveBtn.setText("Saved");
+
+
+            new AlertDialog.Builder(AppSettings.this)
+                        .setTitle(getResources().getString(R.string.warning_title_config_modify))
+                        .setMessage(getResources().getString(R.string.warning_detail_config_modify))
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Constants.MAX_HEARTBEAT_MISSES = Integer.parseInt(config_hb.getText().toString());
+                                Constants.STATUS_CHECK_FREQUENCY = (Integer.parseInt(config_network_freq.getText().toString())) * 1000;
+                                spc.save(ac,"BASE_URL",config_base_url.getText().toString());
+                                Constants.BASE_URL = config_base_url.getText().toString();
+                                saveBtn.setText("Saved");
+                      }
+                        }).setNegativeButton("Cancel", null).show();;
+
+
+
             }
 
         });

@@ -3,6 +3,7 @@ package auto.ausiot.autosensor;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,7 +45,9 @@ import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
+import auto.ausiot.util.Constants;
 import auto.ausiot.util.DateHelper;
+import auto.ausiot.util.SharedAppConfig;
 import auto.ausiot.vo.Days;
 import auto.ausiot.vo.Schedule;
 
@@ -137,8 +140,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button configButton = (Button) findViewById(R.id.congig_button);
+        configButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this,AppSettings.class);
+                startActivity(i);
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        final SharedAppConfig spc = new SharedAppConfig();
+        if(spc.get(this,"BASE_URL") != null){
+            Constants.BASE_URL = spc.get(this,"BASE_URL");
+        }
     }
 
     private void populateAutoComplete() {
