@@ -87,6 +87,35 @@
 
      </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <TextView
+                android:id="@+id/label_config_base_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:singleLine="false"
+                android:text="Base URL"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:layout_margin="10dp"/>
+
+            <EditText
+                android:id="@+id/config_base_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Subject"
+                android:inputType="number"
+                android:layout_margin="10dp"
+                android:gravity="right">
+            </EditText>
+
+        </LinearLayout>
         <Button
             android:id="@+id/button_save"
             android:layout_width="150dp"
