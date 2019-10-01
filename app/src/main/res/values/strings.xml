@@ -35,10 +35,11 @@
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in</string>
     <string name="register_new_user">Register new user</string>
+    <string name="change_config">Change Config</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_incorrect_password">This password is incorrect or you have not confirmed your email.</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
@@ -59,4 +60,6 @@
     <string name="warning_detail_max_schedule">Try agian by deleting unwanted Schedules</string>
     <string name="warning_title_unit_add">Unkown Unit ID</string>
     <string name="warning_detail_unit_add">You are trying to add a Unkown Unit or a Unit already in use. Please recheck your unit ID or contact support?</string>
+    <string name="warning_title_config_modify">You are about to modify App Configarations</string>
+    <string name="warning_detail_config_modify">You are about to modify App Configarations. Are you sure you want to do this?</string>
 </resources>
