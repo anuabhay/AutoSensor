@@ -15,6 +15,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by anu on 16/07/19.
@@ -66,5 +67,7 @@ public interface GetDataService {
     Call<List<Schedule>> getUserSchedules(@Path("id") String userId,@Header("Authorization") String auth);
 
 
-
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    @GET("api/auth/resettoken")
+    Call<String> resetToken(@Query("email") String id);
 }

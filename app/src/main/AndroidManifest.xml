@@ -68,7 +68,9 @@
         <activity
             android:name=".InitViewer"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ResetToken"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".AlarmReceiver"
