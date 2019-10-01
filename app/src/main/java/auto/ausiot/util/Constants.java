@@ -41,8 +41,8 @@ public class Constants {
 
     //Connect URL to rest service
 
-    public static String BASE_URL = "http://10.0.2.2:8080";
-    //public static String BASE_URL = "http://146.148.75.238:8080";
+    //public static String BASE_URL = "http://10.0.2.2:8080";
+    public static String BASE_URL = "http://146.148.75.238:8080";
 
 
 
