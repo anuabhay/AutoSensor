@@ -55,7 +55,7 @@ public class ManageSchedulesActivity extends AppCompatActivity implements Schedu
         unitID = UserConfig.checkInitialized(this);
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         ImageButton addButton = (ImageButton) findViewById(R.id.button_add_schedule);

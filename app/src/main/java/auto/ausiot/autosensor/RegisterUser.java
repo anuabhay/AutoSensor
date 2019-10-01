@@ -72,7 +72,7 @@ public class RegisterUser extends AppCompatActivity {
 
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
          // Set up the login form.

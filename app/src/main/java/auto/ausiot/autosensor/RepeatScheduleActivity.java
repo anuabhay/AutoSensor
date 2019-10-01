@@ -142,7 +142,7 @@ public class RepeatScheduleActivity extends AppCompatActivity {
         }
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         Resources res = getResources();

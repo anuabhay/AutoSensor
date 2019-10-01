@@ -36,7 +36,7 @@ import auto.ausiot.util.Constants;
 import mqtt.HeartBeatCallBack;
 import mqtt.Subscriber;
 
-public class MonitorActivity extends AppCompatActivity implements WaterLineFragment.OnFragmentInteractionListener {
+public class MonitorActivity extends AppCompatActivity implements GarageLineFragment.OnFragmentInteractionListener {
 
     private TextView mTextMessage;
     public static TextView textBanner;
@@ -141,7 +141,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher_1_round);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         textBanner = (TextView) findViewById(R.id.banner);
@@ -170,10 +170,10 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
         if (oldFragment == null) {
             mp = MediaPlayer.create(this, R.raw.click);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            Fragment fragment1 = WaterLineFragment.newInstance("1", "1", "2", unitID, mp);
+            Fragment fragment1 = GarageLineFragment.newInstance("1", "1", "2", unitID, mp);
             ft.add(R.id.water_line, fragment1, "fragment_one");
 
-            //Fragment fragment2 = WaterLineFragment.newInstance("2", "1", "2", unitID, mp);
+            //Fragment fragment2 = GarageLineFragment.newInstance("2", "1", "2", unitID, mp);
             //ft.add(R.id.water_line, fragment2, "fragment_two");
 
             ft.commit();
@@ -200,10 +200,10 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     private void restore_fragment_check_boxes(Bundle savedInstanceState){
         if(savedInstanceState != null) {
             FragmentManager fm = getSupportFragmentManager();
-            WaterLineFragment fragment = (WaterLineFragment) fm.findFragmentByTag("fragment_one");
+            GarageLineFragment fragment = (GarageLineFragment) fm.findFragmentByTag("fragment_one");
             if (fragment != null)
                 fragment.restore_state(savedInstanceState);
-                fragment.set_Indicators();
+                //fragment.set_Indicators();
         }
 
     }
@@ -218,7 +218,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         FragmentManager fm = getSupportFragmentManager();
-        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        GarageLineFragment fragment = (GarageLineFragment)fm.findFragmentByTag("fragment_one");
         if (fragment!= null)
             fragment.save_state(m_savedInstanceState);
 //        m_savedInstanceState.putInt("aaa",1);
@@ -229,7 +229,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         FragmentManager fm = getSupportFragmentManager();
-        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        GarageLineFragment fragment = (GarageLineFragment)fm.findFragmentByTag("fragment_one");
         if (fragment!= null)
             fragment.restore_state(savedInstanceState);
     }
@@ -384,7 +384,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     public void setNetWorkDown(){
         FragmentManager fm = getSupportFragmentManager();
-        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        GarageLineFragment fragment = (GarageLineFragment)fm.findFragmentByTag("fragment_one");
         if (fragment!= null)
             fragment.disable_all_Controls();
 
@@ -396,7 +396,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     public void setNetWorkUp(){
         FragmentManager fm = getSupportFragmentManager();
-        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        GarageLineFragment fragment = (GarageLineFragment)fm.findFragmentByTag("fragment_one");
         if (fragment!= null)
             fragment.enable_all_Controls();
         network_on = true;
@@ -404,7 +404,7 @@ public class MonitorActivity extends AppCompatActivity implements WaterLineFragm
 
     public void setIndicators(){
         FragmentManager fm = getSupportFragmentManager();
-        WaterLineFragment fragment = (WaterLineFragment)fm.findFragmentByTag("fragment_one");
+        GarageLineFragment fragment = (GarageLineFragment)fm.findFragmentByTag("fragment_one");
         if (fragment!= null)
             fragment.set_Indicators();
 
