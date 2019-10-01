@@ -140,6 +140,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button resetUserTokenButton = (Button) findViewById(R.id.reset_user_token);
+        resetUserTokenButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this,ResetToken.class);
+                startActivity(i);
+            }
+        });
+
         Button configButton = (Button) findViewById(R.id.congig_button);
         configButton.setOnClickListener(new OnClickListener() {
             @Override

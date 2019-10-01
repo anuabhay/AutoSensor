@@ -40,8 +40,8 @@ public class Constants {
     public static String QR_CODE_FOR_USER = "USER_1";
 
     //Connect URL to rest service
-    //public static String BASE_URL = "http://10.0.2.2:8080";
-    public static String BASE_URL = "http://146.148.75.238:8080";
+    public static String BASE_URL = "http://10.0.2.2:8080";
+    //public static String BASE_URL = "http://146.148.75.238:8080";
 
 //    // Frequency of checking the status in mili seconds
 //    public static int STATUS_CHECK_FREQUENCY = 120000;

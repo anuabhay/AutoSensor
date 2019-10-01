@@ -1,6 +1,8 @@
 package auto.ausiot.autosensor;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -44,6 +46,7 @@ import auto.ausiot.schedule.ScheduleHelper;
 import auto.ausiot.schedule.User;
 import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
+import auto.ausiot.util.Constants;
 import auto.ausiot.vo.Schedule;
 
 /**
@@ -299,8 +302,17 @@ public class RegisterUser extends AppCompatActivity {
 
             @Override
             public void onResponse(String token, String user) {
+                new AlertDialog.Builder(RegisterUser.this)
+                        .setTitle(getResources().getString(R.string.warning_title_verify_user))
+                        .setMessage(getResources().getString(R.string.warning_detail_verify_user))
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).show();
 
-                finish();
+
             }
 
             @Override
