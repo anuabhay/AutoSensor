@@ -11,6 +11,7 @@ import java.util.Date;
 
 public class HeartBeatCallBack implements MQTTCallBack {
     public static Date last_heart_beat;
+    public static boolean network_up = false;
 
     public static boolean STATUS_R1;
     public static boolean STATUS_R2;
@@ -33,7 +34,12 @@ public class HeartBeatCallBack implements MQTTCallBack {
         return last_heart_beat;
     }
 
-//    public static void setLast_heart_beat(Date last_heart_beat) {
-//        HeartBeatCallBack.last_heart_beat = last_heart_beat;
-//    }
+    public static boolean isNetwork_up() {
+        return network_up;
+    }
+
+    public static void setNetwork_up(boolean network_up) {
+        HeartBeatCallBack.network_up = network_up;
+    }
+
 }

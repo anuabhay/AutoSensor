@@ -13,10 +13,12 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.URISyntaxException;
+import java.util.Date;
 
 import auto.ausiot.util.Constants;
 import mqtt.HeartBeatCallBack;
@@ -47,7 +49,8 @@ public class GarageLineFragment extends Fragment {
     private String mParamUnitID;
     private static MediaPlayer mp;
     private int state = -1;
-
+    private boolean last_known_door_state = false; // True for Open , False for Close
+    public static Date last__disabled_time = new Date();
 
     private OnFragmentInteractionListener mListener;
 
@@ -88,13 +91,8 @@ public class GarageLineFragment extends Fragment {
             mParamLine2 = getArguments().getString(ARG_LINE2);
             mParamUnitID = getArguments().getString(ARG_UNIT_ID);
         }
-
-
     }
 
-//    public void onRadioButtonClicked(View view) {
-//        mIsClicked = true;
-//    }
 
 
     @Override
@@ -108,10 +106,10 @@ public class GarageLineFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // find which radio button is selected
-                Button btn = (Button) getView().findViewById(R.id.button_indicator_1);
+                //Button btn = (Button) getView().findViewById(R.id.button_indicator_1);
                 if(checkedId == R.id.on_1) {
                     //btn.setBackgroundResource(R.drawable.circle_indicator);
-                    mp.start();
+                   mp.start();
                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
                 } else if(checkedId == R.id.off_1) {
                     //btn.setBackgroundResource(R.drawable.circle_indicator_off);
@@ -123,28 +121,30 @@ public class GarageLineFragment extends Fragment {
         });
 
 
-//        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
-//        //Button btnSensor = (Button) view.findViewById(R.id.water_line);
-//
-//        radioGroup_2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                // find which radio button is selected
-//                Button btn = (Button) getView().findViewById(R.id.button_indicator_2);
-//                if(checkedId == R.id.on_2) {
-//                    btn.setBackgroundResource(R.drawable.circle_indicator);
-//                    mp.start();
-//                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_OPEN);
-//                } else if(checkedId == R.id.off_2) {
-//                    btn.setBackgroundResource(R.drawable.circle_indicator_off);
-//                    mp.start();
-//                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R2_CLOSE);
-//                }
-//
-//            }
-//
-//        });
+        final Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
+        btn_controller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(state == 1){
+                    mp.start();
+                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_CLOSE);
+                    last_known_door_state = true; //Open
+                    btn_controller.setAlpha(.5f);
+                    btn_controller.setEnabled(false);
+                }else if (state == 0){
+                    mp.start();
+                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
+                    last_known_door_state = false; //Close
+                    btn_controller.setAlpha(.5f);
+                    btn_controller.setEnabled(false);
+                }else if (state == -1){
+                    Toast.makeText(getActivity(), "Action cannot be performed at this time !" ,Toast.LENGTH_LONG).show();
+                    //btn_controller.setEnabled(false);
+                }
+            }
+
+        });
+
         setLabels();
         disable_all_Controls();
     }
@@ -153,10 +153,7 @@ public class GarageLineFragment extends Fragment {
     void setLabels(){
         //TextView zone = (TextView) getView().findViewById(R.id.label_zone_fragment);
         TextView line1 = (TextView) getView().findViewById(R.id.label_line1_fragment);
-        //TextView line2 = (TextView) getView().findViewById(R.id.label_line2_fragment);
-        //zone.setText("Zone " + mParamZone);
-        //line1.setText("Line " + mParamLine1);
-        //line2.setText("Line " + mParamLine2);
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -242,8 +239,13 @@ public class GarageLineFragment extends Fragment {
         Button btn_1 = (Button) getView().findViewById(R.id.button_indicator_1);
         btn_1.setBackgroundResource(R.mipmap.ic_unknown_garage_round);
         TextView tv = (TextView) getView().findViewById(R.id.label_line1_fragment);
-        tv.setText("Unkown");
+        tv.setText("Unknown");
         state = -1;
+
+        Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
+        btn_controller.setText("Unknown");
+        btn_controller.setBackgroundResource(R.drawable.circle_disable);
+        //btn_controller.setEnabled(false);
 
         ma.textBanner_2.setText(getResources().getString(R.string.try_again_text));
 
@@ -270,19 +272,44 @@ public class GarageLineFragment extends Fragment {
      public void set_Indicators(){
          Button btn_1 = (Button) getView().findViewById(R.id.button_indicator_1);
          TextView tv = (TextView) getView().findViewById(R.id.label_line1_fragment);
-         if(HeartBeatCallBack.STATUS_R1 == true) {
-             btn_1.setBackgroundResource(R.mipmap.ic_open_garage_round);
-             tv.setText("Open");
-             state = 1;
-         }else{
-             btn_1.setBackgroundResource(R.mipmap.ic_close_garage_round);
-             tv.setText("Closed");
-             state = 0;
-         }
 
-         if (state == -1){
-             btn_1.setBackgroundResource(R.mipmap.ic_unknown_garage_round);
-             tv.setText("Unknown");
+         Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
+
+         if (HeartBeatCallBack.isNetwork_up() == true) {
+             if (HeartBeatCallBack.STATUS_R1 == true) {
+                 btn_1.setBackgroundResource(R.mipmap.ic_open_garage_round);
+                 tv.setText("Open");
+                 state = 1;
+
+                 btn_controller.setText("Close");
+                 btn_controller.setBackgroundResource(R.drawable.circle_close);
+                 if( last_known_door_state == false) // If previous state was Close
+                 {
+                    btn_controller.setEnabled(true);
+                    btn_controller.setAlpha(1.0f);
+                 }
+             } else {
+                 btn_1.setBackgroundResource(R.mipmap.ic_close_garage_round);
+                 tv.setText("Closed");
+                 state = 0;
+
+                 btn_controller.setText("Open");
+                 btn_controller.setBackgroundResource(R.drawable.circle_open);
+                 if( last_known_door_state == true) // If previous state was Open
+                 {
+                     btn_controller.setEnabled(true);
+                     btn_controller.setAlpha(1.0f);
+                 }
+             }
+         }else {
+             if (state == -1) {
+                 btn_1.setBackgroundResource(R.mipmap.ic_unknown_garage_round);
+                 tv.setText("Unknown");
+
+                 btn_controller.setText("Unknown");
+                 btn_controller.setBackgroundResource(R.drawable.circle_disable);
+                 btn_controller.setEnabled(false);
+             }
          }
 //         Button btn_2 = (Button) getView().findViewById(R.id.button_indicator_2);
 //         if(HeartBeatCallBack.STATUS_R2 == true) {
@@ -304,6 +331,7 @@ public class GarageLineFragment extends Fragment {
 
     public void restore_state(Bundle savedInstanceState) {
         //Dont Send a MQTT Messages when restoring
+        Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
         if (savedInstanceState.getInt("line_1") != 0) {
 
             //Compare whether the Selected ID Now and previous is different
@@ -332,14 +360,24 @@ public class GarageLineFragment extends Fragment {
             int state = savedInstanceState.getInt("state", 100);
             if (state == -1) {
                 btn_1.setBackgroundResource(R.mipmap.ic_unknown_garage_round);
-                tv.setText("Unkown");
+                tv.setText("Unknown");
+
+                btn_controller.setText("Unknown");
+                btn_controller.setBackgroundResource(R.drawable.circle_disable);
+
             } else if (state == 0) {
                 btn_1.setBackgroundResource(R.mipmap.ic_close_garage_round);
                 tv.setText("Closed");
 
+                btn_controller.setText("Open");
+                btn_controller.setBackgroundResource(R.drawable.circle_open);
+
             } else if (state == 1) {
                 btn_1.setBackgroundResource(R.mipmap.ic_open_garage_round);
                 tv.setText("Open");
+
+                btn_controller.setText("Close");
+                btn_controller.setBackgroundResource(R.drawable.circle_close);
             }
         }
     }

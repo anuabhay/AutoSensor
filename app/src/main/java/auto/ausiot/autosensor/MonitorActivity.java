@@ -318,9 +318,10 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
         if (HeartBeatCallBack.getLast_heart_beat()!= null) {
             if (compareDates(HeartBeatCallBack.getLast_heart_beat(), new Date(), Constants.MAX_HEARTBEAT_MISSES * Constants.STATUS_CHECK_FREQUENCY)) {
                 setNetWorkDown();
-
+                HeartBeatCallBack.setNetwork_up(false);
             } else {
                 setNetWorkUp();
+                HeartBeatCallBack.setNetwork_up(true);
             }
             if(iscallback){
                 setIndicators();

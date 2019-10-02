@@ -41,8 +41,8 @@ public class Constants {
 
     //Connect URL to rest service
 
-    //public static String BASE_URL = "http://10.0.2.2:8080";
-    public static String BASE_URL = "http://146.148.75.238:8080";
+    public static String BASE_URL = "http://10.0.2.2:8080";
+    //public static String BASE_URL = "http://146.148.75.238:8080";
 
 
 
@@ -61,9 +61,9 @@ public class Constants {
     public static String STATUS_R2_CLOSE = "STATUS_R2OFF";
 
     // Frequency of checking the status in mili seconds
-    public static int STATUS_CHECK_FREQUENCY = 5000;
+    public static int STATUS_CHECK_FREQUENCY = 10000;
     // In mili seconds
-    public static int MAX_HEARTBEAT_MISSES = 4;
+    public static int MAX_HEARTBEAT_MISSES = 10;
 
     public static long MAX_END_DATE = 193444070400000L;
 
