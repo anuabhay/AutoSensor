@@ -105,7 +105,7 @@ public class InitViewer extends AppCompatActivity {
             btnScan.setVisibility(View.INVISIBLE);
             button.setVisibility(View.INVISIBLE);
             editText.setVisibility(View.INVISIBLE);
-            btnReset.setText("Assign Zone1 Unit ID :: " + UserConfig.getFirstUnit());
+            btnReset.setText("Remove Unit  :: " + UserConfig.getFirstUnit());
             btnReset.setEnabled(true);
             btnReset.setVisibility(View.VISIBLE);
         }else{
@@ -167,7 +167,7 @@ public class InitViewer extends AppCompatActivity {
             btnScan.setVisibility(View.INVISIBLE);
             button.setVisibility(View.INVISIBLE);
             editText.setVisibility(View.INVISIBLE);
-            btnReset.setText("Assign Zone1 Unit ID :: " + UserConfig.getFirstUnit());
+            btnReset.setText("Remove Unit  :: " + UserConfig.getFirstUnit());
             btnReset.setEnabled(true);
             btnReset.setVisibility(View.VISIBLE);
         }else{

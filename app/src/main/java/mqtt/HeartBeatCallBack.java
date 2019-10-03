@@ -10,7 +10,7 @@ import java.util.Date;
  */
 
 public class HeartBeatCallBack implements MQTTCallBack {
-    public static Date last_heart_beat;
+    public static Date last_heart_beat = null;
     public static boolean network_up = false;
 
     public static boolean STATUS_R1;

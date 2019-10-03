@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,29 +96,29 @@ public class GarageLineFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
-        //Button btnSensor = (Button) view.findViewById(R.id.water_line);
+//        RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
+//        //Button btnSensor = (Button) view.findViewById(R.id.water_line);
+//
+//        radioGroup_1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                // find which radio button is selected
+//                //Button btn = (Button) getView().findViewById(R.id.button_indicator_1);
+//                if(checkedId == R.id.on_1) {
+//                    //btn.setBackgroundResource(R.drawable.circle_indicator);
+//                   mp.start();
+//                   sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
+//                } else if(checkedId == R.id.off_1) {
+//                    //btn.setBackgroundResource(R.drawable.circle_indicator_off);
+//                    mp.start();
+//                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_CLOSE);
+//                }
+//            }
+//
+//        });
 
-        radioGroup_1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-                //Button btn = (Button) getView().findViewById(R.id.button_indicator_1);
-                if(checkedId == R.id.on_1) {
-                    //btn.setBackgroundResource(R.drawable.circle_indicator);
-                   mp.start();
-                   sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
-                } else if(checkedId == R.id.off_1) {
-                    //btn.setBackgroundResource(R.drawable.circle_indicator_off);
-                    mp.start();
-                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_CLOSE);
-                }
-            }
-
-        });
-
-
+        final Button btn_indicator = (Button) getView().findViewById(R.id.button_indicator_1);
         final Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
         btn_controller.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,12 +128,14 @@ public class GarageLineFragment extends Fragment {
                     sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_CLOSE);
                     last_known_door_state = true; //Open
                     btn_controller.setAlpha(.5f);
+                    btn_indicator.setAlpha(.5f);
                     btn_controller.setEnabled(false);
                 }else if (state == 0){
                     mp.start();
                     sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
                     last_known_door_state = false; //Close
                     btn_controller.setAlpha(.5f);
+                    btn_indicator.setAlpha(.5f);
                     btn_controller.setEnabled(false);
                 }else if (state == -1){
                     Toast.makeText(getActivity(), "Action cannot be performed at this time !" ,Toast.LENGTH_LONG).show();
@@ -222,10 +222,10 @@ public class GarageLineFragment extends Fragment {
     }
 
     public void disable_all_Controls(){
-        final RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
-        for (int i = 0; i < radioGroup_1.getChildCount(); i++) {
-            radioGroup_1.getChildAt(i).setEnabled(false);
-        }
+//        final RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
+//        for (int i = 0; i < radioGroup_1.getChildCount(); i++) {
+//            radioGroup_1.getChildAt(i).setEnabled(false);
+//        }
         //final RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
         final MonitorActivity ma = (MonitorActivity) getActivity();
 
@@ -239,12 +239,13 @@ public class GarageLineFragment extends Fragment {
         Button btn_1 = (Button) getView().findViewById(R.id.button_indicator_1);
         btn_1.setBackgroundResource(R.mipmap.ic_unknown_garage_round);
         TextView tv = (TextView) getView().findViewById(R.id.label_line1_fragment);
-        tv.setText("Unknown");
+        tv.setText("Status of your garage door cannot be determined");
         state = -1;
 
         Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
-        btn_controller.setText("Unknown");
-        btn_controller.setBackgroundResource(R.drawable.circle_disable);
+        btn_controller.setText("");
+        btn_controller.setBackgroundResource(R.mipmap.ic_unknown_button_round);
+
         //btn_controller.setEnabled(false);
 
         ma.textBanner_2.setText(getResources().getString(R.string.try_again_text));
@@ -252,18 +253,19 @@ public class GarageLineFragment extends Fragment {
     }
 
 
-    public void enable_all_Controls(){
-        final Button on_1 = (RadioButton) getView().findViewById(R.id.on_1);
-        on_1.setEnabled(true);
-//        final Button on_2 = (RadioButton) getView().findViewById(R.id.on_2);
-//        on_2.setEnabled(true);
-        final Button off_1 = (RadioButton) getView().findViewById(R.id.off_1);
-        off_1.setEnabled(true);
-//        final Button off_2 = (RadioButton) getView().findViewById(R.id.off_2);
-//        off_2.setEnabled(true);
+    public void enable_all_Controls(boolean iscallback){
+//        final Button on_1 = (RadioButton) getView().findViewById(R.id.on_1);
+//        on_1.setEnabled(true);
+//        final Button off_1 = (RadioButton) getView().findViewById(R.id.off_1);
+//        off_1.setEnabled(true);
 
         final MonitorActivity ma = (MonitorActivity) getActivity();
-        ma.textBanner.setText("Network On");
+        if(iscallback) {
+            ma.textBanner.setText("Network On T");
+        }else{
+            ma.textBanner.setText("Network On F");
+
+        }
         ma.textBanner.setTextColor(Color.GREEN);
         ma.textBanner_2.setText("");
 
@@ -278,36 +280,38 @@ public class GarageLineFragment extends Fragment {
          if (HeartBeatCallBack.isNetwork_up() == true) {
              if (HeartBeatCallBack.STATUS_R1 == true) {
                  btn_1.setBackgroundResource(R.mipmap.ic_open_garage_round);
-                 tv.setText("Open");
+                 tv.setText("Your garage door is opened");
                  state = 1;
 
-                 btn_controller.setText("Close");
-                 btn_controller.setBackgroundResource(R.drawable.circle_close);
+                 btn_controller.setText("");
+                 btn_controller.setBackgroundResource(R.mipmap.ic_close_button_round);
                  if( last_known_door_state == false) // If previous state was Close
                  {
                     btn_controller.setEnabled(true);
                     btn_controller.setAlpha(1.0f);
+                    btn_1.setAlpha(1.0f);
                  }
              } else {
                  btn_1.setBackgroundResource(R.mipmap.ic_close_garage_round);
-                 tv.setText("Closed");
+                 tv.setText("Your garage door is closed");
                  state = 0;
 
-                 btn_controller.setText("Open");
-                 btn_controller.setBackgroundResource(R.drawable.circle_open);
+                 btn_controller.setText("");
+                 btn_controller.setBackgroundResource(R.mipmap.ic_open_button_round);
                  if( last_known_door_state == true) // If previous state was Open
                  {
                      btn_controller.setEnabled(true);
                      btn_controller.setAlpha(1.0f);
+                     btn_1.setAlpha(1.0f);
                  }
              }
          }else {
              if (state == -1) {
                  btn_1.setBackgroundResource(R.mipmap.ic_unknown_garage_round);
-                 tv.setText("Unknown");
+                 tv.setText("Status of your garage door cannot be determined");
 
-                 btn_controller.setText("Unknown");
-                 btn_controller.setBackgroundResource(R.drawable.circle_disable);
+                 btn_controller.setText("");
+                 btn_controller.setBackgroundResource(R.mipmap.ic_unknown_button_round);
                  btn_controller.setEnabled(false);
              }
          }
@@ -320,9 +324,13 @@ public class GarageLineFragment extends Fragment {
      }
 
     public void save_state(Bundle savedInstanceState){
-        RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
-        savedInstanceState.putInt("line_1", radioGroup_1.getCheckedRadioButtonId());
+        //RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
+        //savedInstanceState.putInt("line_1", radioGroup_1.getCheckedRadioButtonId());
+        Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
         savedInstanceState.putInt("state", state);
+        savedInstanceState.putBoolean("controller_enable", btn_controller.isEnabled());
+        savedInstanceState.putBoolean("last_known_door_state", last_known_door_state);
+
 
 //        RadioGroup radioGroup_2 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_2);
 //        savedInstanceState.putInt("line_2", radioGroup_2.getCheckedRadioButtonId());
@@ -332,52 +340,63 @@ public class GarageLineFragment extends Fragment {
     public void restore_state(Bundle savedInstanceState) {
         //Dont Send a MQTT Messages when restoring
         Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
-        if (savedInstanceState.getInt("line_1") != 0) {
-
-            //Compare whether the Selected ID Now and previous is different
-            //If so change the state , make sure to set mIsClicked to false
-            // This will prevent firing another MQTT Msg
-            final RadioButton on_1 = (RadioButton) getView().findViewById(savedInstanceState.getInt("line_1"));
-            if (on_1.isChecked() == false) {
-                mIsClicked = false;
-                on_1.setChecked(true);
-            }
-            //radioGroup_1.check(savedInstanceState.getInt("line_1"));
-        }
-
-        if (savedInstanceState.getInt("line_2") != 0) {
-            final RadioButton on_2 = (RadioButton) getView().findViewById(savedInstanceState.getInt("line_2"));
-            if (on_2.isChecked() == false) {
-                mIsClicked = false;
-                on_2.setChecked(true);
-            }
-        }
+        last_known_door_state = savedInstanceState.getBoolean("last_known_door_state",true);
+//        if (savedInstanceState.getInt("line_1") != 0) {
+//
+//            //Compare whether the Selected ID Now and previous is different
+//            //If so change the state , make sure to set mIsClicked to false
+//            // This will prevent firing another MQTT Msg
+//            final RadioButton on_1 = (RadioButton) getView().findViewById(savedInstanceState.getInt("line_1"));
+//            if (on_1.isChecked() == false) {
+//                mIsClicked = false;
+//                on_1.setChecked(true);
+//            }
+//            //radioGroup_1.check(savedInstanceState.getInt("line_1"));
+//        }
+//
+//        if (savedInstanceState.getInt("line_2") != 0) {
+//            final RadioButton on_2 = (RadioButton) getView().findViewById(savedInstanceState.getInt("line_2"));
+//            if (on_2.isChecked() == false) {
+//                mIsClicked = false;
+//                on_2.setChecked(true);
+//            }
+//        }
 
         if (savedInstanceState.getInt("state", 100) != 100) {
             Button btn_1 = (Button) getView().findViewById(R.id.button_indicator_1);
             TextView tv = (TextView) getView().findViewById(R.id.label_line1_fragment);
 
-            int state = savedInstanceState.getInt("state", 100);
+            state = savedInstanceState.getInt("state", 100);
             if (state == -1) {
                 btn_1.setBackgroundResource(R.mipmap.ic_unknown_garage_round);
-                tv.setText("Unknown");
+                tv.setText("Status of your garage door cannot be determined");
 
-                btn_controller.setText("Unknown");
-                btn_controller.setBackgroundResource(R.drawable.circle_disable);
+                btn_controller.setText("");
+                btn_controller.setBackgroundResource(R.mipmap.ic_unknown_button_round);
 
             } else if (state == 0) {
                 btn_1.setBackgroundResource(R.mipmap.ic_close_garage_round);
-                tv.setText("Closed");
+                tv.setText("Your garage door is closed");
 
-                btn_controller.setText("Open");
-                btn_controller.setBackgroundResource(R.drawable.circle_open);
+                btn_controller.setText("");
+                btn_controller.setBackgroundResource(R.mipmap.ic_open_button_round);
 
             } else if (state == 1) {
                 btn_1.setBackgroundResource(R.mipmap.ic_open_garage_round);
-                tv.setText("Open");
+                tv.setText("Your garage door is opened");
 
-                btn_controller.setText("Close");
-                btn_controller.setBackgroundResource(R.drawable.circle_close);
+                btn_controller.setText("");
+                btn_controller.setBackgroundResource(R.mipmap.ic_close_button_round);
+            }
+
+            if (savedInstanceState.getBoolean("controller_enable",true) == true){
+                btn_controller.setEnabled(true);
+                btn_controller.setAlpha(1.0f);
+                btn_1.setAlpha(1.0f);
+            }else{
+                btn_controller.setEnabled(false);
+                btn_controller.setAlpha(.5f);
+                btn_1.setAlpha(.5f);
             }
         }
     }

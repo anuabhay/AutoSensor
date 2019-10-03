@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.animation.AlphaAnimation;
 //import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -320,7 +321,7 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
                 setNetWorkDown();
                 HeartBeatCallBack.setNetwork_up(false);
             } else {
-                setNetWorkUp();
+                setNetWorkUp(iscallback);
                 HeartBeatCallBack.setNetwork_up(true);
             }
             if(iscallback){
@@ -395,11 +396,11 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
         network_on = false;
     }
 
-    public void setNetWorkUp(){
+    public void setNetWorkUp(boolean iscallback){
         FragmentManager fm = getSupportFragmentManager();
         GarageLineFragment fragment = (GarageLineFragment)fm.findFragmentByTag("fragment_one");
         if (fragment!= null)
-            fragment.enable_all_Controls();
+            fragment.enable_all_Controls(iscallback);
         network_on = true;
     }
 
