@@ -25,6 +25,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -140,23 +143,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button resetUserTokenButton = (Button) findViewById(R.id.reset_user_token);
-        resetUserTokenButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(LoginActivity.this,ResetToken.class);
-                startActivity(i);
-            }
-        });
-
-        Button configButton = (Button) findViewById(R.id.congig_button);
-        configButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(LoginActivity.this,AppSettings.class);
-                startActivity(i);
-            }
-        });
+//        Button resetUserTokenButton = (Button) findViewById(R.id.reset_user_token);
+//        resetUserTokenButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(LoginActivity.this,ResetToken.class);
+//                startActivity(i);
+//            }
+//        });
+//
+//        Button configButton = (Button) findViewById(R.id.congig_button);
+//        configButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(LoginActivity.this,AppSettings.class);
+//                startActivity(i);
+//            }
+//        });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -165,6 +168,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if(spc.get(this,"BASE_URL") != null){
             Constants.BASE_URL = spc.get(this,"BASE_URL");
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_user_menu, menu); //your file name
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.reset_token) {
+            startActivity(new Intent(this, ResetToken.class));
+        }
+
+        if (item.getItemId() == R.id.change_config) {
+            startActivity(new Intent(this, AppSettings.class));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void populateAutoComplete() {
