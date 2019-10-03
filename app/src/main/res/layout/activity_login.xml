@@ -96,30 +96,6 @@
                 android:textSize="22sp"/>
                 />
 
-            <Button
-                android:id="@+id/reset_user_token"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/reset_user_token"
-                android:textStyle="bold"
-                android:background="@drawable/circle"
-                android:textColor="#fff"
-                android:textSize="22sp"/>
-            />
-            <Button
-                android:id="@+id/congig_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/change_config"
-                android:textStyle="bold"
-                android:background="@drawable/circle"
-                android:textColor="#fff"
-                android:textSize="22sp"/>
-            />
         </LinearLayout>
         </LinearLayout>
     </ScrollView>
