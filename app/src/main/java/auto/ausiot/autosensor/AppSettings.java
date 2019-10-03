@@ -114,6 +114,17 @@ public class AppSettings extends AppCompatActivity {
             config_base_url.setText(Constants.BASE_URL);
         }
 
+        if(spc.get(this,"MAX_HEARTBEAT_MISSES") != null){
+            config_hb.setText(spc.get(this,"MAX_HEARTBEAT_MISSES"));
+        }else{
+            config_hb.setText(new Integer(Constants.MAX_HEARTBEAT_MISSES).toString());
+        }
+
+        if(spc.get(this,"STATUS_CHECK_FREQUENCY") != null){
+            config_network_freq.setText(spc.get(this,"STATUS_CHECK_FREQUENCY"));
+        }else{
+            config_network_freq.setText(new Integer(Constants.STATUS_CHECK_FREQUENCY / 1000).toString());
+        }
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,8 +136,12 @@ public class AppSettings extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                spc.save(ac,"MAX_HEARTBEAT_MISSES",config_hb.getText().toString());
                                 Constants.MAX_HEARTBEAT_MISSES = Integer.parseInt(config_hb.getText().toString());
+
+                                spc.save(ac,"STATUS_CHECK_FREQUENCY",config_network_freq.getText().toString());
                                 Constants.STATUS_CHECK_FREQUENCY = (Integer.parseInt(config_network_freq.getText().toString())) * 1000;
+
                                 spc.save(ac,"BASE_URL",config_base_url.getText().toString());
                                 Constants.BASE_URL = config_base_url.getText().toString();
                                 saveBtn.setText("Saved");
