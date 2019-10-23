@@ -1,5 +1,8 @@
 package auto.ausiot.autosensor;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -9,6 +12,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,30 +104,9 @@ public class GarageLineFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        RadioGroup radioGroup_1 = (RadioGroup) getView().findViewById(R.id.button_sensor_fragment_1);
-//        //Button btnSensor = (Button) view.findViewById(R.id.water_line);
-//
-//        radioGroup_1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                // find which radio button is selected
-//                //Button btn = (Button) getView().findViewById(R.id.button_indicator_1);
-//                if(checkedId == R.id.on_1) {
-//                    //btn.setBackgroundResource(R.drawable.circle_indicator);
-//                   mp.start();
-//                   sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
-//                } else if(checkedId == R.id.off_1) {
-//                    //btn.setBackgroundResource(R.drawable.circle_indicator_off);
-//                    mp.start();
-//                    sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_CLOSE);
-//                }
-//            }
-//
-//        });
-
         final Button btn_indicator = (Button) getView().findViewById(R.id.button_indicator_1);
         final Button btn_controller = (Button) getView().findViewById(R.id.button_single_contoller);
+        final TextView tv = (TextView) getView().findViewById(R.id.label_line1_fragment);
         btn_controller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,15 +115,19 @@ public class GarageLineFragment extends Fragment {
                     sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_CLOSE);
                     last_known_door_state = true; //Open
                     btn_controller.setAlpha(.5f);
-                    btn_indicator.setAlpha(.5f);
+                    //btn_indicator.setAlpha(.5f);
                     btn_controller.setEnabled(false);
+                    blink(btn_indicator,tv,state);
+
                 }else if (state == 0){
                     mp.start();
                     sendMQTTMsg(mParamUnitID,Constants.ACTION_R1_OPEN);
                     last_known_door_state = false; //Close
                     btn_controller.setAlpha(.5f);
-                    btn_indicator.setAlpha(.5f);
+                    //btn_indicator.setAlpha(.5f);
                     btn_controller.setEnabled(false);
+                    blink(btn_indicator,tv,state);
+
                 }else if (state == -1){
                     Toast.makeText(getActivity(), "Action cannot be performed at this time !" ,Toast.LENGTH_LONG).show();
                     //btn_controller.setEnabled(false);
@@ -149,7 +140,20 @@ public class GarageLineFragment extends Fragment {
         disable_all_Controls();
     }
 
-
+    void blink(Button btn, TextView tv, int state){
+        final Animation animation = new AlphaAnimation(1.0f, 0.3f); // Change alpha from fully visible to invisible
+        animation.setDuration(600); // duration - half a second
+        animation.setInterpolator(new AccelerateInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.RESTART);
+        btn.startAnimation(animation);
+//        if(state == 0) {
+//            tv.setText("Garage door opening" );
+//        } else if(state == 1) {
+//            tv.setText("Garage door closing");
+//        }
+        tv.startAnimation(animation);
+    }
     void setLabels(){
         //TextView zone = (TextView) getView().findViewById(R.id.label_zone_fragment);
         TextView line1 = (TextView) getView().findViewById(R.id.label_line1_fragment);
@@ -261,9 +265,9 @@ public class GarageLineFragment extends Fragment {
 
         final MonitorActivity ma = (MonitorActivity) getActivity();
         if(iscallback) {
-            ma.textBanner.setText("Network On T");
+            ma.textBanner.setText("Network On");
         }else{
-            ma.textBanner.setText("Network On F");
+            ma.textBanner.setText("Network On");
 
         }
         ma.textBanner.setTextColor(Color.GREEN);
@@ -280,16 +284,18 @@ public class GarageLineFragment extends Fragment {
          if (HeartBeatCallBack.isNetwork_up() == true) {
              if (HeartBeatCallBack.STATUS_R1 == true) {
                  btn_1.setBackgroundResource(R.mipmap.ic_open_garage_round);
-                 tv.setText("Your garage door is opened");
+                 tv.setText("Your garage door is open");
                  state = 1;
 
                  btn_controller.setText("");
                  btn_controller.setBackgroundResource(R.mipmap.ic_close_button_round);
                  if( last_known_door_state == false) // If previous state was Close
                  {
-                    btn_controller.setEnabled(true);
-                    btn_controller.setAlpha(1.0f);
-                    btn_1.setAlpha(1.0f);
+                     btn_1.clearAnimation();
+                     tv.clearAnimation();
+                     btn_controller.setEnabled(true);
+                     btn_controller.setAlpha(1.0f);
+                    //btn_1.setAlpha(1.0f);
                  }
              } else {
                  btn_1.setBackgroundResource(R.mipmap.ic_close_garage_round);
@@ -300,13 +306,16 @@ public class GarageLineFragment extends Fragment {
                  btn_controller.setBackgroundResource(R.mipmap.ic_open_button_round);
                  if( last_known_door_state == true) // If previous state was Open
                  {
+                     btn_1.clearAnimation();
+                     tv.clearAnimation();
                      btn_controller.setEnabled(true);
                      btn_controller.setAlpha(1.0f);
-                     btn_1.setAlpha(1.0f);
+                     //btn_1.setAlpha(1.0f);
                  }
              }
          }else {
              if (state == -1) {
+                 //btn_1.clearAnimation();
                  btn_1.setBackgroundResource(R.mipmap.ic_unknown_garage_round);
                  tv.setText("Status of your garage door cannot be determined");
 
@@ -383,7 +392,7 @@ public class GarageLineFragment extends Fragment {
 
             } else if (state == 1) {
                 btn_1.setBackgroundResource(R.mipmap.ic_open_garage_round);
-                tv.setText("Your garage door is opened");
+                tv.setText("Your garage door is open");
 
                 btn_controller.setText("");
                 btn_controller.setBackgroundResource(R.mipmap.ic_close_button_round);
@@ -396,7 +405,8 @@ public class GarageLineFragment extends Fragment {
             }else{
                 btn_controller.setEnabled(false);
                 btn_controller.setAlpha(.5f);
-                btn_1.setAlpha(.5f);
+                //btn_1.setAlpha(.5f);
+                blink(btn_1,tv,state);
             }
         }
     }
