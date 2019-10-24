@@ -49,6 +49,10 @@ public class Subscriber implements MqttCallback {
         //this.client.subscribe(this.topic, qos);
     }
 
+    public static void clear(){
+        client = null;
+        mqttsub = null;
+    }
     public static void setHbcallback(HeartBeatCallBack callback){
         if (hbcallback == null)
             hbcallback = callback;

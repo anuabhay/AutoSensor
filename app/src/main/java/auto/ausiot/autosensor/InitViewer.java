@@ -1,6 +1,8 @@
 package auto.ausiot.autosensor;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,18 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import auto.ausiot.schedule.ScheduleHelper;
-import auto.ausiot.stroe.RestCallBack;
-import auto.ausiot.stroe.RestStore;
+import auto.ausiot.stroe.ConfigFileStore;
 import auto.ausiot.util.UserConfig;
-import auto.ausiot.vo.Unit;
 
 /**
  * Created by anu on 23/06/19.
@@ -74,10 +72,10 @@ public class InitViewer extends AppCompatActivity {
 
         setContentView(R.layout.activity_initialize);
 
-        if (RestStore.authToken == null){
-            Intent i = new Intent(InitViewer.this,LoginActivity.class);
-            startActivity(i);
-        }
+//        if (RestStore.authToken == null){
+//            Intent i = new Intent(InitViewer.this,LoginActivity.class);
+//            startActivity(i);
+//        }
 
         //Add Icon to Action Bar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -205,82 +203,57 @@ public class InitViewer extends AppCompatActivity {
         }
     }
 
-    void addSensor(String unitID){
-        if (checkInitialized() == false) {
-            //@TODO CREATE SENSOR
-            // Create Sensor Using REST Service
-            ScheduleHelper sh = new ScheduleHelper();
-            final String sID = unitID;
-            RestCallBack rcallback =  new RestCallBack() {
-                int count ;
-                @Override
-                public void onResponse(Object obj) {
-                    //@TODO Count Actual responses
-                    //if(count++ == 2) {
-                        //config.writeConfig(sID);
-                        if (obj != null) {
-                            RestStore.addUnit((Unit) obj);
-                            Intent i = new Intent(InitViewer.this, InitViewer.class);
-                            startActivity(i);
-                        }else{
-                            new AlertDialog.Builder(InitViewer.this)
-                                    .setTitle(getResources().getString(R.string.warning_title_unit_add))
-                                    .setMessage(R.string.warning_detail_unit_add)
-                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            deleteSensor(UserConfig.getFirstUnit());
-                                        }
-                                    }).show();
-                        }
-                    //}
-                }
+    void addSensor(String unitstr){
+       ConfigFileStore config = new ConfigFileStore(getApplicationContext(),"config.txt");
+       config.save(unitstr);
+       restartApp();
+    }
 
-                @Override
-                public void onResponse(String token, String user) {
-                }
-
-                @Override
-                public void onFailure() {
-                    //@TODO
-                    int x = 1;
-                }
-
-            };
-            sh.addSensorfromservice(null,rcallback,unitID);
-            //sh.addSensorfromservice(null,rcallback,unitID + "_2"  );
-
-        }
+    void restartApp(){
+        new AlertDialog.Builder(InitViewer.this)
+                .setTitle(getResources().getString(R.string.warning_title_unit_add_1))
+                .setMessage(R.string.warning_detail_unit_add_1)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                        System.exit(0);;
+                    }
+                }).setNegativeButton("Cancel", null).show();
 
 
     }
 
     void deleteSensor(final String unitID){
-        ScheduleHelper sh = new ScheduleHelper();
-        RestCallBack rcallback =  new RestCallBack() {
-            int count = 0;
-            @Override
-            public void onResponse(Object obj) {
-                //@TODO Count Actual responses
-                //if(count++ == 2) {
-                    //config.reset();
-                    RestStore.deleteUnit(unitID);
-                    Intent i = new Intent(InitViewer.this, InitViewer.class);
-                    startActivity(i);
-                //}
-            }
-            @Override
-            public void onResponse(String token, String user) {
-
-            }
-            @Override
-            public void onFailure() {
-                //@TODO
-                int x = 1;
-            }
-
-        };
-        sh.deleteUnit(unitID, null,rcallback);
+        ConfigFileStore config = new ConfigFileStore(getApplicationContext(),"config.txt");
+        config.delete();
+        Intent i = new Intent(InitViewer.this, InitViewer.class);
+        startActivity(i);
+//        ScheduleHelper sh = new ScheduleHelper();
+//        RestCallBack rcallback =  new RestCallBack() {
+//            int count = 0;
+//            @Override
+//            public void onResponse(Object obj) {
+//                //@TODO Count Actual responses
+//                //if(count++ == 2) {
+//                    //config.reset();
+//                    RestStore.deleteUnit(unitID);
+//                    Intent i = new Intent(InitViewer.this, InitViewer.class);
+//                    startActivity(i);
+//                //}
+//            }
+//            @Override
+//            public void onResponse(String token, String user) {
+//
+//            }
+//            @Override
+//            public void onFailure() {
+//                //@TODO
+//                int x = 1;
+//            }
+//
+//        };
+//        sh.deleteUnit(unitID, null,rcallback);
 
 
     }

@@ -61,7 +61,7 @@ public class Constants {
     public static String STATUS_R2_CLOSE = "STATUS_R2OFF";
 
     // Frequency of checking the status in mili seconds
-    public static int STATUS_CHECK_FREQUENCY = 5000;
+    public static int STATUS_CHECK_FREQUENCY = 1000;
     // In mili seconds
     public static int MAX_HEARTBEAT_MISSES = 6;
 

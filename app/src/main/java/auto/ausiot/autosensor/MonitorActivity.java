@@ -69,7 +69,7 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
     private int ZONE_COUNT = 3;
     private int LINE_COUNT = 3;
 
-    private static boolean isActivityInitialized = false;
+    public static boolean isActivityInitialized = false;
     static Bundle m_savedInstanceState = new Bundle();
 
 
@@ -188,6 +188,7 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
     @Override
     protected void onStart(){
         super.onStart();
+        unitID = UserConfig.checkInitialized(this);
         if(unitID != null) {
             subscribeToStatus(unitID);
             sendMQTTMsg(unitID, Constants.ACTION_GET_STATUS);

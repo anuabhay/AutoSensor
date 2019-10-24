@@ -30,6 +30,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:text="GRA000;tcp://soldier.cloudmqtt.com:12191;onvgbtbe;6WewisPqtTmC"
             android:hint="Enter Text Here" />
 
 

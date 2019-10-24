@@ -20,6 +20,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import auto.ausiot.schedule.ScheduleHelper;
+import auto.ausiot.stroe.ConfigFileStore;
 import auto.ausiot.stroe.RestCallBack;
 import auto.ausiot.stroe.RestStore;
 import auto.ausiot.util.UserConfig;
@@ -60,10 +61,10 @@ public class StartupActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_start_up);
 
-        if (RestStore.authToken == null){
-            Intent i = new Intent(StartupActivity.this,LoginActivity.class);
-            startActivity(i);
-        }
+//        if (RestStore.authToken == null){
+//            Intent i = new Intent(StartupActivity.this,LoginActivity.class);
+//            startActivity(i);
+//        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -75,8 +76,14 @@ public class StartupActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (RestStore.authToken != null){
+        ConfigFileStore config = new ConfigFileStore(getApplicationContext(),"config.txt");
+        //config.delete();
+        config.load();
+        if (ConfigFileStore.m_unit != null){
             Intent i = new Intent(StartupActivity.this,MonitorActivity.class);
+            startActivity(i);
+        }else{
+            Intent i = new Intent(StartupActivity.this,InitViewer.class);
             startActivity(i);
         }
 
@@ -85,11 +92,16 @@ public class StartupActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        if (RestStore.authToken != null){
+        ConfigFileStore config = new ConfigFileStore(getApplicationContext(),"config.txt");
+        //config.delete();
+        config.load();
+        if (ConfigFileStore.m_unit != null){
             Intent i = new Intent(StartupActivity.this,MonitorActivity.class);
             startActivity(i);
+        }else{
+            Intent i = new Intent(StartupActivity.this,InitViewer.class);
+            startActivity(i);
         }
-
     }
 
 

@@ -57,4 +57,6 @@
     <string name="warning_title_verify_user">Activate new User</string>
     <string name="warning_detail_verify_user">You will recieve a mail from OzBach with your registration details. Please use the link in this mail to activate the user.</string>
     <string name="reset_user_token">Reset User Token</string>
+    <string name="warning_title_unit_add_1">App needs to reboot for the new unit to work</string>
+    <string name="warning_detail_unit_add_1">Please restart the app for the new unit to work properly</string>
 </resources>
