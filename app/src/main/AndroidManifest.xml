@@ -29,47 +29,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".EventViewer"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".StartupActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".UserInfo"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".AppSettings"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Disclaimer"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
-            android:screenOrientation="portrait" ></activity>
-        <activity
-            android:name=".RegisterUser"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ManageSchedulesActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".RepeatScheduleActivity"></activity>
-
-        <activity
-            android:name=".SingleScheduleActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".InitViewer"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ResetToken"
             android:screenOrientation="portrait" />
 
         <receiver

@@ -115,17 +115,6 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.help) {
-//            //startActivity(new Intent(this, CoursesActivity.class));
-//            startActivity(new Intent(this, UserInfo.class));
-//        }
-//        if (item.getItemId() == R.id.app_settings) {
-//            startActivity(new Intent(this, AppSettings.class));
-//        }
-//        if (item.getItemId() == R.id.disclaimer) {
-//            startActivity(new Intent(this, Disclaimer.class));
-//        }
-
         if (item.getItemId() == R.id.init_view) {
             startActivity(new Intent(this, InitViewer.class));
         }
@@ -162,9 +151,6 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
         }
 
         context = MonitorActivity.this.getApplicationContext();
-        //config = new AppConfig(MonitorActivity.this.getApplicationContext());
-        //this.unitID = config.readFirstConfig();
-        //checkInitialized();
         FragmentManager fm = getSupportFragmentManager();
         Fragment oldFragment = fm.findFragmentByTag("fragment_one");
 
@@ -173,10 +159,6 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             Fragment fragment1 = GarageLineFragment.newInstance("1", "1", "2", unitID, mp);
             ft.add(R.id.water_line, fragment1, "fragment_one");
-
-            //Fragment fragment2 = GarageLineFragment.newInstance("2", "1", "2", unitID, mp);
-            //ft.add(R.id.water_line, fragment2, "fragment_two");
-
             ft.commit();
         }
          //Init Navigation
@@ -288,20 +270,6 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
                                 HeartBeatCallBack.STATUS_R2 = false;
                             }
                         }
-
-//                        if (msg.compareTo(Constants.SENSOR_STATUS_ON_MSG) == 0) {
-//                            HeartBeatCallBack.last_heart_beat = new Date();
-//                            //Interrupt the UI thread using an alarm
-//                            Intent intent1 = new Intent(context, AlarmReceiver.class);
-//                            final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, 0);
-//                            final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1, pendingIntent);
-//                            //setNetworkStatusBanner();
-//                        }else if((msg.compareTo(Constants.STATUS_R1_CLOSE) == 0) || (msg.compareTo(Constants.STATUS_R1_OPEN)== 0)){
-//
-//                        }else if((msg.compareTo(Constants.STATUS_R2_CLOSE) == 0) || (msg.compareTo(Constants.STATUS_R2_OPEN)== 0)){
-//
-//                        }
                     }
                 };
                 HeartBeatCallBack.textBanner = textBanner;
@@ -355,14 +323,6 @@ public class MonitorActivity extends AppCompatActivity implements GarageLineFrag
     }
 
     void setAlarm(String unitID){
-//        if (alarmManager == null) {
-//            alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//            AlarmReceiver.monitorActivity =this;
-//            Intent intent = new Intent(this, AlarmReceiver.class);
-//            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 120, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constants.STATUS_CHECK_FREQUENCY, pendingIntent);
-//
-//        }
         if (alarmManager == null) {
             AlarmReceiver.monitorActivity =this;
             Intent intent = new Intent(MonitorActivity.this, AlarmReceiver.class);

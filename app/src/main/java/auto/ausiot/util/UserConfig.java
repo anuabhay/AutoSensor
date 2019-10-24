@@ -3,14 +3,8 @@ package auto.ausiot.util;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import auto.ausiot.autosensor.InitViewer;
-import auto.ausiot.autosensor.MonitorActivity;
-import auto.ausiot.autosensor.StartupActivity;
 import auto.ausiot.stroe.ConfigFileStore;
-import mqtt.Subscriber;
 
 public class UserConfig {
 //    public static String checkInitialized(AppCompatActivity activity){

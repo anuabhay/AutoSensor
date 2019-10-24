@@ -1,8 +1,5 @@
 package auto.ausiot.util;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,7 +8,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import auto.ausiot.autosensor.RepeatScheduleActivity;
 import auto.ausiot.schedule.ScheduleBO;
 import auto.ausiot.stroe.RestStore;
 import auto.ausiot.vo.Days;

@@ -6,7 +6,6 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import auto.ausiot.autosensor.MainActivity;
 import auto.ausiot.util.Constants;
 
 /**
